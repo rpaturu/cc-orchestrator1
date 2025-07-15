@@ -86,14 +86,14 @@ export class SalesIntelligenceStack extends cdk.Stack {
       },
     });
 
-    // Analysis Lambda Function (slower endpoint)
-    const analysisFunction = new NodejsFunction(this, 'AnalysisFunction', {
-      functionName: 'sales-intelligence-analysis',
+    // Async Discovery Lambda Function
+    const discoveryAsyncFunction = new NodejsFunction(this, 'DiscoveryAsyncFunction', {
+      functionName: 'sales-intelligence-discovery-async',
       runtime: lambda.Runtime.NODEJS_20_X,
       entry: path.join(__dirname, '../index.ts'),
-      handler: 'analysisHandler',
-      timeout: cdk.Duration.minutes(5),
-      memorySize: 1024,
+      handler: 'discoveryAsyncHandler',
+      timeout: cdk.Duration.seconds(30), // Short timeout as it only creates request
+      memorySize: 512,
       environment: {
         CACHE_TABLE_NAME: cacheTable.tableName,
         REQUESTS_TABLE_NAME: requestsTable.tableName,
@@ -112,14 +112,14 @@ export class SalesIntelligenceStack extends cdk.Stack {
       },
     });
 
-    // Discovery Lambda Function (medium speed endpoint)
-    const discoveryFunction = new NodejsFunction(this, 'DiscoveryFunction', {
-      functionName: 'sales-intelligence-discovery',
+    // Async Analysis Lambda Function
+    const analysisAsyncFunction = new NodejsFunction(this, 'AnalysisAsyncFunction', {
+      functionName: 'sales-intelligence-analysis-async',
       runtime: lambda.Runtime.NODEJS_20_X,
       entry: path.join(__dirname, '../index.ts'),
-      handler: 'discoveryHandler',
-      timeout: cdk.Duration.minutes(3),
-      memorySize: 768,
+      handler: 'analysisAsyncHandler',
+      timeout: cdk.Duration.seconds(30), // Short timeout as it only creates request
+      memorySize: 512,
       environment: {
         CACHE_TABLE_NAME: cacheTable.tableName,
         REQUESTS_TABLE_NAME: requestsTable.tableName,
@@ -299,6 +299,56 @@ export class SalesIntelligenceStack extends cdk.Stack {
       },
     });
 
+    // Process Discovery Lambda Function (for async processing)
+    const processDiscoveryFunction = new NodejsFunction(this, 'ProcessDiscoveryFunction', {
+      functionName: 'sales-intelligence-process-discovery',
+      runtime: lambda.Runtime.NODEJS_20_X,
+      entry: path.join(__dirname, '../index.ts'),
+      handler: 'processDiscoveryHandler',
+      timeout: cdk.Duration.minutes(15), // Long timeout for processing
+      memorySize: 1024,
+      environment: {
+        CACHE_TABLE_NAME: cacheTable.tableName,
+        REQUESTS_TABLE_NAME: requestsTable.tableName,
+        API_KEYS_SECRET_NAME: apiKeysSecret.secretName,
+        BEDROCK_MODEL: this.node.tryGetContext('bedrockModel')!,
+        BEDROCK_MAX_TOKENS: this.node.tryGetContext('bedrockMaxTokens')!,
+        BEDROCK_TEMPERATURE: this.node.tryGetContext('bedrockTemperature')!,
+        GOOGLE_SEARCH_API_KEY: this.node.tryGetContext('googleSearchApiKey')!,
+        GOOGLE_SEARCH_ENGINE_ID: this.node.tryGetContext('googleSearchEngineId')!,
+        LOG_LEVEL: this.node.tryGetContext('logLevel')!,
+        NODE_ENV: 'production'
+      },
+      bundling: {
+        tsconfig: path.join(__dirname, '../../tsconfig.json'),
+      },
+    });
+
+    // Process Analysis Lambda Function (for async processing)
+    const processAnalysisFunction = new NodejsFunction(this, 'ProcessAnalysisFunction', {
+      functionName: 'sales-intelligence-process-analysis',
+      runtime: lambda.Runtime.NODEJS_20_X,
+      entry: path.join(__dirname, '../index.ts'),
+      handler: 'processAnalysisHandler',
+      timeout: cdk.Duration.minutes(15), // Long timeout for processing
+      memorySize: 1024,
+      environment: {
+        CACHE_TABLE_NAME: cacheTable.tableName,
+        REQUESTS_TABLE_NAME: requestsTable.tableName,
+        API_KEYS_SECRET_NAME: apiKeysSecret.secretName,
+        BEDROCK_MODEL: this.node.tryGetContext('bedrockModel')!,
+        BEDROCK_MAX_TOKENS: this.node.tryGetContext('bedrockMaxTokens')!,
+        BEDROCK_TEMPERATURE: this.node.tryGetContext('bedrockTemperature')!,
+        GOOGLE_SEARCH_API_KEY: this.node.tryGetContext('googleSearchApiKey')!,
+        GOOGLE_SEARCH_ENGINE_ID: this.node.tryGetContext('googleSearchEngineId')!,
+        LOG_LEVEL: this.node.tryGetContext('logLevel')!,
+        NODE_ENV: 'production'
+      },
+      bundling: {
+        tsconfig: path.join(__dirname, '../../tsconfig.json'),
+      },
+    });
+
     // Cache Management Lambda Functions (for development)
     const cacheClearFunction = new NodejsFunction(this, 'CacheClearFunction', {
       functionName: 'sales-intelligence-cache-clear',
@@ -355,7 +405,7 @@ export class SalesIntelligenceStack extends cdk.Stack {
     });
 
     // Grant permissions for all functions
-    [searchFunction, analysisFunction, discoveryFunction, chatFunction, bedrockParseFunction, debugFunction, asyncOverviewFunction, getAsyncRequestFunction, processOverviewFunction].forEach(func => {
+    [searchFunction, discoveryAsyncFunction, analysisAsyncFunction, chatFunction, bedrockParseFunction, debugFunction, asyncOverviewFunction, getAsyncRequestFunction, processOverviewFunction, processDiscoveryFunction, processAnalysisFunction].forEach(func => {
       cacheTable.grantReadWriteData(func);
       requestsTable.grantReadWriteData(func);
       apiKeysSecret.grantRead(func);
@@ -370,7 +420,7 @@ export class SalesIntelligenceStack extends cdk.Stack {
     requestsTable.grantReadData(healthCheckFunction);
 
     // Additional IAM permissions for web scraping and external APIs
-    [analysisFunction, discoveryFunction, chatFunction, processOverviewFunction].forEach(func => {
+    [analysisAsyncFunction, discoveryAsyncFunction, chatFunction, processOverviewFunction, processDiscoveryFunction, processAnalysisFunction].forEach(func => {
       func.addToRolePolicy(new iam.PolicyStatement({
       effect: iam.Effect.ALLOW,
       actions: [
@@ -388,7 +438,7 @@ export class SalesIntelligenceStack extends cdk.Stack {
       throw new Error('bedrockModel context parameter is required');
     }
     
-    [analysisFunction, discoveryFunction, chatFunction, bedrockParseFunction, asyncOverviewFunction, processOverviewFunction].forEach(func => {
+    [analysisAsyncFunction, discoveryAsyncFunction, chatFunction, bedrockParseFunction, asyncOverviewFunction, processOverviewFunction, processDiscoveryFunction, processAnalysisFunction].forEach(func => {
       func.addToRolePolicy(new iam.PolicyStatement({
       effect: iam.Effect.ALLOW,
       actions: [
@@ -453,22 +503,22 @@ export class SalesIntelligenceStack extends cdk.Stack {
 
     // /company/{domain}/analysis endpoint
     const analysisResource = domainResource.addResource('analysis');
-    const analysisIntegration = new apigateway.LambdaIntegration(analysisFunction);
+    const analysisIntegration = new apigateway.LambdaIntegration(analysisAsyncFunction);
     analysisResource.addMethod('POST', analysisIntegration, {
       apiKeyRequired: true,
     });
 
     // /company/{domain}/discovery endpoint
     const discoveryResource = domainResource.addResource('discovery');
-    const discoveryIntegration = new apigateway.LambdaIntegration(discoveryFunction);
+    const discoveryIntegration = new apigateway.LambdaIntegration(discoveryAsyncFunction);
     discoveryResource.addMethod('GET', discoveryIntegration, {
       apiKeyRequired: true,
     });
 
-    // /company/{domain}/overview-async endpoint
-    const asyncOverviewResource = domainResource.addResource('overview-async');
-    const asyncOverviewIntegration = new apigateway.LambdaIntegration(asyncOverviewFunction);
-    asyncOverviewResource.addMethod('GET', asyncOverviewIntegration, {
+    // /company/{domain}/overview endpoint
+    const overviewResource = domainResource.addResource('overview');
+    const overviewIntegration = new apigateway.LambdaIntegration(asyncOverviewFunction);
+    overviewResource.addMethod('GET', overviewIntegration, {
       apiKeyRequired: true,
     });
 
@@ -480,9 +530,9 @@ export class SalesIntelligenceStack extends cdk.Stack {
       apiKeyRequired: true,
     });
 
-    // Legacy /intelligence endpoint for backward compatibility
+    // Legacy /intelligence endpoint for backward compatibility (now async)
     const intelligenceResource = api.root.addResource('intelligence');
-    const intelligenceIntegration = new apigateway.LambdaIntegration(analysisFunction);
+    const intelligenceIntegration = new apigateway.LambdaIntegration(analysisAsyncFunction);
     intelligenceResource.addMethod('POST', intelligenceIntegration, {
       apiKeyRequired: true,
     });

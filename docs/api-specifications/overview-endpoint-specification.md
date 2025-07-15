@@ -35,7 +35,7 @@
 
 ---
 
-## Endpoint: `/company/{domain}/overview-async`
+## Endpoint: `/company/{domain}/overview`
 
 This document defines the expected response structure for the asynchronous company overview endpoint.
 

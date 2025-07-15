@@ -211,7 +211,7 @@ The Sales Intelligence platform provides REST API endpoints for different use ca
 **Asynchronous (recommended pattern):**
 ```bash
 # 1. Start processing (returns immediately)
-GET /company/{domain}/overview-async
+GET /company/{domain}/overview
 
 # Response:
 {
@@ -279,7 +279,7 @@ GET /health
 All endpoints require an API key:
 ```bash
 curl -H "X-API-Key: your-api-key" \
-     https://api.example.com/company/shopify.com/overview-async
+     https://api.example.com/company/shopify.com/overview
 ```
 
 ### Status Codes

@@ -19,9 +19,9 @@ All complex endpoints now follow a consistent async pattern for better performan
 
 | Endpoint | Method | Path | Time | Description |
 |----------|--------|------|------|-------------|
-| **Overview** | `GET` | `/company/{domain}/overview-async` | ~1 min | Company overview with snippet-first approach |
-| **Discovery** | `GET` | `/company/{domain}/discovery-async` | ~3 min | Sales discovery insights |
-| **Analysis** | `POST` | `/company/{domain}/analysis-async` | ~5 min | AI analysis of search results |
+| **Overview** | `GET` | `/company/{domain}/overview` | ~1 min | Company overview with snippet-first approach |
+| **Discovery** | `GET` | `/company/{domain}/discovery` | ~3 min | Sales discovery insights |
+| **Analysis** | `POST` | `/company/{domain}/analysis` | ~5 min | AI analysis of search results |
 
 ## 🔍 **Status Checking**
 
@@ -41,7 +41,7 @@ GET /requests/{requestId}
 ### 1. Company Overview Async
 ```bash
 # Submit request
-curl -X GET "https://api.example.com/company/shopify.com/overview-async" \
+curl -X GET "https://api.example.com/company/shopify.com/overview" \
   -H "X-API-Key: your-api-key"
 
 # Response
@@ -77,7 +77,7 @@ curl -X GET "https://api.example.com/requests/req_abc123" \
 ### 2. Discovery Insights Async
 ```bash
 # Submit request
-curl -X GET "https://api.example.com/company/shopify.com/discovery-async" \
+curl -X GET "https://api.example.com/company/shopify.com/discovery" \
   -H "X-API-Key: your-api-key"
 
 # Response
@@ -93,7 +93,7 @@ curl -X GET "https://api.example.com/company/shopify.com/discovery-async" \
 ### 3. Analysis Async
 ```bash
 # Submit request
-curl -X POST "https://api.example.com/company/shopify.com/analysis-async" \
+curl -X POST "https://api.example.com/company/shopify.com/analysis" \
   -H "X-API-Key: your-api-key" \
   -H "Content-Type: application/json" \
   -d '{
@@ -145,7 +145,7 @@ const insights = await response.json();
 **After (Async):**
 ```javascript
 // Submit request
-const submitResponse = await fetch('/company/shopify.com/discovery-async');
+const submitResponse = await fetch('/company/shopify.com/discovery');
 const { requestId } = await submitResponse.json();
 
 // Poll for completion
