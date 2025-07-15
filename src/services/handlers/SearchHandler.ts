@@ -6,17 +6,10 @@
  */
 
 import { BaseEndpointHandler } from './BaseEndpointHandler';
+import { SearchResponseFormatter, SearchResponse } from '../formatters/SearchResponseFormatter';
 import { SearchEngine } from '../search/SearchEngine';
 import { SearchQueryBuilder } from '../search/SearchQueryBuilder';
 import { SearchEngineResponse, SalesContext, SalesIntelligenceRequest } from '@/types';
-
-export interface SearchResponse {
-  queries: string[];
-  results: SearchEngineResponse[];
-  totalResults: number;
-  searchTime: number;
-  relationshipAware?: boolean;
-}
 
 export class SearchHandler extends BaseEndpointHandler {
   private readonly searchEngine: SearchEngine;
@@ -61,12 +54,14 @@ export class SearchHandler extends BaseEndpointHandler {
     
     this.logger.info('Search completed', { domain, context, totalResults, searchTime });
 
-    return {
+    return SearchResponseFormatter.formatSearchResponse(
       queries,
       results,
       totalResults,
-      searchTime
-    };
+      searchTime,
+      domain,
+      context
+    );
   }
 
   /**
@@ -114,13 +109,15 @@ export class SearchHandler extends BaseEndpointHandler {
       queries
     });
 
-    return {
+    return SearchResponseFormatter.formatSearchResponse(
       queries,
       results,
       totalResults,
       searchTime,
-      relationshipAware: !!sellerCompany
-    };
+      domain,
+      context,
+      !!sellerCompany
+    );
   }
 
   /**

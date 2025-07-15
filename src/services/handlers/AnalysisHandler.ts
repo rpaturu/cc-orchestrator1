@@ -6,6 +6,7 @@
  */
 
 import { BaseEndpointHandler } from './BaseEndpointHandler';
+import { AnalysisResponseFormatter, AnalysisResponse } from '../formatters/AnalysisResponseFormatter';
 import { ContentFetcher } from '../content/ContentFetcher';
 import { AIAnalyzer } from '../analysis/AIAnalyzer';
 import { SearchEngineResponse, SalesContext, ContentAnalysis } from '@/types';
@@ -33,7 +34,7 @@ export class AnalysisHandler extends BaseEndpointHandler {
     domain: string, 
     context: SalesContext, 
     searchResults: SearchEngineResponse[]
-  ): Promise<ContentAnalysis> {
+  ): Promise<AnalysisResponse> {
     const startTime = Date.now();
     const companyName = this.extractCompanyName(domain);
     
@@ -130,6 +131,6 @@ export class AnalysisHandler extends BaseEndpointHandler {
       sourcesAnalyzed: authoritativeSources.length 
     });
 
-    return result;
+    return AnalysisResponseFormatter.formatAnalysisResponse(result);
   }
 } 

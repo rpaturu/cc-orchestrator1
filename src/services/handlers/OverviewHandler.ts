@@ -6,23 +6,13 @@
  */
 
 import { BaseEndpointHandler } from './BaseEndpointHandler';
+import { OverviewResponseFormatter, OverviewResponse } from '../formatters/OverviewResponseFormatter';
 import { ContentFetcher } from '../content/ContentFetcher';
 import { AIAnalyzer } from '../analysis/AIAnalyzer';
 import { SearchEngine } from '../search/SearchEngine';
 import { SearchQueryBuilder } from '../search/SearchQueryBuilder';
 import { SourceAnalyzer } from '../analysis/SourceAnalyzer';
 import { AuthoritativeSource } from '@/types';
-
-export interface OverviewResponse {
-  name: string;
-  domain: string;
-  sources: AuthoritativeSource[];
-  confidence?: {
-    overall: number;
-    [key: string]: any;
-  };
-  [key: string]: any; // Allow additional properties from AI analysis
-}
 
 export class OverviewHandler extends BaseEndpointHandler {
   private readonly contentFetcher: ContentFetcher;
@@ -74,7 +64,7 @@ export class OverviewHandler extends BaseEndpointHandler {
         cacheKey,
         cachedAt: cachedResult.generatedAt 
       });
-      return cachedResult.insights as any;
+      return OverviewResponseFormatter.formatOverviewResponse(cachedResult.insights);
     }
 
     this.logger.info('Cache miss - generating new company overview', { domain, cacheKey });
@@ -116,7 +106,7 @@ export class OverviewHandler extends BaseEndpointHandler {
     await this.cache.set(cacheKey, cacheData);
     this.logger.info('Cached company overview result', { domain, cacheKey });
     
-    return result;
+    return OverviewResponseFormatter.formatOverviewResponse(result);
   }
 
   /**
