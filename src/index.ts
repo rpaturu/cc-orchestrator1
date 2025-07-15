@@ -717,7 +717,6 @@ export const companyOverviewAsyncHandler = async (
         message: 'Company overview is being processed. Use the requestId to check status.',
         estimatedTimeMinutes: 1,
         statusCheckEndpoint: `/requests/${asyncRequestId}`,
-        awsRequestId: context.awsRequestId,
       }),
     };
 
@@ -790,7 +789,6 @@ export const getAsyncRequestHandler = async (
       companyDomain: asyncRequest.companyDomain,
       createdAt: asyncRequest.createdAt,
       updatedAt: asyncRequest.updatedAt,
-      awsRequestId: context.awsRequestId,
     };
 
     if (asyncRequest.processingTime) {
