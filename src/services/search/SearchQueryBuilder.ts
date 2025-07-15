@@ -6,7 +6,7 @@
  */
 
 import { SalesContext, SalesIntelligenceRequest } from '@/types';
-import { CompanyExtractor } from './CompanyExtractor';
+import { CompanyExtractor } from '../utilities/CompanyExtractor';
 
 export interface QueryStrategy {
   queries: string[];

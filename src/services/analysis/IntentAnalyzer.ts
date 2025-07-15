@@ -5,8 +5,8 @@
  * for the chat interface and conversational AI features.
  */
 
-import { CompanyExtractor } from './CompanyExtractor';
-import { SearchQueryBuilder } from './SearchQueryBuilder';
+import { CompanyExtractor } from '../utilities/CompanyExtractor';
+import { SearchQueryBuilder } from '../search/SearchQueryBuilder';
 
 export interface UserIntent {
   type: string;

@@ -10,7 +10,7 @@ import {
   AuthoritativeSource,
   CitedContent
 } from '@/types';
-import { Logger } from './Logger';
+import { Logger } from '../core/Logger';
 
 export class AIAnalyzer {
   private readonly bedrock: BedrockRuntimeClient;

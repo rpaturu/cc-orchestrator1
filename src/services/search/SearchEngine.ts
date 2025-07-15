@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import { SearchResult, SearchEngineResponse, SearchConfig } from '@/types';
-import { Logger } from './Logger';
-import { CacheService } from './CacheService';
+import { Logger } from '../core/Logger';
+import { CacheService } from '../core/CacheService';
 
 interface GoogleSearchResponse {
   items?: Array<{

@@ -2,10 +2,10 @@ import { config } from 'dotenv';
 import { SalesIntelligenceOrchestrator } from './services/SalesIntelligenceOrchestrator';
 import { AppConfig, SalesIntelligenceRequest } from './types';
 import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
-import { RequestService } from './services/RequestService';
-import { Logger } from './services/Logger';
+import { RequestService } from './services/utilities/RequestService';
+import { Logger } from './services/core/Logger';
 import { LambdaClient, InvokeCommand } from '@aws-sdk/client-lambda';
-import { CacheService } from './services/CacheService';
+import { CacheService } from './services/core/CacheService';
 
 // Load environment variables
 config();

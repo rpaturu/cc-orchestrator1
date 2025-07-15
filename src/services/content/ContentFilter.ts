@@ -5,7 +5,7 @@
  * for fetched content based on company context.
  */
 
-import { Logger } from './Logger';
+import { Logger } from '../core/Logger';
 
 export interface RelevancyResult {
   filteredResults: { content: string | null; [key: string]: any }[];

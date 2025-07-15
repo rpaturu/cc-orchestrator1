@@ -15,19 +15,20 @@ import {
   SalesInsights
 } from '@/types';
 
-import { SearchEngine } from './SearchEngine';
-import { ContentFetcher } from './ContentFetcher';
-import { AIAnalyzer } from './AIAnalyzer';
-import { CacheService } from './CacheService';
-import { Logger } from './Logger';
-
+import { SearchEngine } from './search/SearchEngine';
+import { ContentFetcher } from './content/ContentFetcher';
+import { AIAnalyzer } from './analysis/AIAnalyzer';
+import { CacheService } from './core/CacheService';
+import { Logger } from './core/Logger';
 
 // New focused services
-import { CompanyExtractor } from './CompanyExtractor';
-import { SourceAnalyzer } from './SourceAnalyzer';
-import { ContentFilter } from './ContentFilter';
-import { SearchQueryBuilder } from './SearchQueryBuilder';
-import { IntentAnalyzer } from './IntentAnalyzer';
+import { CompanyExtractor } from './utilities/CompanyExtractor';
+import { SourceAnalyzer } from './analysis/SourceAnalyzer';
+import { ContentFilter } from './content/ContentFilter';
+import { SearchQueryBuilder } from './search/SearchQueryBuilder';
+import { IntentAnalyzer } from './analysis/IntentAnalyzer';
+import { DiscoveryHandler } from './handlers/DiscoveryHandler';
+import { DiscoveryResponse } from './formatters/DiscoveryResponseFormatter';
 
 export class SalesIntelligenceOrchestrator {
   private readonly searchEngine: SearchEngine;
@@ -37,6 +38,7 @@ export class SalesIntelligenceOrchestrator {
   private readonly logger: Logger;
   private readonly config: AppConfig;
   private readonly contentFilter: ContentFilter;
+  private readonly discoveryHandler: DiscoveryHandler;
 
   constructor(config: AppConfig) {
     this.config = config;
@@ -69,6 +71,17 @@ export class SalesIntelligenceOrchestrator {
     );
 
     this.contentFilter = new ContentFilter(this.logger);
+    
+    // Initialize handlers
+    this.discoveryHandler = new DiscoveryHandler(
+      this.contentFetcher,
+      this.aiAnalyzer,
+      this.searchEngine,
+      config.search.maxResultsPerQuery,
+      this.cache,
+      this.logger,
+      this.contentFilter
+    );
   }
 
   /**
@@ -375,7 +388,33 @@ export class SalesIntelligenceOrchestrator {
     const startTime = Date.now();
     const companyName = CompanyExtractor.extractCompanyName(domain);
     
-    this.logger.info('Starting AI analysis', { domain, context, companyName });
+    // Generate cache key for analysis
+    const cacheKey = CompanyExtractor.generateCacheKey({ 
+      companyDomain: domain, 
+      salesContext: context,
+      additionalContext: 'analysis_endpoint'
+    });
+    
+    this.logger.info('Starting AI analysis', { 
+      domain, 
+      context, 
+      companyName,
+      cacheKey
+    });
+
+    // Check cache first
+    const cachedResult = await this.cache.get(cacheKey);
+    if (cachedResult) {
+      this.logger.info('Returning cached analysis result', { 
+        domain, 
+        context,
+        cacheKey,
+        cachedAt: cachedResult.generatedAt 
+      });
+      return cachedResult;
+    }
+
+    this.logger.info('Cache miss - generating new analysis', { domain, context, cacheKey });
 
     // Extract URLs from search results
     const allUrls = searchResults.flatMap(response => response.results.map(result => result.url));
@@ -412,8 +451,22 @@ export class SalesIntelligenceOrchestrator {
     const analysisTime = Date.now() - analysisStartTime;
 
     const confidenceScore = this.contentFilter.calculateConfidenceScore(allContent.length, authoritativeSources.length);
-    const totalTime = Date.now() - startTime;
+    
+    // Create result
+    const result: ContentAnalysis = {
+      insights,
+      sources: authoritativeSources,
+      confidenceScore,
+      generatedAt: new Date(),
+      cacheKey,
+      totalSources: authoritativeSources.length,
+      citationMap: {}
+    };
 
+    // Cache the result
+    await this.cache.set(cacheKey, result);
+
+    const totalTime = Date.now() - startTime;
     this.logger.info('AI analysis completed', { 
       domain, 
       context, 
@@ -423,74 +476,14 @@ export class SalesIntelligenceOrchestrator {
       sourcesAnalyzed: authoritativeSources.length 
     });
 
-    return {
-      insights,
-      sources: authoritativeSources,
-      confidenceScore,
-      generatedAt: new Date(),
-      cacheKey: CompanyExtractor.generateCacheKey({ companyDomain: domain, salesContext: context }),
-      totalSources: authoritativeSources.length,
-      citationMap: {}
-    };
+    return result;
   }
 
   /**
    * Get discovery-focused insights (medium speed endpoint)
    */
-  async getDiscoveryInsights(domain: string): Promise<{
-    painPoints: string[];
-    opportunities: string[];
-    keyContacts: string[];
-    technologyStack: string[];
-    sources: AuthoritativeSource[];
-  }> {
-    const startTime = Date.now();
-    const companyName = CompanyExtractor.extractCompanyName(domain);
-    
-    this.logger.info('Getting discovery insights', { domain, companyName });
-
-    // Use focused query builder for discovery queries
-    const queries = SearchQueryBuilder.buildDiscoveryQueries(companyName);
-
-    // Perform searches
-    const searchResponses = await this.executeBatchedSearches(queries, this.config.search.maxResultsPerQuery);
-    
-    // Fetch and filter content
-    const allUrls = searchResponses.flatMap(response => response.results.slice(0, 5).map(result => result.url));
-    const uniqueUrls = [...new Set(allUrls)];
-    const fetchResults = await this.contentFetcher.fetchBatch(uniqueUrls);
-
-    const allSearchResults = searchResponses.flatMap(response => response.results);
-    const { filteredResults, filteredUrls, relevancyScores } = this.contentFilter.filterByRelevancy(
-      fetchResults,
-      uniqueUrls,
-      allSearchResults,
-      companyName,
-      0.25 // Medium threshold for discovery insights
-    );
-
-    // Create sources
-    const sources = this.createAuthoritativeSources(filteredResults, filteredUrls, allSearchResults, relevancyScores);
-
-    // Extract discovery insights using AI
-    const content = filteredResults.filter(r => r.content !== null).map(r => r.content!);
-    const insights = await this.aiAnalyzer.analyzeForSalesContext(
-      content,
-      sources,
-      companyName,
-      'discovery'
-    );
-
-    const totalTime = Date.now() - startTime;
-    this.logger.info('Discovery insights completed', { domain, totalTime, sourcesFound: sources.length });
-
-    return {
-      painPoints: insights.painPoints.map(p => p.text) || [],
-      opportunities: insights.recommendedActions.map(a => a.text) || [],
-      keyContacts: insights.keyContacts.map(c => `${c.name} - ${c.title}`) || [],
-      technologyStack: insights.technologyStack.current || [],
-      sources
-    };
+  async getDiscoveryInsights(domain: string): Promise<DiscoveryResponse> {
+    return this.discoveryHandler.getDiscoveryInsights(domain);
   }
 
   /**
@@ -739,4 +732,6 @@ export class SalesIntelligenceOrchestrator {
     
     return sources;
   }
+
+
 } 

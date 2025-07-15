@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import * as cheerio from 'cheerio';
 import { FetchResult, RateLimitInfo } from '@/types';
-import { Logger } from './Logger';
+import { Logger } from '../core/Logger';
 
 export class ContentFetcher {
   private readonly logger: Logger;

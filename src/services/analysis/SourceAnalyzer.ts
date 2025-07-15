@@ -5,7 +5,7 @@
  * for web sources and content.
  */
 
-import { CompanyExtractor } from './CompanyExtractor';
+import { CompanyExtractor } from '../utilities/CompanyExtractor';
 
 export interface SourcePriority {
   url: string;

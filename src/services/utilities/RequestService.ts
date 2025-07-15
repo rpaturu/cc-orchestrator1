@@ -1,6 +1,6 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, PutCommand, GetCommand, UpdateCommand, QueryCommand } from '@aws-sdk/lib-dynamodb';
-import { Logger } from './Logger';
+import { Logger } from '../core/Logger';
 
 export interface AsyncRequest {
   requestId: string;
