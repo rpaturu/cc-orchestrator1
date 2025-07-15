@@ -1,0 +1,243 @@
+#!/bin/bash
+
+set -e;
+
+# Load environment variables from .env.local if it exists
+if [ -f .env.local ]; then
+  source .env.local
+fi
+
+# Parse arguments
+CDK_PROFILE=${AWS_PROFILE:-default}
+CDK_REGION=${AWS_REGION:-us-west-2}
+ADMIN_PROFILE=${ADMIN_PROFILE:-iamadminrp}
+while [[ "$#" -gt 0 ]]; do case $1 in
+  --profile) CDK_PROFILE="$2"; shift;;
+  --region) AWS_REGION="$2"; shift;;
+  --admin-profile) ADMIN_PROFILE="$2"; shift;;
+esac; shift; done
+
+# Check if region is set
+if [ -z "$AWS_REGION" ]; then
+  # Try to get region from AWS config
+  AWS_REGION=$(aws configure get region --profile $CDK_PROFILE 2>/dev/null)
+  
+  if [ -z "$AWS_REGION" ]; then
+    echo "Error: AWS region is required"
+    echo "Usage: ./deploy [--profile <aws_profile>] [--region <aws_region>] [--admin-profile <admin_profile>]"
+    echo "Example: ./deploy --profile dev --region us-west-2 --admin-profile iamadminrp"
+    echo "You may also configure your region by running 'aws configure'"
+    exit 1
+  fi
+fi
+
+echo "Using AWS Profile: $CDK_PROFILE"
+echo "Using Admin Profile: $ADMIN_PROFILE (for API key retrieval)"
+echo "Using AWS Region: $AWS_REGION"
+
+# Build and deploy infrastructure
+echo "Building and deploying infrastructure..."
+npm ci && npm run build
+
+# Prepare CDK context parameters
+CDK_CONTEXT_PARAMS=""
+
+# Option to show keys for debugging
+SHOW_KEYS=false
+for arg in "$@"; do
+  if [ "$arg" = "--show-keys" ]; then
+    SHOW_KEYS=true
+  fi
+done
+
+# Set defaults for Google Search API (empty strings if not provided)
+GOOGLE_SEARCH_API_KEY=${GOOGLE_SEARCH_API_KEY:-}
+GOOGLE_SEARCH_ENGINE_ID=${GOOGLE_SEARCH_ENGINE_ID:-}
+
+CDK_CONTEXT_PARAMS="$CDK_CONTEXT_PARAMS -c googleSearchApiKey=$GOOGLE_SEARCH_API_KEY"
+CDK_CONTEXT_PARAMS="$CDK_CONTEXT_PARAMS -c googleSearchEngineId=$GOOGLE_SEARCH_ENGINE_ID"
+
+if [ ! -z "$GOOGLE_SEARCH_API_KEY" ]; then
+  if [ "$SHOW_KEYS" = true ]; then
+    echo "Using Google Search API Key: $GOOGLE_SEARCH_API_KEY"
+  else
+    echo "Using Google Search API Key: [HIDDEN]"
+  fi
+else
+  echo "Warning: GOOGLE_SEARCH_API_KEY not set in .env.local - search functionality will not work"
+fi
+
+if [ ! -z "$GOOGLE_SEARCH_ENGINE_ID" ]; then
+  echo "Using Google Search Engine ID: $GOOGLE_SEARCH_ENGINE_ID"
+else
+  echo "Warning: GOOGLE_SEARCH_ENGINE_ID not set in .env.local - search functionality will not work"
+fi
+
+# Bedrock configuration (uses AWS credentials, no API key needed)
+if [ -z "$BEDROCK_MODEL" ]; then
+  echo "Error: BEDROCK_MODEL is required in .env.local"
+  exit 1
+fi
+
+if [ -z "$BEDROCK_MAX_TOKENS" ]; then
+  echo "Error: BEDROCK_MAX_TOKENS is required in .env.local"
+  exit 1
+fi
+
+if [ -z "$BEDROCK_TEMPERATURE" ]; then
+  echo "Error: BEDROCK_TEMPERATURE is required in .env.local"
+  exit 1
+fi
+
+if [ -z "$LOG_LEVEL" ]; then
+  echo "Error: LOG_LEVEL is required in .env.local"
+  exit 1
+fi
+
+CDK_CONTEXT_PARAMS="$CDK_CONTEXT_PARAMS -c bedrockModel=$BEDROCK_MODEL"
+CDK_CONTEXT_PARAMS="$CDK_CONTEXT_PARAMS -c bedrockMaxTokens=$BEDROCK_MAX_TOKENS"
+CDK_CONTEXT_PARAMS="$CDK_CONTEXT_PARAMS -c bedrockTemperature=$BEDROCK_TEMPERATURE"
+CDK_CONTEXT_PARAMS="$CDK_CONTEXT_PARAMS -c logLevel=$LOG_LEVEL"
+
+echo "Using Bedrock Model: $BEDROCK_MODEL"
+echo "Bedrock Max Tokens: $BEDROCK_MAX_TOKENS"
+echo "Bedrock Temperature: $BEDROCK_TEMPERATURE"
+echo "Log Level: $LOG_LEVEL"
+
+# Find existing stack
+echo "Finding existing SalesIntelligence stack..."
+STACK_NAME=$(aws cloudformation list-stacks \
+  --profile $CDK_PROFILE \
+  --region $AWS_REGION \
+  --no-cli-pager \
+  --stack-status-filter CREATE_COMPLETE UPDATE_COMPLETE UPDATE_ROLLBACK_COMPLETE \
+  --query "StackSummaries[?starts_with(StackName, 'SalesIntelligenceStack')].StackName" \
+  --output text | head -n 1)
+
+if [ -z "$STACK_NAME" ]; then
+  echo "No existing SalesIntelligence stack found. Creating new stack..."
+  npx cdk --profile $CDK_PROFILE --region $AWS_REGION deploy SalesIntelligenceStack --require-approval never $CDK_CONTEXT_PARAMS
+else
+  echo "Updating existing stack: $STACK_NAME"
+  npx cdk --profile $CDK_PROFILE --region $AWS_REGION deploy SalesIntelligenceStack --require-approval never $CDK_CONTEXT_PARAMS
+fi
+
+# Get stack outputs
+echo "Getting stack outputs..."
+
+# Get API endpoint
+API_ENDPOINT=$(aws cloudformation describe-stacks \
+  --profile $CDK_PROFILE \
+  --region $AWS_REGION \
+  --no-cli-pager \
+  --stack-name SalesIntelligenceStack \
+  --query 'Stacks[0].Outputs[?OutputKey==`ApiEndpoint`].OutputValue' \
+  --output text)
+
+# Get API Key ID
+API_KEY_ID=$(aws cloudformation describe-stacks \
+  --profile $CDK_PROFILE \
+  --region $AWS_REGION \
+  --no-cli-pager \
+  --stack-name SalesIntelligenceStack \
+  --query 'Stacks[0].Outputs[?OutputKey==`ApiKeyId`].OutputValue' \
+  --output text)
+
+# Get the actual API key value (using admin profile)
+echo "Retrieving API key using admin profile..."
+API_KEY_VALUE=$(aws apigateway get-api-key \
+  --profile $ADMIN_PROFILE \
+  --region $AWS_REGION \
+  --no-cli-pager \
+  --api-key $API_KEY_ID \
+  --include-value \
+  --query 'value' \
+  --output text)
+
+# Create .env file with stack outputs
+cat > .env << EOF
+# Sales Intelligence API Configuration
+API_ENDPOINT=$API_ENDPOINT
+API_KEY=$API_KEY_VALUE
+
+# Google Custom Search API
+GOOGLE_SEARCH_API_KEY=$GOOGLE_SEARCH_API_KEY
+GOOGLE_SEARCH_ENGINE_ID=$GOOGLE_SEARCH_ENGINE_ID
+
+# AWS Bedrock Configuration
+BEDROCK_MODEL=$BEDROCK_MODEL
+BEDROCK_MAX_TOKENS=$BEDROCK_MAX_TOKENS
+BEDROCK_TEMPERATURE=$BEDROCK_TEMPERATURE
+
+# AWS Configuration
+AWS_REGION=$AWS_REGION
+AWS_PROFILE=$CDK_PROFILE
+
+# Logging Configuration
+LOG_LEVEL=$LOG_LEVEL
+EOF
+
+echo "Environment variables saved to .env file"
+
+# Update API keys in Secrets Manager (using admin profile)
+echo "Updating API keys in Secrets Manager..."
+SECRET_NAME=$(aws cloudformation describe-stacks \
+  --profile $CDK_PROFILE \
+  --region $AWS_REGION \
+  --no-cli-pager \
+  --stack-name SalesIntelligenceStack \
+  --query 'Stacks[0].Outputs[?OutputKey==`ApiKeysSecretName`].OutputValue' \
+  --output text)
+
+# Update the secret with actual API keys
+SECRET_VALUE=$(cat << EOF
+{
+  "googleSearchApiKey": "$GOOGLE_SEARCH_API_KEY",
+  "googleSearchEngineId": "$GOOGLE_SEARCH_ENGINE_ID"
+}
+EOF
+)
+
+aws secretsmanager update-secret \
+  --profile $ADMIN_PROFILE \
+  --region $AWS_REGION \
+  --no-cli-pager \
+  --secret-id $SECRET_NAME \
+  --secret-string "$SECRET_VALUE" > /dev/null
+
+echo ""
+echo "🎉 Sales Intelligence deployment complete!"
+echo ""
+echo "📊 API Endpoint: $API_ENDPOINT"
+echo "🔑 API Key: $API_KEY_VALUE"
+echo "🔍 Search: Using Google Search API with intelligent caching"
+echo ""
+# Remove trailing slash from API_ENDPOINT if it exists
+API_ENDPOINT_CLEAN=$(echo "$API_ENDPOINT" | sed 's|/$||')
+
+echo "🧪 Test the API:"
+echo "# Company Overview (Asynchronous - returns request ID immediately)"
+echo "curl -X GET \"$API_ENDPOINT_CLEAN/company/shopify.com/overview-async\" -H \"X-API-Key: $API_KEY_VALUE\" | jq"
+echo ""
+echo "# Check Async Request Status (replace REQUEST_ID with actual value)"
+echo "curl -X GET \"$API_ENDPOINT_CLEAN/requests/REQUEST_ID\" -H \"X-API-Key: $API_KEY_VALUE\" | jq"
+echo ""
+echo "# Company Search"
+echo "curl -X GET \"$API_ENDPOINT_CLEAN/company/shopify.com/search?query=latest+news\" -H \"X-API-Key: $API_KEY_VALUE\" | jq"
+echo ""
+echo "# Company Analysis"
+echo "curl -X GET \"$API_ENDPOINT_CLEAN/company/shopify.com/analysis\" -H \"X-API-Key: $API_KEY_VALUE\" | jq"
+echo ""
+echo "🗂️ Cache Management (Dev):"
+echo "# Get cache statistics"
+echo "curl -X GET \"$API_ENDPOINT_CLEAN/cache/stats\" -H \"X-API-Key: $API_KEY_VALUE\" | jq"
+echo ""
+echo "# Clear entire cache"
+echo "curl -X POST \"$API_ENDPOINT_CLEAN/cache/clear\" -H \"X-API-Key: $API_KEY_VALUE\" | jq"
+echo ""
+echo "# Delete specific cache entry (replace CACHE_KEY with actual cache key)"
+echo "curl -X DELETE \"$API_ENDPOINT_CLEAN/cache/delete/CACHE_KEY\" -H \"X-API-Key: $API_KEY_VALUE\" | jq"
+echo ""
+echo "🔍 Health Check:"
+echo "curl $API_ENDPOINT_CLEAN/health"
+echo "" 
