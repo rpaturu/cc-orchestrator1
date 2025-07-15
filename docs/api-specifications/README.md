@@ -4,45 +4,51 @@ This directory contains detailed specifications for all Sales Intelligence Orche
 
 ## 📋 Endpoint Overview
 
-| Endpoint | Speed | Purpose | Handler |
-|----------|-------|---------|---------|
-| Overview | Fast | Company overview with snippet-first approach | `OverviewHandler` |
-| Discovery | Medium | Sales discovery insights for prospecting | `DiscoveryHandler` |
-| Analysis | Slow | Deep AI analysis of search results | `AnalysisHandler` |
-| Search | Fast | Raw search results with optional context | `SearchHandler` |
+| Endpoint | Pattern | Purpose | Handler |
+|----------|---------|---------|---------|
+| Overview | Async | Company overview with snippet-first approach | `OverviewHandler` |
+| Discovery | Async | Sales discovery insights for prospecting | `DiscoveryHandler` |
+| Analysis | Async | Deep AI analysis of search results | `AnalysisHandler` |
+| Search | Sync | Raw search results with optional context | `SearchHandler` |
 
 ## 📄 Specifications
 
 ### 🏢 [Overview Endpoint](./overview-endpoint-specification.md)
 - **Purpose**: Comprehensive company overview generation
-- **Speed**: Fast (snippet-first approach)
+- **Pattern**: Async (~1 min processing)
 - **Response**: Company details, growth indicators, sources
 - **Implementation**: `OverviewHandler` + `OverviewResponseFormatter`
 
 ### 🎯 [Discovery Endpoint](./discovery-endpoint-specification.md)
 - **Purpose**: Sales discovery insights for prospecting
-- **Speed**: Medium (focused content processing)
+- **Pattern**: Async (~3 min processing)
 - **Response**: Pain points, opportunities, key contacts, tech stack
 - **Implementation**: `DiscoveryHandler` + `DiscoveryResponseFormatter`
 
 ### 🔍 [Analysis Endpoint](./analysis-endpoint-specification.md)
 - **Purpose**: Deep AI analysis of search results
-- **Speed**: Slow (comprehensive content analysis)
+- **Pattern**: Async (~5 min processing)
 - **Response**: Full sales intelligence with insights
 - **Implementation**: `AnalysisHandler` + `AnalysisResponseFormatter`
 
 ### 🔎 [Search API Modes](./search-api-modes.md)
 - **Purpose**: Fast search with optional relationship context
-- **Speed**: Fast (no content analysis)
+- **Pattern**: Sync (<2s response)
 - **Response**: Raw search results with metadata
 - **Implementation**: `SearchHandler` + `SearchResponseFormatter`
 
+### 🚀 [Async Endpoints Summary](./async-endpoints-summary.md)
+- **Purpose**: Comprehensive guide to async pattern implementation
+- **Pattern**: Async request/response flow
+- **Response**: Usage examples, migration guide, performance comparison
+- **Implementation**: All async endpoints follow consistent pattern
+
 ## 🔧 Implementation Status
 
-- ✅ **Overview Endpoint** - Fully implemented with caching
-- ✅ **Discovery Endpoint** - Implemented with enhanced response structure
-- ✅ **Analysis Endpoint** - Implemented with comprehensive insights
-- ✅ **Search Endpoint** - Implemented with relationship-aware queries
+- ✅ **Overview Endpoint** - Fully implemented with async pattern and caching
+- ✅ **Discovery Endpoint** - Implemented with async pattern and enhanced response structure
+- ✅ **Analysis Endpoint** - Implemented with async pattern and comprehensive insights
+- ✅ **Search Endpoint** - Implemented with sync pattern and relationship-aware queries
 
 ## 📊 Common Patterns
 
