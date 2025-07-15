@@ -14,6 +14,7 @@ export interface AsyncRequest {
   updatedAt: string;
   processingTime?: number;
   expiresAt?: string;
+  additionalData?: any;
 }
 
 export class RequestService {
@@ -35,7 +36,8 @@ export class RequestService {
    */
   async createRequest(
     companyDomain: string,
-    requestType: 'overview' | 'search' | 'analysis' | 'discovery'
+    requestType: 'overview' | 'search' | 'analysis' | 'discovery',
+    additionalData?: any
   ): Promise<string> {
     const requestId = this.generateRequestId();
     const timestamp = Date.now();
@@ -52,7 +54,8 @@ export class RequestService {
       status: 'pending',
       createdAt: now,
       updatedAt: now,
-      expiresAt
+      expiresAt,
+      additionalData
     };
 
     try {

@@ -706,7 +706,7 @@ export const companyOverviewAsyncHandler = async (
     const asyncRequestId = await requestService.createRequest(domain, 'overview');
     
     // Invoke processing Lambda asynchronously
-    await invokeProcessingLambda(asyncRequestId, domain, context.awsRequestId);
+    await invokeProcessingLambda(asyncRequestId, domain, context.awsRequestId, 'overview');
     
     return {
       statusCode: 202, // Accepted
@@ -722,6 +722,166 @@ export const companyOverviewAsyncHandler = async (
 
   } catch (error) {
     console.error('Company Overview Async Lambda error:', error);
+    
+    const origin = event.headers.Origin || event.headers.origin;
+    const corsHeaders = getCorsHeaders(origin);
+    
+    return {
+      statusCode: 500,
+      headers: corsHeaders,
+      body: JSON.stringify({
+        error: 'Internal server error',
+        message: error instanceof Error ? error.message : 'Unknown error',
+        requestId: context.awsRequestId,
+      }),
+    };
+  }
+};
+
+/**
+ * Lambda handler for discovery async processing
+ */
+export const discoveryAsyncHandler = async (
+  event: APIGatewayProxyEvent,
+  context: Context
+): Promise<APIGatewayProxyResult> => {
+  try {
+    console.log('Discovery Async Lambda invoked', { requestId: context.awsRequestId });
+
+    const origin = event.headers.Origin || event.headers.origin;
+    const corsHeaders = getCorsHeaders(origin);
+
+    // Extract domain from path parameters
+    const domain = event.pathParameters?.domain;
+    if (!domain) {
+      return {
+        statusCode: 400,
+        headers: corsHeaders,
+        body: JSON.stringify({
+          error: 'Company domain is required in path',
+          requestId: context.awsRequestId,
+        }),
+      };
+    }
+
+    // Initialize request service
+    const logger = new Logger('DiscoveryAsync');
+    const requestService = new RequestService(logger);
+    
+    // Create async request
+    const asyncRequestId = await requestService.createRequest(domain, 'discovery');
+    
+    // Invoke processing Lambda asynchronously
+    await invokeProcessingLambda(asyncRequestId, domain, context.awsRequestId, 'discovery');
+    
+    return {
+      statusCode: 202, // Accepted
+      headers: corsHeaders,
+      body: JSON.stringify({
+        requestId: asyncRequestId,
+        status: 'processing',
+        message: 'Discovery insights are being processed. Use the requestId to check status.',
+        estimatedTimeMinutes: 3,
+        statusCheckEndpoint: `/requests/${asyncRequestId}`,
+      }),
+    };
+
+  } catch (error) {
+    console.error('Discovery Async Lambda error:', error);
+    
+    const origin = event.headers.Origin || event.headers.origin;
+    const corsHeaders = getCorsHeaders(origin);
+    
+    return {
+      statusCode: 500,
+      headers: corsHeaders,
+      body: JSON.stringify({
+        error: 'Internal server error',
+        message: error instanceof Error ? error.message : 'Unknown error',
+        requestId: context.awsRequestId,
+      }),
+    };
+  }
+};
+
+/**
+ * Lambda handler for analysis async processing
+ */
+export const analysisAsyncHandler = async (
+  event: APIGatewayProxyEvent,
+  context: Context
+): Promise<APIGatewayProxyResult> => {
+  try {
+    console.log('Analysis Async Lambda invoked', { requestId: context.awsRequestId });
+
+    const origin = event.headers.Origin || event.headers.origin;
+    const corsHeaders = getCorsHeaders(origin);
+
+    // Extract domain from path parameters
+    const domain = event.pathParameters?.domain;
+    if (!domain) {
+      return {
+        statusCode: 400,
+        headers: corsHeaders,
+        body: JSON.stringify({
+          error: 'Company domain is required in path',
+          requestId: context.awsRequestId,
+        }),
+      };
+    }
+
+    if (!event.body) {
+      return {
+        statusCode: 400,
+        headers: corsHeaders,
+        body: JSON.stringify({
+          error: 'Request body with search results is required',
+          requestId: context.awsRequestId,
+        }),
+      };
+    }
+
+    const requestBody = JSON.parse(event.body);
+    const { context: salesContext, searchResults } = requestBody;
+
+    if (!salesContext || !searchResults) {
+      return {
+        statusCode: 400,
+        headers: corsHeaders,
+        body: JSON.stringify({
+          error: 'salesContext and searchResults are required',
+          requestId: context.awsRequestId,
+        }),
+      };
+    }
+
+    // Initialize request service
+    const logger = new Logger('AnalysisAsync');
+    const requestService = new RequestService(logger);
+    
+    // Create async request with additional data
+    const asyncRequestId = await requestService.createRequest(domain, 'analysis', {
+      salesContext,
+      searchResults
+    });
+    
+    // Invoke processing Lambda asynchronously
+    await invokeProcessingLambda(asyncRequestId, domain, context.awsRequestId, 'analysis');
+    
+    return {
+      statusCode: 202, // Accepted
+      headers: corsHeaders,
+      body: JSON.stringify({
+        requestId: asyncRequestId,
+        status: 'processing',
+        message: 'Analysis is being processed. Use the requestId to check status.',
+        estimatedTimeMinutes: 5,
+        statusCheckEndpoint: `/requests/${asyncRequestId}`,
+      }),
+    };
+
+  } catch (error) {
+    console.error('Analysis Async Lambda error:', error);
     
     const origin = event.headers.Origin || event.headers.origin;
     const corsHeaders = getCorsHeaders(origin);
@@ -830,7 +990,7 @@ export const getAsyncRequestHandler = async (
 /**
  * Invoke processing Lambda asynchronously
  */
-async function invokeProcessingLambda(asyncRequestId: string, domain: string, awsRequestId: string): Promise<void> {
+async function invokeProcessingLambda(asyncRequestId: string, domain: string, awsRequestId: string, requestType: string = 'overview'): Promise<void> {
   const logger = new Logger('InvokeProcessingLambda');
   
   try {
@@ -839,11 +999,21 @@ async function invokeProcessingLambda(asyncRequestId: string, domain: string, aw
     const payload = {
       asyncRequestId,
       domain,
-      awsRequestId
+      awsRequestId,
+      requestType
     };
     
+    // Map request type to Lambda function name
+    const functionNameMap: { [key: string]: string } = {
+      'overview': 'sales-intelligence-process-overview',
+      'discovery': 'sales-intelligence-process-discovery',
+      'analysis': 'sales-intelligence-process-analysis'
+    };
+    
+    const functionName = functionNameMap[requestType] || 'sales-intelligence-process-overview';
+    
     const command = new InvokeCommand({
-      FunctionName: 'sales-intelligence-process-overview',
+      FunctionName: functionName,
       InvocationType: 'Event', // Async invocation
       Payload: JSON.stringify(payload)
     });
@@ -853,7 +1023,8 @@ async function invokeProcessingLambda(asyncRequestId: string, domain: string, aw
     logger.info('Processing Lambda invoked successfully', { 
       asyncRequestId, 
       domain,
-      functionName: 'sales-intelligence-process-overview'
+      requestType,
+      functionName
     });
     
   } catch (error) {
@@ -931,6 +1102,148 @@ export const processOverviewHandler = async (
   });
   
   await processOverviewAsync(asyncRequestId, domain, awsRequestId);
+};
+
+/**
+ * Background function to process discovery async (fire and forget)
+ */
+async function processDiscoveryAsync(asyncRequestId: string, domain: string, awsRequestId: string): Promise<void> {
+  const logger = new Logger('ProcessDiscoveryAsync');
+  const requestService = new RequestService(logger);
+  
+  try {
+    // Mark as processing
+    await requestService.updateRequestStatus(asyncRequestId, 'processing');
+    
+    logger.info('Starting async discovery processing', { 
+      asyncRequestId, 
+      domain, 
+      awsRequestId 
+    });
+
+    // Initialize the service
+    const salesIntelligence = new SalesIntelligenceOrchestrator(appConfig);
+    
+    // Get discovery insights
+    const insights = await salesIntelligence.getDiscoveryInsights(domain);
+    
+    // Mark as completed with result
+    await requestService.updateRequestStatus(asyncRequestId, 'completed', insights);
+    
+    logger.info('Async discovery processing completed', { 
+      asyncRequestId, 
+      domain 
+    });
+
+  } catch (error) {
+    logger.error('Async discovery processing failed', { 
+      asyncRequestId, 
+      domain, 
+      error: error instanceof Error ? error.message : String(error) 
+    });
+    
+    // Mark as failed with error
+    await requestService.updateRequestStatus(
+      asyncRequestId, 
+      'failed', 
+      undefined, 
+      error instanceof Error ? error.message : String(error)
+    );
+  }
+}
+
+/**
+ * Lambda handler for processing discovery in background
+ */
+export const processDiscoveryHandler = async (
+  event: any,
+  context: Context
+): Promise<void> => {
+  const { asyncRequestId, domain, awsRequestId } = event;
+  
+  console.log('Process Discovery Lambda invoked', { 
+    asyncRequestId, 
+    domain, 
+    awsRequestId,
+    requestId: context.awsRequestId 
+  });
+  
+  await processDiscoveryAsync(asyncRequestId, domain, awsRequestId);
+};
+
+/**
+ * Background function to process analysis async (fire and forget)
+ */
+async function processAnalysisAsync(asyncRequestId: string, domain: string, awsRequestId: string): Promise<void> {
+  const logger = new Logger('ProcessAnalysisAsync');
+  const requestService = new RequestService(logger);
+  
+  try {
+    // Mark as processing
+    await requestService.updateRequestStatus(asyncRequestId, 'processing');
+    
+    logger.info('Starting async analysis processing', { 
+      asyncRequestId, 
+      domain, 
+      awsRequestId 
+    });
+
+    // Get the request to retrieve additional data
+    const requestData = await requestService.getRequest(asyncRequestId);
+    if (!requestData || !requestData.additionalData) {
+      throw new Error('Request data or additional data not found');
+    }
+
+    const { salesContext, searchResults } = requestData.additionalData;
+    
+    // Initialize the service
+    const salesIntelligence = new SalesIntelligenceOrchestrator(appConfig);
+    
+    // Perform analysis
+    const analysis = await salesIntelligence.performAnalysis(domain, salesContext, searchResults);
+    
+    // Mark as completed with result
+    await requestService.updateRequestStatus(asyncRequestId, 'completed', analysis);
+    
+    logger.info('Async analysis processing completed', { 
+      asyncRequestId, 
+      domain 
+    });
+
+  } catch (error) {
+    logger.error('Async analysis processing failed', { 
+      asyncRequestId, 
+      domain, 
+      error: error instanceof Error ? error.message : String(error) 
+    });
+    
+    // Mark as failed with error
+    await requestService.updateRequestStatus(
+      asyncRequestId, 
+      'failed', 
+      undefined, 
+      error instanceof Error ? error.message : String(error)
+    );
+  }
+}
+
+/**
+ * Lambda handler for processing analysis in background
+ */
+export const processAnalysisHandler = async (
+  event: any,
+  context: Context
+): Promise<void> => {
+  const { asyncRequestId, domain, awsRequestId } = event;
+  
+  console.log('Process Analysis Lambda invoked', { 
+    asyncRequestId, 
+    domain, 
+    awsRequestId,
+    requestId: context.awsRequestId 
+  });
+  
+  await processAnalysisAsync(asyncRequestId, domain, awsRequestId);
 };
 
 /**
