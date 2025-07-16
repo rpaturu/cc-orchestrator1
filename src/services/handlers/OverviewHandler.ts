@@ -103,8 +103,17 @@ export class OverviewHandler extends BaseEndpointHandler {
       citationMap: {}
     };
     
-    await this.cache.set(cacheKey, cacheData);
-    this.logger.info('Cached company overview result', { domain, cacheKey });
+    // Only cache successful overview results, not failures
+    if (this.isOverviewSuccessful(result)) {
+      await this.cache.set(cacheKey, cacheData);
+      this.logger.info('Cached successful overview result', { domain, cacheKey });
+    } else {
+      this.logger.warn('Overview analysis failed - not caching result to allow retry', { 
+        domain, 
+        cacheKey,
+        failureIndicators: this.getOverviewFailureIndicators(result)
+      });
+    }
     
     return OverviewResponseFormatter.formatOverviewResponse(result);
   }
@@ -257,10 +266,10 @@ export class OverviewHandler extends BaseEndpointHandler {
   }
 
   /**
-   * Create sources from snippets only
+   * Create sources from snippets only (fallback when no URLs are fetched)
    */
   private createSourcesFromSnippets(snippets: any[]): AuthoritativeSource[] {
-    return snippets.slice(0, 10).map((snippet: any, index: number) => ({
+    return snippets.map((snippet, index) => ({
       id: index + 1,
       url: snippet.url,
       title: snippet.title,
@@ -268,11 +277,72 @@ export class OverviewHandler extends BaseEndpointHandler {
       sourceType: SourceAnalyzer.determineSourceType(snippet.url),
       snippet: snippet.snippet,
       credibilityScore: SourceAnalyzer.calculateCredibilityScore(snippet.sourceDomain),
-      publishedDate: new Date().toISOString(),
-      author: undefined,
       domainAuthority: SourceAnalyzer.calculateCredibilityScore(snippet.sourceDomain),
       lastUpdated: new Date().toISOString(),
-      relevancyScore: 0.8 - (index * 0.05) // Descending relevancy
+      relevancyScore: 0.5 // Default for snippet-only sources
     }));
+  }
+
+  /**
+   * Check if overview analysis was successful by looking for failure indicators
+   */
+  private isOverviewSuccessful(result: any): boolean {
+    // Check for very low confidence scores (indicates AI analysis failure)
+    if (result.confidence?.overall && result.confidence.overall < 0.2) {
+      return false;
+    }
+
+    // Check for failure description
+    if (result.description?.includes('Company information not available')) {
+      return false;
+    }
+
+    // Check for empty/minimal data indicating failure
+    if (!result.domain || result.domain === '' || result.domain === 'Unknown') {
+      return false;
+    }
+
+    // Check if name is just the fallback company name with no additional info
+    if (result.name === result.companyName && !result.industry) {
+      return false;
+    }
+
+    // Check for generic fallback industry with no other meaningful data
+    if (result.industry === 'Technology' && 
+        !result.description && 
+        (!result.sources || result.sources.length === 0)) {
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Get failure indicators for logging
+   */
+  private getOverviewFailureIndicators(result: any): string[] {
+    const indicators: string[] = [];
+    
+    if (result.confidence?.overall && result.confidence.overall < 0.2) {
+      indicators.push(`low_confidence_${result.confidence.overall}`);
+    }
+    
+    if (result.description?.includes('Company information not available')) {
+      indicators.push('unavailable_description');
+    }
+    
+    if (!result.domain || result.domain === '' || result.domain === 'Unknown') {
+      indicators.push('empty_domain');
+    }
+    
+    if (result.industry === 'Technology' && !result.description) {
+      indicators.push('generic_industry_no_description');
+    }
+    
+    if (!result.sources || result.sources.length === 0) {
+      indicators.push('no_sources');
+    }
+    
+    return indicators;
   }
 } 

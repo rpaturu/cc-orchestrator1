@@ -350,6 +350,21 @@ export class AIAnalyzer {
   private async invokeBedrock(systemPrompt: string, userPrompt: string): Promise<string> {
     const modelId = this.config.model;
     
+    // Estimate input token usage (rough approximation: 1 token ≈ 4 characters)
+    const estimatedInputTokens = Math.ceil((systemPrompt.length + userPrompt.length) / 4);
+    const maxOutputTokens = this.config.maxTokens;
+    const totalTokenBudget = estimatedInputTokens + maxOutputTokens;
+
+    this.logger.info('Bedrock token usage estimation', {
+      modelId,
+      estimatedInputTokens,
+      maxOutputTokens,
+      totalTokenBudget,
+      systemPromptLength: systemPrompt.length,
+      userPromptLength: userPrompt.length,
+      inputToOutputRatio: `${Math.round((estimatedInputTokens / maxOutputTokens) * 100)}%`
+    });
+
     let requestBody: any;
     
     // Different models have different input formats
@@ -398,24 +413,71 @@ export class AIAnalyzer {
     };
 
     const command = new InvokeModelCommand(input);
+    const startTime = Date.now();
     const response = await this.bedrock.send(command);
+    const responseTime = Date.now() - startTime;
 
     if (!response.body) {
       throw new Error('No response body from Bedrock');
     }
 
     const responseBody = JSON.parse(new TextDecoder().decode(response.body));
-    
-    // Extract content based on model type
+    let responseText: string;
+    let actualInputTokens = 0;
+    let actualOutputTokens = 0;
+
+    // Extract response text and token usage based on model type
     if (modelId.includes('claude')) {
-      return responseBody.content[0].text;
+      responseText = responseBody.content[0].text;
+      // Claude returns usage information
+      actualInputTokens = responseBody.usage?.input_tokens || estimatedInputTokens;
+      actualOutputTokens = responseBody.usage?.output_tokens || Math.ceil(responseText.length / 4);
     } else if (modelId.includes('llama')) {
-      return responseBody.generation;
+      responseText = responseBody.generation;
+      actualOutputTokens = Math.ceil(responseText.length / 4);
     } else if (modelId.includes('titan')) {
-      return responseBody.results[0].outputText;
+      responseText = responseBody.results[0].outputText;
+      actualOutputTokens = Math.ceil(responseText.length / 4);
+    } else {
+      throw new Error(`Unsupported model response format: ${modelId}`);
     }
 
-    throw new Error(`Unknown response format for model: ${modelId}`);
+    // Log detailed token usage
+    const tokenEfficiency = (actualOutputTokens / maxOutputTokens) * 100;
+    const isResponseTruncated = responseText.length > 0 && !responseText.trim().endsWith('}');
+    
+    this.logger.info('Bedrock response token analysis', {
+      modelId,
+      responseTime,
+      actualInputTokens,
+      actualOutputTokens,
+      maxOutputTokens,
+      tokenEfficiency: `${tokenEfficiency.toFixed(1)}%`,
+      responseLength: responseText.length,
+      isResponseTruncated,
+      tokenUtilization: {
+        inputUsed: actualInputTokens,
+        outputUsed: actualOutputTokens,
+        outputCapacity: maxOutputTokens,
+        outputRemaining: maxOutputTokens - actualOutputTokens
+      }
+    });
+
+    // Warning if response appears truncated
+    if (isResponseTruncated) {
+      this.logger.warn('Response appears truncated - consider increasing token limit', {
+        currentLimit: maxOutputTokens,
+        suggestedLimit: Math.min(8192, maxOutputTokens + 2000),
+        truncationIndicators: {
+          endsWithBrace: responseText.trim().endsWith('}'),
+          endsWithBracket: responseText.trim().endsWith(']'),
+          endsWithComma: responseText.trim().endsWith(','),
+          lastChars: responseText.slice(-20)
+        }
+      });
+    }
+
+    return responseText;
   }
 
   /**
@@ -495,11 +557,11 @@ You must respond with a valid JSON object containing sales insights. The respons
     additionalContext?: string
   ): string {
     // Create numbered sources for AI reference
-    const numberedSources = sources.map((source, index) => 
+    const numberedSources = (sources || []).map((source, index) => 
       `[${index + 1}] ${source.title} - ${source.domain} (${source.url})`
     ).join('\n');
     
-    const contentWithSources = content.map((text, index) => 
+    const contentWithSources = (content || []).map((text, index) => 
       `Source [${index + 1}]: ${text}`
     ).join('\n\n---\n\n');
     
@@ -622,7 +684,36 @@ Please provide a comprehensive analysis in the specified JSON format. Ensure all
       return insights;
 
     } catch (error) {
-      this.logger.error('Failed to parse AI response', { error, response: response.substring(0, 500) });
+      // Enhanced error analysis for better debugging
+      const truncationIndicators = {
+        endsWithBrace: response.trim().endsWith('}'),
+        endsWithBracket: response.trim().endsWith(']'),
+        endsWithComma: response.trim().endsWith(','),
+        lastChars: response.slice(-50),
+        responseLength: response.length,
+        containsCompanyOverview: response.includes('companyOverview'),
+        containsPainPoints: response.includes('painPoints'),
+        containsTalkingPoints: response.includes('talkingPoints')
+      };
+
+      const isLikelyTruncated = !response.trim().endsWith('}') && response.length > 100;
+      
+      this.logger.error('Failed to parse AI response - detailed analysis', { 
+        error: error instanceof Error ? error.message : String(error),
+        responseLength: response.length,
+        isLikelyTruncated,
+        truncationIndicators,
+        responsePreview: response.substring(0, 500),
+        responseSuffix: response.slice(-200)
+      });
+
+      if (isLikelyTruncated) {
+        this.logger.warn('Response appears to be truncated due to token limits', {
+          recommendation: 'Increase BEDROCK_MAX_TOKENS to at least 8000',
+          currentResponseLength: response.length,
+          truncatedAt: truncationIndicators.lastChars
+        });
+      }
       
       // Return a default structure if parsing fails
       return {
@@ -801,11 +892,11 @@ Extract comprehensive company information with inline citations [N] for every fa
     companyName: string
   ): string {
     // Create numbered sources for reference
-    const numberedSources = sources.map((source, index) => 
+    const numberedSources = (sources || []).map((source, index) => 
       `[${index + 1}] ${source.title} - ${source.domain} (Credibility: ${source.credibilityScore}) - ${source.sourceType}`
     ).join('\n');
     
-    const contentWithSources = content.map((text, index) => 
+    const contentWithSources = (content || []).map((text, index) => 
       `Source [${index + 1}]: ${text.substring(0, 4000)}...` // Increased content limit for comprehensive extraction
     ).join('\n\n---\n\n');
     
@@ -1080,7 +1171,7 @@ Respond in valid JSON format with these fields:
     companyName: string,
     analysisType: string
   ): string {
-    const snippetText = snippets.map((s, i) => 
+    const snippetText = (snippets || []).map((s, i) => 
       `[${i + 1}] ${s.title}\nSource: ${s.sourceDomain}\nURL: ${s.url}\nSnippet: ${s.snippet}\n`
     ).join('\n');
 

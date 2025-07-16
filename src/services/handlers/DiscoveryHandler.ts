@@ -92,13 +92,24 @@ export class DiscoveryHandler extends BaseEndpointHandler {
       citationMap: {}
     };
 
-    await this.cacheResult(cacheKey, cacheData, { domain, endpoint: 'discovery' });
+    // Only cache successful analysis results, not failures
+    if (this.isAnalysisSuccessful(insights)) {
+      await this.cacheResult(cacheKey, cacheData, { domain, endpoint: 'discovery' });
+      this.logger.info('Cached successful discovery result', { domain, cacheKey });
+    } else {
+      this.logger.warn('Discovery analysis failed - not caching result to allow retry', { 
+        domain, 
+        cacheKey,
+        failureIndicators: this.getFailureIndicators(insights)
+      });
+    }
 
     const totalTime = Date.now() - startTime;
     this.logger.info('Discovery insights completed', { 
       domain, 
       totalTime, 
-      sourcesFound: sources.length 
+      sourcesFound: sources.length,
+      analysisSuccessful: this.isAnalysisSuccessful(insights)
     });
 
     return DiscoveryResponseFormatter.formatResponse(insights, sources, confidenceScore);
@@ -177,5 +188,78 @@ export class DiscoveryHandler extends BaseEndpointHandler {
       sources,
       allSearchResults
     };
+  }
+
+  /**
+   * Check if analysis was successful by looking for failure indicators
+   */
+  private isAnalysisSuccessful(insights: any): boolean {
+    // Check for common failure indicators
+    const failureMessages = [
+      'Analysis failed - please try again',
+      'Unknown',
+      'Not available'
+    ];
+
+    // Check pain points for failure messages
+    if (insights.painPoints?.some((point: any) => 
+      failureMessages.some(msg => point.text?.includes(msg)))) {
+      return false;
+    }
+
+    // Check talking points for failure messages
+    if (insights.talkingPoints?.some((point: any) => 
+      failureMessages.some(msg => point.text?.includes(msg)))) {
+      return false;
+    }
+
+    // Check recommended actions for failure messages
+    if (insights.recommendedActions?.some((action: any) => 
+      failureMessages.some(msg => action.text?.includes(msg)))) {
+      return false;
+    }
+
+    // Check if deal probability is 0 (indicates failure)
+    if (insights.dealProbability === 0) {
+      return false;
+    }
+
+    // Check if company overview has all unknown values
+    if (insights.companyOverview?.name === 'Unknown' && 
+        insights.companyOverview?.industry === 'Unknown' && 
+        insights.companyOverview?.size === 'Unknown') {
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Get failure indicators for logging
+   */
+  private getFailureIndicators(insights: any): string[] {
+    const indicators: string[] = [];
+    
+    if (insights.painPoints?.some((point: any) => point.text?.includes('Analysis failed'))) {
+      indicators.push('pain_points_failed');
+    }
+    
+    if (insights.talkingPoints?.some((point: any) => point.text?.includes('Analysis failed'))) {
+      indicators.push('talking_points_failed');
+    }
+    
+    if (insights.recommendedActions?.some((action: any) => action.text?.includes('Analysis failed'))) {
+      indicators.push('recommended_actions_failed');
+    }
+    
+    if (insights.dealProbability === 0) {
+      indicators.push('zero_deal_probability');
+    }
+    
+    if (insights.companyOverview?.name === 'Unknown') {
+      indicators.push('unknown_company_data');
+    }
+    
+    return indicators;
   }
 } 

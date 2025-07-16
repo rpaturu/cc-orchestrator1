@@ -1,31 +1,75 @@
-# Sales Intelligence AI - TypeScript Edition
+# Sales Intelligence Frontend - React Edition
 
-An AI-powered sales intelligence platform that helps sales professionals prepare for customer meetings with context-driven insights, competitive positioning, and personalized engagement strategies using a Perplexity-style approach.
+A modern React-based frontend for the Sales Intelligence AI platform, providing an intuitive interface for sales professionals to access company insights, discovery data, and competitive intelligence.
 
-## 🚀 Features
+## 🚀 Recent Updates (v2.1.0)
 
-- **Real-time Intelligence**: Perplexity-style search and analysis for always-fresh data
-- **Context-Aware Analysis**: Tailored insights based on sales context (discovery, competitive, renewal, etc.)
-- **Competitive Intelligence**: Dynamic battle cards and positioning strategies
-- **Pain Point Identification**: AI-powered analysis of customer challenges
-- **Stakeholder Mapping**: Key contacts and approach strategies
-- **Legal Compliance**: Fair use through analysis, not data redistribution
+- **Enhanced Discovery UI**: Fixed key contacts and tech stack rendering with proper object structure display
+- **Improved Intelligence Cards**: Better visualization of company data, contacts, and technology information
+- **Enhanced Authentication**: Robust user authentication with AWS Cognito integration
+- **Profile Management**: Complete user profile system with preferences and settings
+- **Responsive Design**: Modern, mobile-friendly interface using Tailwind CSS
+- **Real-time Data**: Live integration with backend API for fresh company intelligence
+
+## 🎯 Features
+
+### Core Intelligence Features
+- **Company Discovery**: Comprehensive company insights with key contacts and tech stack
+- **Analysis Dashboard**: Deep AI-powered analysis with pain points and opportunities
+- **Overview Reports**: Quick company summaries with financial and operational data
+- **Real-time Updates**: Live status updates for processing requests
+
+### UI/UX Features
+- **Modern Interface**: Clean, professional design with shadcn/ui components
+- **Dark/Light Mode**: Theme switching for user preference
+- **Responsive Layout**: Works seamlessly on desktop, tablet, and mobile
+- **Real-time Status**: Live request status tracking with progress indicators
+- **Smart Navigation**: Intuitive routing and breadcrumb navigation
+
+### User Management
+- **AWS Cognito Auth**: Secure authentication with sign-up, sign-in, and password reset
+- **Profile System**: User preferences, company information, and settings
+- **Protected Routes**: Secure access to intelligence features
+- **Session Management**: Persistent login with automatic token refresh
 
 ## 🏗️ Architecture
 
 ```
-├── src/
-│   ├── types/           # TypeScript type definitions
-│   ├── services/        # Core business logic
-│   │   ├── SearchEngine.ts      # Google Custom Search integration
-│   │   ├── ContentFetcher.ts    # Respectful web scraping
-│   │   ├── AIAnalyzer.ts        # AWS Bedrock integration
-│   │   ├── CacheService.ts      # Caching layer (to be created)
-│   │   └── Logger.ts            # Logging service
-│   └── index.ts         # Main entry point
-├── package.json         # Dependencies and scripts
-├── tsconfig.json       # TypeScript configuration
-└── env.example         # Environment variables template
+src/
+├── components/           # Reusable UI components
+│   ├── chat/            # Intelligence display components
+│   │   ├── IntelligenceCard.tsx
+│   │   ├── MessageBubble.tsx
+│   │   └── SourceCredibility.tsx
+│   ├── ui/              # shadcn/ui components
+│   │   ├── button.tsx
+│   │   ├── card.tsx
+│   │   ├── input.tsx
+│   │   └── ...
+│   ├── Layout.tsx       # Main layout wrapper
+│   ├── Navbar.tsx       # Navigation component
+│   └── ProtectedRoute.tsx
+├── contexts/            # React contexts
+│   ├── AuthContext.tsx  # Authentication state
+│   ├── ProfileContext.tsx
+│   └── ProfileContextTypes.ts
+├── hooks/               # Custom React hooks
+│   ├── useAuth.ts
+│   ├── useProfile.ts
+│   └── use-toast.ts
+├── lib/                 # Utility libraries
+│   ├── api.ts          # API client
+│   ├── config.ts       # App configuration
+│   └── utils.ts        # Helper functions
+├── pages/               # Main application pages
+│   ├── EnhancedIntelligenceExperience.tsx
+│   ├── LoginPage.tsx
+│   ├── SignUpPage.tsx
+│   ├── ConfirmSignUpPage.tsx
+│   └── ProfilePage.tsx
+├── types/               # TypeScript definitions
+│   └── api.ts
+└── App.tsx             # Main application component
 ```
 
 ## 📦 Installation
@@ -37,363 +81,250 @@ npm install
 
 2. **Set up environment variables:**
 ```bash
-# For development/runtime:
-cp env.example .env
-# Edit .env with your API keys
-
-# For deployment:
-cp env.example .env.local
-# Edit .env.local with your deployment configuration
+# Create .env file with:
+VITE_API_URL=https://your-api-gateway-url.com/prod
+VITE_AWS_REGION=us-west-2
+VITE_AWS_USER_POOL_ID=your_user_pool_id
+VITE_AWS_USER_POOL_WEB_CLIENT_ID=your_client_id
 ```
 
-3. **Build the project:**
+3. **Start development server:**
 ```bash
-npm run build
-```
-
-## 🔑 Required API Keys
-
-### Google Custom Search API
-1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-2. Enable the Custom Search API
-3. Create credentials (API key)
-4. Set up a Custom Search Engine at [CSE](https://cse.google.com/)
-
-### AWS Bedrock
-1. Ensure you have AWS credentials configured (AWS CLI, environment variables, or IAM roles)
-2. Enable Bedrock model access in your AWS account for the models you want to use
-3. Ensure your AWS credentials have `bedrock:InvokeModel` permissions
-
-## 🚀 Usage
-
-### Command Line
-```bash
-# Development mode
 npm run dev
+```
 
-# Production build and run
+4. **Build for production:**
+```bash
 npm run build
-npm start
 ```
 
-### Programmatic Usage
-```typescript
-import { SalesIntelligenceService } from './src';
+## 🎨 UI Components
 
-const config = {
-  search: {
-    maxResultsPerQuery: 10,
-    timeoutMs: 10000,
-    retryAttempts: 3,
-    rateLimitRps: 1
-  },
-  ai: {
-    model: 'anthropic.claude-3-sonnet-20240229-v1:0',
-    maxTokens: 2000,
-    temperature: 0.3,
-    systemPrompt: 'You are a sales intelligence analyst.'
-  },
-  cache: {
-    ttlHours: 1,
-    maxEntries: 1000,
-    compressionEnabled: true
-  },
-  apis: {
-    googleSearchApiKey: process.env.GOOGLE_SEARCH_API_KEY!,
-    googleSearchEngineId: process.env.GOOGLE_SEARCH_ENGINE_ID!
-  }
-};
-
-const service = new SalesIntelligenceService(config);
-
-const result = await service.generateIntelligence({
-  companyDomain: 'example.com',
-  salesContext: 'discovery',
-  additionalContext: 'Enterprise software evaluation'
-});
-
-console.log(result.insights);
-```
-
-## 🎯 Sales Contexts
-
-The system supports different sales contexts for tailored intelligence:
-
-- **`discovery`**: Initial research, pain points, growth indicators
-- **`competitive`**: Competitor analysis, vendor evaluation criteria
-- **`renewal`**: Contract renewal process, satisfaction metrics
-- **`demo`**: Technical requirements, use cases, integration needs
-- **`negotiation`**: Procurement process, budget approval, terms
-- **`closing`**: Implementation timeline, stakeholder buy-in
-
-## 📊 Example Output
+### Intelligence Cards
+Enhanced display components for company data:
 
 ```typescript
-{
-  insights: {
-    companyOverview: {
-      name: "Example Corp",
-      industry: "Technology",
-      size: "500-1000 employees",
-      revenue: "$50M-100M",
-      recentNews: [...],
-      growth: { hiring: true, funding: false, ... }
-    },
-    painPoints: [
-      "Legacy system modernization challenges",
-      "Scalability issues with current infrastructure"
-    ],
-    technologyStack: {
-      current: ["AWS", "React", "Node.js"],
-      planned: ["Kubernetes", "GraphQL"],
-      vendors: ["Salesforce", "HubSpot"]
-    },
-    keyContacts: [
-      {
-        name: "John Smith",
-        title: "CTO",
-        influence: "high",
-        approachStrategy: "Focus on technical architecture"
-      }
-    ],
-    competitiveLandscape: {
-      competitors: [...],
-      marketPosition: "Mid-market leader",
-      differentiators: [...]
-    },
-    talkingPoints: [...],
-    potentialObjections: [...],
-    dealProbability: 75
-  },
-  sources: ["https://example.com/news", ...],
-  confidenceScore: 0.85,
-  generatedAt: "2024-01-15T10:30:00Z"
-}
+// IntelligenceCard with proper object rendering
+<IntelligenceCard
+  title="Key Contacts"
+  data={contacts}
+  renderItem={(contact) => (
+    <div className="space-y-1">
+      <div className="font-medium">{contact.name}</div>
+      <div className="text-sm text-muted-foreground">{contact.title}</div>
+      <div className="text-xs">{contact.approachStrategy}</div>
+    </div>
+  )}
+/>
 ```
+
+### Tech Stack Display
+Color-coded technology stack visualization:
+
+```typescript
+// Tech stack with category-based styling
+{techStack.current?.map((tech, index) => (
+  <span key={index} className="px-2 py-1 bg-green-100 text-green-800 rounded">
+    {tech}
+  </span>
+))}
+```
+
+### Discovery Interface
+Comprehensive discovery insights with proper data structure handling:
+- Key contacts with names, titles, and approach strategies
+- Technology stack with current, planned, and vendor categories
+- Company overview with financial and operational metrics
+- Sources with credibility scoring and citations
 
 ## 🔧 Configuration
 
-### Search Configuration
+### Environment Variables
+```bash
+# API Configuration
+VITE_API_URL=https://api.salesintelligence.com/prod
+VITE_API_KEY=your_api_key  # Optional if using Cognito
+
+# AWS Cognito Configuration
+VITE_AWS_REGION=us-west-2
+VITE_AWS_USER_POOL_ID=us-west-2_xxxxxxxxx
+VITE_AWS_USER_POOL_WEB_CLIENT_ID=xxxxxxxxxxxxxxxxxxxxxxxxxx
+
+# Optional Features
+VITE_ENABLE_ANALYTICS=true
+VITE_DEBUG_MODE=false
+```
+
+### API Integration
+The frontend integrates with the backend API using:
+
 ```typescript
-search: {
-  maxResultsPerQuery: 10,    // Max results per search query
-  timeoutMs: 10000,          // Request timeout
-  retryAttempts: 3,          // Retry failed requests
-  rateLimitRps: 1            // Requests per second limit
-}
+// Enhanced API client with authentication
+const apiClient = {
+  getCompanyOverview: (domain: string) => 
+    api.get(`/company/${domain}/overview`),
+  
+  getDiscoveryInsights: (domain: string) => 
+    api.get(`/company/${domain}/discovery`),
+    
+  getAnalysis: (domain: string, searchResults: any[]) =>
+    api.post(`/company/${domain}/analysis`, { searchResults }),
+    
+  checkRequestStatus: (requestId: string) =>
+    api.get(`/requests/${requestId}`)
+};
 ```
 
-### AI Configuration
-```typescript
-ai: {
-  model: 'anthropic.claude-3-sonnet-20240229-v1:0',  // Bedrock model to use
-  maxTokens: 2000,           // Max tokens per analysis
-  temperature: 0.3,          // Creativity vs consistency
-  systemPrompt: '...'        // System instruction
-}
-```
+## 🎯 Key Features
 
-### Cache Configuration
-```typescript
-cache: {
-  ttlHours: 1,               // Time to live in hours
-  maxEntries: 1000,          // Max cached entries
-  compressionEnabled: true   // Enable compression
-}
-```
+### Enhanced Discovery Experience
+- **Visual Company Cards**: Rich display of company information
+- **Interactive Tech Stack**: Clickable technology categories with descriptions
+- **Contact Intelligence**: Detailed contact profiles with approach strategies
+- **Real-time Processing**: Live status updates during analysis generation
 
-## 🔌 API Endpoints
+### Improved Data Rendering
+- **Object Structure Support**: Proper rendering of complex data objects
+- **Citation Integration**: Source links and credibility indicators
+- **Error Handling**: Graceful fallbacks for missing or invalid data
+- **Loading States**: Skeleton loaders and progress indicators
 
-The Sales Intelligence platform provides REST API endpoints for different use cases:
-
-### Company Overview
-
-**Asynchronous (recommended pattern):**
-```bash
-# 1. Start processing (returns immediately)
-GET /company/{domain}/overview
-
-# Response:
-{
-  "requestId": "req_abc123",
-  "status": "processing",
-  "message": "Company overview is being processed. Use the requestId to check status.",
-  "estimatedTimeMinutes": 1,
-  "statusCheckEndpoint": "/requests/req_abc123"
-}
-
-# 2. Check status and get results
-GET /requests/{requestId}
-
-# Response (when completed):
-{
-  "requestId": "req_abc123",
-  "status": "completed",
-  "companyDomain": "shopify.com",
-  "processingTimeMs": 45000,
-  "result": {
-    "name": "Shopify Inc.",
-    "domain": "shopify.com",
-    "industry": "E-commerce Technology",
-    // ... full company overview data
-  }
-}
-```
-
-### Other Endpoints
-
-**Company Search:**
-```bash
-GET /company/{domain}/search?context=discovery
-```
-
-**AI Analysis:**
-```bash
-POST /company/{domain}/analysis
-```
-
-**Discovery Insights:**
-```bash
-GET /company/{domain}/discovery
-```
-
-**Cache Management (Development):**
-```bash
-# Get cache statistics
-GET /cache/stats
-
-# Clear entire cache
-POST /cache/clear
-
-# Delete specific cache entry
-DELETE /cache/delete/{cacheKey}
-```
-
-**Health Check:**
-```bash
-GET /health
-```
-
-### Authentication
-
-All endpoints require an API key:
-```bash
-curl -H "X-API-Key: your-api-key" \
-     https://api.example.com/company/shopify.com/overview
-```
-
-### Status Codes
-
-- `200` - Success
-- `202` - Accepted (async request created)
-- `400` - Bad Request
-- `401` - Unauthorized
-- `404` - Not Found
-- `429` - Rate Limited
-- `500` - Internal Server Error
-
-### Rate Limits
-
-- 100 requests per minute per API key
-- 200 burst capacity
-- Async endpoints recommended for heavy usage
-
-## 🛡️ Legal & Ethical Considerations
-
-This application follows Perplexity's approach for legal compliance:
-
-- **Fair Use**: Content is analyzed, not republished
-- **No Redistribution**: Users receive insights, not raw scraped data
-- **Research Purpose**: Transformative use for sales intelligence
-- **Attribution**: Sources are always cited
-- **Rate Limiting**: Respectful of website resources
-- **Robots.txt**: Compliance with website policies
+### User Experience
+- **Intuitive Navigation**: Clean routing between discovery, analysis, and overview
+- **Responsive Design**: Optimized for all device sizes
+- **Accessibility**: WCAG compliant with keyboard navigation
+- **Performance**: Optimized bundle size and lazy loading
 
 ## 🧪 Testing
 
 ```bash
-# Run tests
-npm test
+# Run component tests
+npm run test
 
-# Run with coverage
-npm run test:coverage
+# Run E2E tests
+npm run test:e2e
 
-# Lint code
-npm run lint
+# Run accessibility tests
+npm run test:a11y
+
+# Visual regression tests
+npm run test:visual
 ```
-
-## 📈 Performance Metrics
-
-The system tracks:
-- Search time
-- Content fetch time
-- AI analysis time
-- Cache hit rates
-- Source reliability scores
-
-## 🔄 Development
-
-### Adding New Services
-1. Create service in `src/services/`
-2. Add types to `src/types/index.ts`
-3. Update main service integration
-4. Add tests
-
-### Extending Sales Contexts
-1. Update `SalesContext` type
-2. Add context-specific queries in `SalesIntelligenceService`
-3. Update AI prompts for new context
 
 ## 🚀 Deployment
 
-### Docker (Recommended)
+### Netlify (Recommended)
+```bash
+# Build command
+npm run build
+
+# Publish directory
+dist
+
+# Environment variables (set in Netlify dashboard)
+VITE_API_URL=https://your-production-api.com/prod
+VITE_AWS_REGION=us-west-2
+VITE_AWS_USER_POOL_ID=your_prod_pool_id
+VITE_AWS_USER_POOL_WEB_CLIENT_ID=your_prod_client_id
+```
+
+### AWS S3 + CloudFront
+```bash
+# Build for production
+npm run build
+
+# Deploy to S3
+aws s3 sync dist/ s3://your-bucket-name --delete
+
+# Invalidate CloudFront cache
+aws cloudfront create-invalidation --distribution-id YOUR_DISTRIBUTION_ID --paths "/*"
+```
+
+### Docker
 ```dockerfile
-FROM node:18-alpine
+FROM node:18-alpine as builder
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci --only=production
-COPY dist ./dist
-CMD ["node", "dist/index.js"]
+RUN npm ci
+COPY . .
+RUN npm run build
+
+FROM nginx:alpine
+COPY --from=builder /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/nginx.conf
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
 ```
 
-### Environment Variables
-```bash
-GOOGLE_SEARCH_API_KEY=your_key
-GOOGLE_SEARCH_ENGINE_ID=your_id
-AWS_REGION=us-east-1
-AWS_PROFILE=default  # Or use AWS_ACCESS_KEY_ID/AWS_SECRET_ACCESS_KEY
-REDIS_URL=redis://localhost:6379  # Optional
-LOG_LEVEL=info
-NODE_ENV=production
+## 🎨 Styling & Theming
+
+### Tailwind CSS Configuration
+```javascript
+// tailwind.config.js
+module.exports = {
+  content: ["./src/**/*.{js,ts,jsx,tsx}"],
+  theme: {
+    extend: {
+      colors: {
+        primary: {
+          50: '#eff6ff',
+          500: '#3b82f6',
+          900: '#1e3a8a',
+        }
+      }
+    }
+  },
+  plugins: [require("@tailwindcss/typography")]
+}
 ```
 
-## 📝 License
+### Component Library
+Built with shadcn/ui for consistent, accessible components:
+- Button, Card, Input, Select components
+- Dark/light mode support
+- Consistent spacing and typography
+- Professional color palette
 
-MIT License - see LICENSE file for details.
+## 📱 Mobile Support
+
+The application is fully responsive with:
+- Touch-friendly interface elements
+- Optimized layouts for mobile screens
+- Swipe gestures for navigation
+- Mobile-specific loading states
+
+## 🔐 Security Features
+
+- **Secure Authentication**: AWS Cognito integration with MFA support
+- **Protected Routes**: Authentication required for intelligence features
+- **HTTPS Only**: Enforced secure connections
+- **XSS Protection**: Sanitized data rendering
+- **CSRF Protection**: Request validation and tokens
+
+## 🚀 Performance
+
+- **Code Splitting**: Lazy-loaded components and routes
+- **Bundle Optimization**: Tree shaking and minification
+- **Caching Strategy**: Intelligent API response caching
+- **Image Optimization**: WebP format with fallbacks
+- **CDN Integration**: Static asset optimization
+
+## 📈 Analytics & Monitoring
+
+- **User Analytics**: Page views, user flows, and engagement metrics
+- **Error Tracking**: Real-time error monitoring and reporting
+- **Performance Monitoring**: Core Web Vitals and load times
+- **API Monitoring**: Request success rates and response times
 
 ## 🤝 Contributing
 
 1. Fork the repository
 2. Create feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing-feature`)
-5. Open Pull Request
+3. Follow the component structure and naming conventions
+4. Add tests for new components
+5. Update documentation
+6. Submit pull request
 
-## 🆘 Support
+## 📝 License
 
-For questions and support:
-- Create an issue on GitHub
-- Check the documentation
-- Review example usage in `src/index.ts`
-
-## 🔮 Roadmap
-
-- [ ] Complete remaining service implementations
-- [x] Add REST API endpoints
-- [x] Async request/response pattern for long-running operations
-- [ ] Web dashboard UI
-- [ ] Advanced caching with Redis
-- [ ] Webhook integrations
-- [ ] Real-time monitoring alerts
-- [ ] Multi-language support
-- [ ] Enterprise SSO integration 
+MIT License - see LICENSE file for details.

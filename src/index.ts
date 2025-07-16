@@ -6,6 +6,7 @@ import { RequestService } from './services/utilities/RequestService';
 import { Logger } from './services/core/Logger';
 import { LambdaClient, InvokeCommand } from '@aws-sdk/client-lambda';
 import { CacheService } from './services/core/CacheService';
+import { ProfileService, UserProfile } from './services/ProfileService';
 
 // Load environment variables
 config();
@@ -133,7 +134,7 @@ const getCorsHeaders = (origin?: string) => {
   return {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': allowOrigin,
-    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Api-Key, X-Amz-Date, X-Amz-Security-Token',
     'Access-Control-Allow-Credentials': 'false',
   };
@@ -1247,6 +1248,187 @@ export const cacheStatsHandler = async (
 
     const origin = event.headers.Origin || event.headers.origin;
     const corsHeaders = getCorsHeaders(origin);
+    
+    return {
+      statusCode: 500,
+      headers: corsHeaders,
+      body: JSON.stringify({
+        error: 'Internal server error',
+        message: error instanceof Error ? error.message : 'Unknown error',
+        requestId: context.awsRequestId,
+      }),
+    };
+  }
+};
+
+/**
+ * Lambda handler for profile management
+ */
+export const profileHandler = async (
+  event: APIGatewayProxyEvent,
+  context: Context
+): Promise<APIGatewayProxyResult> => {
+  try {
+    console.log('Profile Lambda invoked', { 
+      requestId: context.awsRequestId,
+      method: event.httpMethod,
+      path: event.path 
+    });
+
+    const origin = event.headers.Origin || event.headers.origin;
+    const corsHeaders = getCorsHeaders(origin);
+
+    // Extract userId from path parameters
+    const userId = event.pathParameters?.userId;
+    if (!userId) {
+      return {
+        statusCode: 400,
+        headers: corsHeaders,
+        body: JSON.stringify({
+          error: 'User ID is required in path',
+          requestId: context.awsRequestId,
+        }),
+      };
+    }
+
+    const profileService = new ProfileService();
+
+    switch (event.httpMethod) {
+      case 'GET':
+        // Get user profile
+        try {
+          const profile = await profileService.getProfile(userId);
+          
+          if (!profile) {
+            return {
+              statusCode: 404,
+              headers: corsHeaders,
+              body: JSON.stringify({
+                error: 'Profile not found',
+                requestId: context.awsRequestId,
+              }),
+            };
+          }
+
+          return {
+            statusCode: 200,
+            headers: corsHeaders,
+            body: JSON.stringify({
+              profile,
+              requestId: context.awsRequestId,
+            }),
+          };
+        } catch (error) {
+          console.error('Error getting profile:', error);
+          return {
+            statusCode: 500,
+            headers: corsHeaders,
+            body: JSON.stringify({
+              error: 'Failed to get profile',
+              message: error instanceof Error ? error.message : 'Unknown error',
+              requestId: context.awsRequestId,
+            }),
+          };
+        }
+
+      case 'PUT':
+        // Save/update user profile
+        try {
+          if (!event.body) {
+            return {
+              statusCode: 400,
+              headers: corsHeaders,
+              body: JSON.stringify({
+                error: 'Request body is required',
+                requestId: context.awsRequestId,
+              }),
+            };
+          }
+
+          const profileData = JSON.parse(event.body) as Partial<UserProfile>;
+          
+          // Ensure userId matches the path parameter
+          profileData.userId = userId;
+
+          // Validate profile data
+          const validation = profileService.validateProfile(profileData);
+          if (!validation.isValid) {
+            return {
+              statusCode: 400,
+              headers: corsHeaders,
+              body: JSON.stringify({
+                error: 'Invalid profile data',
+                errors: validation.errors,
+                requestId: context.awsRequestId,
+              }),
+            };
+          }
+
+          const savedProfile = await profileService.saveProfile(profileData as UserProfile);
+
+          return {
+            statusCode: 200,
+            headers: corsHeaders,
+            body: JSON.stringify({
+              profile: savedProfile,
+              message: 'Profile saved successfully',
+              requestId: context.awsRequestId,
+            }),
+          };
+        } catch (error) {
+          console.error('Error saving profile:', error);
+          return {
+            statusCode: 500,
+            headers: corsHeaders,
+            body: JSON.stringify({
+              error: 'Failed to save profile',
+              message: error instanceof Error ? error.message : 'Unknown error',
+              requestId: context.awsRequestId,
+            }),
+          };
+        }
+
+      case 'DELETE':
+        // Delete user profile
+        try {
+          await profileService.deleteProfile(userId);
+
+          return {
+            statusCode: 200,
+            headers: corsHeaders,
+            body: JSON.stringify({
+              message: 'Profile deleted successfully',
+              requestId: context.awsRequestId,
+            }),
+          };
+        } catch (error) {
+          console.error('Error deleting profile:', error);
+          return {
+            statusCode: 500,
+            headers: corsHeaders,
+            body: JSON.stringify({
+              error: 'Failed to delete profile',
+              message: error instanceof Error ? error.message : 'Unknown error',
+              requestId: context.awsRequestId,
+            }),
+          };
+        }
+
+      default:
+        return {
+          statusCode: 405,
+          headers: corsHeaders,
+          body: JSON.stringify({
+            error: 'Method not allowed',
+            allowedMethods: ['GET', 'PUT', 'DELETE'],
+            requestId: context.awsRequestId,
+          }),
+        };
+    }
+  } catch (error) {
+    console.error('Profile Lambda error:', error);
+    
+    const corsHeaders = getCorsHeaders();
     
     return {
       statusCode: 500,

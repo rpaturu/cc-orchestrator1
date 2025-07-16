@@ -44,6 +44,13 @@ export class SalesIntelligenceStack extends cdk.Stack {
       projectionType: dynamodb.ProjectionType.ALL,
     });
 
+    const profilesTable = new dynamodb.Table(this, 'UserProfilesTable', {
+      tableName: 'user-profiles',
+      partitionKey: { name: 'userId', type: dynamodb.AttributeType.STRING },
+      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+    });
+
     // Secrets Manager for API keys
     const apiKeysSecret = new secretsmanager.Secret(this, 'SalesIntelligenceApiKeys', {
       secretName: 'sales-intelligence-api-keys',
@@ -404,12 +411,34 @@ export class SalesIntelligenceStack extends cdk.Stack {
       },
     });
 
+    // Profile Management Lambda Function
+    const profileFunction = new NodejsFunction(this, 'ProfileFunction', {
+      functionName: 'sales-intelligence-profile',
+      runtime: lambda.Runtime.NODEJS_20_X,
+      entry: path.join(__dirname, '../index.ts'),
+      handler: 'profileHandler',
+      timeout: cdk.Duration.seconds(30),
+      memorySize: 256,
+      environment: {
+        PROFILES_TABLE_NAME: profilesTable.tableName,
+        LOG_LEVEL: this.node.tryGetContext('logLevel')!,
+        ALLOWED_ORIGINS: allowedOriginsString,
+        NODE_ENV: 'production'
+      },
+      bundling: {
+        tsconfig: path.join(__dirname, '../../tsconfig.json'),
+      },
+    });
+
     // Grant permissions for all functions
     [searchFunction, discoveryAsyncFunction, analysisAsyncFunction, chatFunction, bedrockParseFunction, debugFunction, asyncOverviewFunction, getAsyncRequestFunction, processOverviewFunction, processDiscoveryFunction, processAnalysisFunction].forEach(func => {
       cacheTable.grantReadWriteData(func);
       requestsTable.grantReadWriteData(func);
       apiKeysSecret.grantRead(func);
     });
+
+    // Profile function needs access to profiles table
+    profilesTable.grantReadWriteData(profileFunction);
 
     // Cache management functions only need cache table access
     [cacheClearFunction, cacheDeleteFunction, cacheStatsFunction].forEach(func => {
@@ -458,13 +487,31 @@ export class SalesIntelligenceStack extends cdk.Stack {
       resources: [processOverviewFunction.functionArn],
     }));
 
+    // Grant permission for discovery async function to invoke processing function
+    discoveryAsyncFunction.addToRolePolicy(new iam.PolicyStatement({
+      effect: iam.Effect.ALLOW,
+      actions: [
+        'lambda:InvokeFunction',
+      ],
+      resources: [processDiscoveryFunction.functionArn],
+    }));
+
+    // Grant permission for analysis async function to invoke processing function
+    analysisAsyncFunction.addToRolePolicy(new iam.PolicyStatement({
+      effect: iam.Effect.ALLOW,
+      actions: [
+        'lambda:InvokeFunction',
+      ],
+      resources: [processAnalysisFunction.functionArn],
+    }));
+
     // Create REST API
     const api = new apigateway.RestApi(this, 'SalesIntelligenceApi', {
       restApiName: 'Sales Intelligence API',
       description: 'API for sales intelligence and company research',
       defaultCorsPreflightOptions: {
         allowOrigins: allowedOrigins,
-        allowMethods: ['GET', 'POST', 'OPTIONS'],
+        allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
         allowHeaders: ['Content-Type', 'Authorization', 'X-API-Key'],
         allowCredentials: true,
       },
@@ -585,6 +632,26 @@ export class SalesIntelligenceStack extends cdk.Stack {
       apiKeyRequired: true,
     });
 
+    // Profile management endpoints
+    const profileResource = api.root.addResource('profile');
+    const userIdResource = profileResource.addResource('{userId}');
+    const profileIntegration = new apigateway.LambdaIntegration(profileFunction);
+    
+    // GET /profile/{userId} - Get user profile
+    userIdResource.addMethod('GET', profileIntegration, {
+      apiKeyRequired: true,
+    });
+    
+    // PUT /profile/{userId} - Save/update user profile
+    userIdResource.addMethod('PUT', profileIntegration, {
+      apiKeyRequired: true,
+    });
+    
+    // DELETE /profile/{userId} - Delete user profile
+    userIdResource.addMethod('DELETE', profileIntegration, {
+      apiKeyRequired: true,
+    });
+
     // CloudFormation Outputs
     new cdk.CfnOutput(this, 'ApiEndpoint', {
       value: api.url,
@@ -608,6 +675,12 @@ export class SalesIntelligenceStack extends cdk.Stack {
       value: requestsTable.tableName,
       description: 'DynamoDB requests table name',
       exportName: 'SalesIntelligenceRequestsTableName',
+    });
+
+    new cdk.CfnOutput(this, 'ProfilesTableName', {
+      value: profilesTable.tableName,
+      description: 'DynamoDB profiles table name',
+      exportName: 'SalesIntelligenceProfilesTableName',
     });
 
     new cdk.CfnOutput(this, 'ApiKeysSecretName', {
