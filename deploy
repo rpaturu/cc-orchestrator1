@@ -215,32 +215,28 @@ echo ""
 # Remove trailing slash from API_ENDPOINT if it exists
 API_ENDPOINT_CLEAN=$(echo "$API_ENDPOINT" | sed 's|/$||')
 
-echo "🧪 Test the API:"
-echo "# Company Overview (Asynchronous - returns request ID immediately)"
-echo "curl -X GET \"$API_ENDPOINT_CLEAN/company/shopify.com/overview\" -H \"X-API-Key: $API_KEY_VALUE\" | jq"
+# Update .env with clean endpoint for easy testing
+cat >> .env << EOF
+
+# For easy testing (no trailing slash)
+API_ENDPOINT_CLEAN=$API_ENDPOINT_CLEAN
+EOF
+
+echo "📚 API Documentation: docs/api-endpoints.md"
 echo ""
-echo "# Company Discovery (Asynchronous - returns request ID immediately)"
-echo "curl -X GET \"$API_ENDPOINT_CLEAN/company/shopify.com/discovery\" -H \"X-API-Key: $API_KEY_VALUE\" | jq"
+echo "🧪 Quick Test Commands:"
+echo "# Set environment variables"
+echo "export API_ENDPOINT=\"$API_ENDPOINT_CLEAN\""
+echo "export API_KEY=\"$API_KEY_VALUE\""
 echo ""
-echo "# Company Analysis (Asynchronous - returns request ID immediately)"
-echo "curl -X POST \"$API_ENDPOINT_CLEAN/company/shopify.com/analysis\" -H \"X-API-Key: $API_KEY_VALUE\" -H \"Content-Type: application/json\" -d '{\"context\":\"discovery\",\"searchResults\":[{\"title\":\"Sample\",\"url\":\"https://example.com\",\"snippet\":\"Sample content\"}]}' | jq"
+echo "# Test health check"
+echo "curl \$API_ENDPOINT/health"
 echo ""
-echo "# Check Async Request Status (replace REQUEST_ID with actual value)"
-echo "curl -X GET \"$API_ENDPOINT_CLEAN/requests/REQUEST_ID\" -H \"X-API-Key: $API_KEY_VALUE\" | jq"
+echo "# Test company lookup"
+echo "curl -X GET \"\$API_ENDPOINT/api/companies/lookup?query=shopify&limit=3\" -H \"X-API-Key: \$API_KEY\" | jq"
 echo ""
-echo "# Company Search (Synchronous - immediate response)"
-echo "curl -X GET \"$API_ENDPOINT_CLEAN/company/shopify.com/search?query=latest+news\" -H \"X-API-Key: $API_KEY_VALUE\" | jq"
+echo "# Test company overview (async)"
+echo "curl -X GET \"\$API_ENDPOINT/company/shopify.com/overview\" -H \"X-API-Key: \$API_KEY\" | jq"
 echo ""
-echo "🗂️ Cache Management (Dev):"
-echo "# Get cache statistics"
-echo "curl -X GET \"$API_ENDPOINT_CLEAN/cache/stats\" -H \"X-API-Key: $API_KEY_VALUE\" | jq"
-echo ""
-echo "# Clear entire cache"
-echo "curl -X POST \"$API_ENDPOINT_CLEAN/cache/clear\" -H \"X-API-Key: $API_KEY_VALUE\" | jq"
-echo ""
-echo "# Delete specific cache entry (replace CACHE_KEY with actual cache key)"
-echo "curl -X DELETE \"$API_ENDPOINT_CLEAN/cache/delete/CACHE_KEY\" -H \"X-API-Key: $API_KEY_VALUE\" | jq"
-echo ""
-echo "🔍 Health Check:"
-echo "curl $API_ENDPOINT_CLEAN/health"
+echo "📖 For complete API documentation and examples, see: docs/api-endpoints.md"
 echo "" 
