@@ -105,7 +105,7 @@ export class OverviewHandler extends BaseEndpointHandler {
     
     // Only cache successful overview results, not failures
     if (this.isOverviewSuccessful(result)) {
-      await this.cache.set(cacheKey, cacheData);
+    await this.cache.set(cacheKey, cacheData);
       this.logger.info('Cached successful overview result', { domain, cacheKey });
     } else {
       this.logger.warn('Overview analysis failed - not caching result to allow retry', { 

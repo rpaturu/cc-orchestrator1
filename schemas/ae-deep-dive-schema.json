@@ -1,0 +1,98 @@
+{
+  "persona": "Account Executive (AE)",
+  "customer": {
+    "name": "string",
+    "industry": "string", 
+    "size": "string",
+    "headquarters": "string",
+    "founded": "string",
+    "funding": {
+      "totalRaised": "string",
+      "latestRound": {
+        "type": "string",
+        "amount": "string", 
+        "date": "string",
+        "investors": ["string"]
+      }
+    },
+    "financialHealth": {
+      "revenue": "string",
+      "growthRate": "string",
+      "profitability": "string"
+    }
+  },
+  "buyingSignals": [
+    {
+      "signal": "string",
+      "strength": "high|medium|low",
+      "source": "string",
+      "date": "string",
+      "insight": "string"
+    }
+  ],
+  "decisionMakers": [
+    {
+      "name": "string",
+      "title": "string", 
+      "role": "economic_buyer|technical_buyer|champion|influencer",
+      "influence": "high|medium|low",
+      "reachability": "warm|cold|linkedin",
+      "backgroundSignals": ["string"]
+    }
+  ],
+  "competitiveContext": {
+    "incumbentVendors": ["string"],
+    "evaluationHistory": [
+      {
+        "vendor": "string",
+        "outcome": "string",
+        "year": "string",
+        "painPoints": ["string"]
+      }
+    ],
+    "competitiveBattlecards": [
+      {
+        "competitor": "string",
+        "theirStrength": "string",
+        "ourAdvantage": "string",
+        "objectionHandler": "string"
+      }
+    ]
+  },
+  "opportunityIntel": {
+    "estimatedBudget": "string",
+    "decisionTimeline": "string", 
+    "currentPainPoints": ["string"],
+    "businessDrivers": ["string"],
+    "successMetrics": ["string"]
+  },
+  "recommendedProducts": [
+    {
+      "product": "string",
+      "fitReason": "string",
+      "businessValue": "string",
+      "estimatedARR": "string",
+      "attachRate": "string"
+    }
+  ],
+  "sellingStrategy": {
+    "primaryMessage": "string",
+    "proofPoints": ["string"],
+    "riskMitigation": ["string"],
+    "nextBestActions": ["string"]
+  },
+  "contentRecommendations": [
+    {
+      "title": "string",
+      "type": "case_study|demo|roi_calculator|white_paper",
+      "url": "string",
+      "useCase": "string"
+    }
+  ],
+  "meetingPrep": {
+    "talkingPoints": ["string"],
+    "questionsToAsk": ["string"],
+    "landmines": ["string"],
+    "leaveBehind": ["string"]
+  }
+} 

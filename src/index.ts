@@ -7,6 +7,7 @@ import { Logger } from './services/core/Logger';
 import { LambdaClient, InvokeCommand } from '@aws-sdk/client-lambda';
 import { CacheService } from './services/core/CacheService';
 import { ProfileService, UserProfile } from './services/ProfileService';
+import { CompanyLookupHandler } from './services/handlers/CompanyLookupHandler';
 
 // Load environment variables
 config();
@@ -1429,6 +1430,206 @@ export const profileHandler = async (
     console.error('Profile Lambda error:', error);
     
     const corsHeaders = getCorsHeaders();
+    
+    return {
+      statusCode: 500,
+      headers: corsHeaders,
+      body: JSON.stringify({
+        error: 'Internal server error',
+        message: error instanceof Error ? error.message : 'Unknown error',
+        requestId: context.awsRequestId,
+      }),
+    };
+  }
+};
+
+/**
+ * Company Lookup API Handler - Lookup companies for autocomplete
+ * GET /api/companies/lookup?query=acme&limit=5
+ */
+export const companyLookupHandler = async (
+  event: APIGatewayProxyEvent,
+  context: Context
+): Promise<APIGatewayProxyResult> => {
+  try {
+    console.log('Company Lookup Lambda invoked', { requestId: context.awsRequestId });
+
+    const origin = event.headers.Origin || event.headers.origin;
+    const corsHeaders = getCorsHeaders(origin);
+
+    const handler = new CompanyLookupHandler();
+    const result = await handler.handleLookup(event);
+
+    return {
+      ...result,
+      headers: { ...result.headers, ...corsHeaders }
+    };
+
+  } catch (error) {
+    console.error('Company Lookup Lambda error:', error);
+
+    const origin = event.headers.Origin || event.headers.origin;
+    const corsHeaders = getCorsHeaders(origin);
+    
+    return {
+      statusCode: 500,
+      headers: corsHeaders,
+      body: JSON.stringify({
+        error: 'Internal server error',
+        message: error instanceof Error ? error.message : 'Unknown error',
+        requestId: context.awsRequestId,
+      }),
+    };
+  }
+};
+
+/**
+ * Company Enrichment API Handler - Get full company details
+ * POST /api/companies/enrich
+ */
+export const companyEnrichHandler = async (
+  event: APIGatewayProxyEvent,
+  context: Context
+): Promise<APIGatewayProxyResult> => {
+  try {
+    console.log('Company Enrich Lambda invoked', { requestId: context.awsRequestId });
+
+    const origin = event.headers.Origin || event.headers.origin;
+    const corsHeaders = getCorsHeaders(origin);
+
+    const handler = new CompanyLookupHandler();
+    const result = await handler.handleEnrich(event);
+
+    return {
+      ...result,
+      headers: { ...result.headers, ...corsHeaders }
+    };
+
+  } catch (error) {
+    console.error('Company Enrich Lambda error:', error);
+
+    const origin = event.headers.Origin || event.headers.origin;
+    const corsHeaders = getCorsHeaders(origin);
+    
+    return {
+      statusCode: 500,
+      headers: corsHeaders,
+      body: JSON.stringify({
+        error: 'Internal server error',
+        message: error instanceof Error ? error.message : 'Unknown error',
+        requestId: context.awsRequestId,
+      }),
+    };
+  }
+};
+
+/**
+ * Product Suggestions API Handler
+ * POST /api/products/suggest
+ */
+export const productSuggestHandler = async (
+  event: APIGatewayProxyEvent,
+  context: Context
+): Promise<APIGatewayProxyResult> => {
+  try {
+    console.log('Product Suggest Lambda invoked', { requestId: context.awsRequestId });
+
+    const origin = event.headers.Origin || event.headers.origin;
+    const corsHeaders = getCorsHeaders(origin);
+
+    const handler = new CompanyLookupHandler();
+    const result = await handler.handleProductSuggestions(event);
+
+    return {
+      ...result,
+      headers: { ...result.headers, ...corsHeaders }
+    };
+
+  } catch (error) {
+    console.error('Product Suggest Lambda error:', error);
+
+    const origin = event.headers.Origin || event.headers.origin;
+    const corsHeaders = getCorsHeaders(origin);
+    
+    return {
+      statusCode: 500,
+      headers: corsHeaders,
+      body: JSON.stringify({
+        error: 'Internal server error',
+        message: error instanceof Error ? error.message : 'Unknown error',
+        requestId: context.awsRequestId,
+      }),
+    };
+  }
+};
+
+/**
+ * Competitor Discovery API Handler
+ * POST /api/competitors/find
+ */
+export const competitorFindHandler = async (
+  event: APIGatewayProxyEvent,
+  context: Context
+): Promise<APIGatewayProxyResult> => {
+  try {
+    console.log('Competitor Find Lambda invoked', { requestId: context.awsRequestId });
+
+    const origin = event.headers.Origin || event.headers.origin;
+    const corsHeaders = getCorsHeaders(origin);
+
+    const handler = new CompanyLookupHandler();
+    const result = await handler.handleCompetitorFind(event);
+
+    return {
+      ...result,
+      headers: { ...result.headers, ...corsHeaders }
+    };
+
+  } catch (error) {
+    console.error('Competitor Find Lambda error:', error);
+
+    const origin = event.headers.Origin || event.headers.origin;
+    const corsHeaders = getCorsHeaders(origin);
+    
+    return {
+      statusCode: 500,
+      headers: corsHeaders,
+      body: JSON.stringify({
+        error: 'Internal server error',
+        message: error instanceof Error ? error.message : 'Unknown error',
+        requestId: context.awsRequestId,
+      }),
+    };
+  }
+};
+
+/**
+ * Domain Suggestion API Handler
+ * GET /api/companies/suggest-domain?name=Acme Corp
+ */
+export const domainSuggestHandler = async (
+  event: APIGatewayProxyEvent,
+  context: Context
+): Promise<APIGatewayProxyResult> => {
+  try {
+    console.log('Domain Suggest Lambda invoked', { requestId: context.awsRequestId });
+
+    const origin = event.headers.Origin || event.headers.origin;
+    const corsHeaders = getCorsHeaders(origin);
+
+    const handler = new CompanyLookupHandler();
+    const result = await handler.handleDomainSuggestion(event);
+
+    return {
+      ...result,
+      headers: { ...result.headers, ...corsHeaders }
+    };
+
+  } catch (error) {
+    console.error('Domain Suggest Lambda error:', error);
+
+    const origin = event.headers.Origin || event.headers.origin;
+    const corsHeaders = getCorsHeaders(origin);
     
     return {
       statusCode: 500,

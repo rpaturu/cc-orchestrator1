@@ -425,7 +425,7 @@ export class AIAnalyzer {
     let responseText: string;
     let actualInputTokens = 0;
     let actualOutputTokens = 0;
-
+    
     // Extract response text and token usage based on model type
     if (modelId.includes('claude')) {
       responseText = responseBody.content[0].text;

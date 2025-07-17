@@ -1,0 +1,8 @@
+"recommended_products": [
+  {
+    "product": "Okta Lifecycle Management",
+    "reason": "Acme Corp is hiring in EMEA and needs automated onboarding",
+    "personaFit": ["AE", "CSM"],
+    "vendor": "Okta"
+  }
+]

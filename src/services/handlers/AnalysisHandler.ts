@@ -120,7 +120,7 @@ export class AnalysisHandler extends BaseEndpointHandler {
 
     // Only cache successful analysis results, not failures
     if (this.isAnalysisSuccessful(insights)) {
-      await this.cache.set(cacheKey, result);
+    await this.cache.set(cacheKey, result);
       this.logger.info('Cached successful analysis result', { domain, context, cacheKey });
     } else {
       this.logger.warn('Analysis failed - not caching result to allow retry', { 

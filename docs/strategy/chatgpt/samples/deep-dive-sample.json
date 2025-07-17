@@ -1,0 +1,137 @@
+"deepDiveSample": {
+  okta_CSM: {
+    userPersona: {
+      name: "Taylor",
+      role: "CSM",
+      company: "Okta",
+      productLine: "Identity Cloud",
+      region: "EMEA",
+      segment: "Mid-Market",
+      primaryCompetitors: ["Microsoft Entra ID", "Ping Identity", "Auth0"]
+    },
+    customer: {
+      name: "Acme Corp",
+      industry: "FinTech",
+      size: "500–1,000 employees",
+      headquarters: "London, UK",
+      meetingType: "renewal",
+      techStack: ["Salesforce", "Slack", "AWS"],
+      knownPainPoints: ["onboarding latency", "MFA fatigue"]
+    },
+    recommended_products: [
+      {
+        product: "Okta Lifecycle Management",
+        reason: "Automates user provisioning as Acme grows",
+        personaFit: ["CSM"],
+        vendor: "Okta"
+      }
+    ],
+    competitive_positioning: [
+      {
+        competitor: "Microsoft Entra ID",
+        known_issues: ["Steep learning curve for custom apps", "Vendor lock-in"],
+        how_to_win: "Emphasize Okta's faster time-to-value and ecosystem neutrality"
+      }
+    ],
+    persona_guidance: {
+      CSM: {
+        meeting_focus: "Retention & expanding usage in EMEA",
+        key_metrics_to_watch: ["Provisioning failures", "MFA ticket volume"],
+        recommended_actions: [
+          "Propose Lifecycle Management pilot",
+          "Share new SCIM provisioning success stories"
+        ]
+      }
+    }
+  },
+
+  paloAlto_AE: {
+    userPersona: {
+      name: "Jaden",
+      role: "AE",
+      company: "Palo Alto Networks",
+      productLine: "Prisma Cloud",
+      region: "AMER",
+      segment: "Enterprise",
+      primaryCompetitors: ["CrowdStrike", "Wiz", "Check Point"]
+    },
+    customer: {
+      name: "Neon Payments",
+      industry: "eCommerce",
+      size: "1,200 employees",
+      meetingType: "discovery",
+      techStack: ["Kubernetes", "AWS", "Terraform"],
+      knownPainPoints: ["cloud config drift", "delayed security audits"]
+    },
+    recommended_products: [
+      {
+        product: "Prisma Cloud – Infrastructure as Code",
+        reason: "Detect misconfigurations pre-deploy in Terraform pipelines",
+        personaFit: ["AE"],
+        vendor: "Palo Alto Networks"
+      }
+    ],
+    competitive_positioning: [
+      {
+        competitor: "Wiz",
+        known_issues: ["Shallow IaC scanning", "Alert fatigue"],
+        how_to_win: "Position Prisma as deeper in CI/CD security with fewer false positives"
+      }
+    ],
+    persona_guidance: {
+      AE: {
+        meeting_focus: "Land net-new footprint in cloud security",
+        key_metrics_to_watch: ["IaC policy violations", "MTTR from misconfigs"],
+        recommended_actions: [
+          "Discuss shift-left scanning in Terraform",
+          "Offer joint workshop with DevSecOps leader"
+        ]
+      }
+    }
+  },
+
+  crowdStrike_SE: {
+    userPersona: {
+      name: "Priya",
+      role: "SE",
+      company: "CrowdStrike",
+      productLine: "Falcon Complete",
+      region: "APAC",
+      segment: "Upper Mid-Market",
+      primaryCompetitors: ["SentinelOne", "Palo Alto Cortex XDR"]
+    },
+    customer: {
+      name: "ZenBank",
+      industry: "Banking",
+      size: "3,000 employees",
+      meetingType: "technical validation",
+      techStack: ["Azure AD", "Windows 11", "Okta"],
+      knownPainPoints: ["dwell time", "alert triage backlog"]
+    },
+    recommended_products: [
+      {
+        product: "Falcon Complete MDR",
+        reason: "ZenBank lacks 24/7 SOC coverage",
+        personaFit: ["SE", "AE"],
+        vendor: "CrowdStrike"
+      }
+    ],
+    competitive_positioning: [
+      {
+        competitor: "SentinelOne",
+        known_issues: ["Reactive threat hunting", "Delayed response playbooks"],
+        how_to_win: "Highlight real-time response and analyst-backed MDR from CrowdStrike"
+      }
+    ],
+    persona_guidance: {
+      SE: {
+        meeting_focus: "Demonstrate detection & response superiority",
+        key_metrics_to_watch: ["time to detect", "escalation noise"],
+        recommended_actions: [
+          "Show replay of real Falcon Complete incident",
+          "Contrast S1’s response SLAs with ours"
+        ]
+      }
+    }
+  }
+};

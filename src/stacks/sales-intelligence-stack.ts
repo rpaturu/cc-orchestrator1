@@ -51,21 +51,17 @@ export class SalesIntelligenceStack extends cdk.Stack {
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
 
-    // Secrets Manager for API keys
-    const apiKeysSecret = new secretsmanager.Secret(this, 'SalesIntelligenceApiKeys', {
-      secretName: 'sales-intelligence-api-keys',
-      description: 'API keys for Sales Intelligence services (Google Search)',
-      generateSecretString: {
-        secretStringTemplate: JSON.stringify({
-          googleSearchApiKey: '',
-          googleSearchEngineId: ''
-        }),
-        generateStringKey: 'placeholder',
-        excludeCharacters: '"\\/@',
-      },
-    });
+    // Import existing secrets for API keys (avoids creation conflict)
+    const apiKeysSecret = secretsmanager.Secret.fromSecretNameV2(
+      this, 
+      'ApiKeysSecret', 
+      'sales-intelligence-api-keys'
+    );
 
-
+    // Read context values for environment variables
+    const googleApiKey = this.node.tryGetContext('googleSearchApiKey') || '';
+    const googleEngineId = this.node.tryGetContext('googleSearchEngineId') || '';
+    const brightDataApiKey = this.node.tryGetContext('brightDataApiKey') || '';
 
     // Search Lambda Function (fast endpoint)
     const searchFunction = new NodejsFunction(this, 'SearchFunction', {
@@ -430,6 +426,126 @@ export class SalesIntelligenceStack extends cdk.Stack {
       },
     });
 
+    // Company Lookup Lambda
+    const companyLookupLambda = new NodejsFunction(this, 'CompanyLookupLambda', {
+      functionName: 'sales-intelligence-company-lookup',
+      runtime: lambda.Runtime.NODEJS_20_X,
+      handler: 'companyLookupHandler',
+      entry: path.join(__dirname, '../index.ts'),
+      timeout: cdk.Duration.seconds(30),
+      memorySize: 512,
+      environment: {
+        CACHE_TABLE_NAME: cacheTable.tableName,
+        REQUESTS_TABLE_NAME: requestsTable.tableName,
+        PROFILES_TABLE_NAME: profilesTable.tableName,
+        API_KEYS_SECRET_NAME: apiKeysSecret.secretName,
+        GOOGLE_API_KEY: googleApiKey,
+        BRIGHT_DATA_API_KEY: brightDataApiKey,
+        LOG_LEVEL: this.node.tryGetContext('logLevel') || 'INFO',
+        ALLOWED_ORIGINS: allowedOriginsString,
+        NODE_ENV: 'production'
+      },
+      bundling: {
+        tsconfig: path.join(__dirname, '../../tsconfig.json'),
+      },
+    });
+
+    // Company Enrichment Lambda
+    const companyEnrichLambda = new NodejsFunction(this, 'CompanyEnrichLambda', {
+      functionName: 'sales-intelligence-company-enrich',
+      runtime: lambda.Runtime.NODEJS_20_X,
+      handler: 'companyEnrichHandler',
+      entry: path.join(__dirname, '../index.ts'),
+      timeout: cdk.Duration.seconds(60),
+      memorySize: 1024,
+      environment: {
+        CACHE_TABLE_NAME: cacheTable.tableName,
+        REQUESTS_TABLE_NAME: requestsTable.tableName,
+        PROFILES_TABLE_NAME: profilesTable.tableName,
+        API_KEYS_SECRET_NAME: apiKeysSecret.secretName,
+        GOOGLE_API_KEY: googleApiKey,
+        BRIGHT_DATA_API_KEY: brightDataApiKey,
+        LOG_LEVEL: this.node.tryGetContext('logLevel') || 'INFO',
+        ALLOWED_ORIGINS: allowedOriginsString,
+        NODE_ENV: 'production'
+      },
+      bundling: {
+        tsconfig: path.join(__dirname, '../../tsconfig.json'),
+      },
+    });
+
+    // Product Suggestions Lambda
+    const productSuggestLambda = new NodejsFunction(this, 'ProductSuggestLambda', {
+      functionName: 'sales-intelligence-product-suggest',
+      runtime: lambda.Runtime.NODEJS_20_X,
+      handler: 'productSuggestHandler',
+      entry: path.join(__dirname, '../index.ts'),
+      timeout: cdk.Duration.seconds(45),
+      memorySize: 512,
+      environment: {
+        CACHE_TABLE_NAME: cacheTable.tableName,
+        REQUESTS_TABLE_NAME: requestsTable.tableName,
+        PROFILES_TABLE_NAME: profilesTable.tableName,
+        API_KEYS_SECRET_NAME: apiKeysSecret.secretName,
+        GOOGLE_API_KEY: googleApiKey,
+        BRIGHT_DATA_API_KEY: brightDataApiKey,
+        LOG_LEVEL: this.node.tryGetContext('logLevel') || 'INFO',
+        ALLOWED_ORIGINS: allowedOriginsString,
+        NODE_ENV: 'production'
+      },
+      bundling: {
+        tsconfig: path.join(__dirname, '../../tsconfig.json'),
+      },
+    });
+
+    // Competitor Discovery Lambda
+    const competitorFindLambda = new NodejsFunction(this, 'CompetitorFindLambda', {
+      functionName: 'sales-intelligence-competitor-find',
+      runtime: lambda.Runtime.NODEJS_20_X,
+      handler: 'competitorFindHandler',
+      entry: path.join(__dirname, '../index.ts'),
+      timeout: cdk.Duration.seconds(45),
+      memorySize: 512,
+      environment: {
+        CACHE_TABLE_NAME: cacheTable.tableName,
+        REQUESTS_TABLE_NAME: requestsTable.tableName,
+        PROFILES_TABLE_NAME: profilesTable.tableName,
+        API_KEYS_SECRET_NAME: apiKeysSecret.secretName,
+        GOOGLE_API_KEY: googleApiKey,
+        BRIGHT_DATA_API_KEY: brightDataApiKey,
+        LOG_LEVEL: this.node.tryGetContext('logLevel') || 'INFO',
+        ALLOWED_ORIGINS: allowedOriginsString,
+        NODE_ENV: 'production'
+      },
+      bundling: {
+        tsconfig: path.join(__dirname, '../../tsconfig.json'),
+      },
+    });
+
+    // Domain Suggestion Lambda
+    const domainSuggestLambda = new NodejsFunction(this, 'DomainSuggestLambda', {
+      functionName: 'sales-intelligence-domain-suggest',
+      runtime: lambda.Runtime.NODEJS_20_X,
+      handler: 'domainSuggestHandler',
+      entry: path.join(__dirname, '../index.ts'),
+      timeout: cdk.Duration.seconds(30),
+      memorySize: 512,
+      environment: {
+        CACHE_TABLE_NAME: cacheTable.tableName,
+        REQUESTS_TABLE_NAME: requestsTable.tableName,
+        PROFILES_TABLE_NAME: profilesTable.tableName,
+        API_KEYS_SECRET_NAME: apiKeysSecret.secretName,
+        GOOGLE_API_KEY: googleApiKey,
+        BRIGHT_DATA_API_KEY: brightDataApiKey,
+        LOG_LEVEL: this.node.tryGetContext('logLevel') || 'INFO',
+        ALLOWED_ORIGINS: allowedOriginsString,
+        NODE_ENV: 'production'
+      },
+      bundling: {
+        tsconfig: path.join(__dirname, '../../tsconfig.json'),
+      },
+    });
+
     // Grant permissions for all functions
     [searchFunction, discoveryAsyncFunction, analysisAsyncFunction, chatFunction, bedrockParseFunction, debugFunction, asyncOverviewFunction, getAsyncRequestFunction, processOverviewFunction, processDiscoveryFunction, processAnalysisFunction].forEach(func => {
       cacheTable.grantReadWriteData(func);
@@ -651,6 +767,75 @@ export class SalesIntelligenceStack extends cdk.Stack {
     userIdResource.addMethod('DELETE', profileIntegration, {
       apiKeyRequired: true,
     });
+
+    // Grant DynamoDB permissions to all functions
+    cacheTable.grantReadWriteData(searchFunction);
+    cacheTable.grantReadWriteData(discoveryAsyncFunction);
+    cacheTable.grantReadWriteData(analysisAsyncFunction);
+    cacheTable.grantReadWriteData(chatFunction);
+    cacheTable.grantReadWriteData(asyncOverviewFunction);
+    cacheTable.grantReadWriteData(healthCheckFunction);
+    cacheTable.grantReadWriteData(profileFunction);
+    cacheTable.grantReadWriteData(companyLookupLambda);
+    cacheTable.grantReadWriteData(companyEnrichLambda);
+    cacheTable.grantReadWriteData(productSuggestLambda);
+    cacheTable.grantReadWriteData(competitorFindLambda);
+    cacheTable.grantReadWriteData(domainSuggestLambda);
+
+    requestsTable.grantReadWriteData(searchFunction);
+    requestsTable.grantReadWriteData(discoveryAsyncFunction);
+    requestsTable.grantReadWriteData(analysisAsyncFunction);
+    requestsTable.grantReadWriteData(chatFunction);
+    requestsTable.grantReadWriteData(asyncOverviewFunction);
+    requestsTable.grantReadWriteData(profileFunction);
+    requestsTable.grantReadWriteData(companyLookupLambda);
+    requestsTable.grantReadWriteData(companyEnrichLambda);
+    requestsTable.grantReadWriteData(productSuggestLambda);
+    requestsTable.grantReadWriteData(competitorFindLambda);
+    requestsTable.grantReadWriteData(domainSuggestLambda);
+
+    profilesTable.grantReadWriteData(profileFunction);
+    profilesTable.grantReadWriteData(companyLookupLambda);
+    profilesTable.grantReadWriteData(companyEnrichLambda);
+    profilesTable.grantReadWriteData(productSuggestLambda);
+    profilesTable.grantReadWriteData(competitorFindLambda);
+    profilesTable.grantReadWriteData(domainSuggestLambda);
+
+    // Grant Secrets Manager permissions
+    apiKeysSecret.grantRead(searchFunction);
+    apiKeysSecret.grantRead(discoveryAsyncFunction);
+    apiKeysSecret.grantRead(analysisAsyncFunction);
+    apiKeysSecret.grantRead(chatFunction);
+    apiKeysSecret.grantRead(asyncOverviewFunction);
+    apiKeysSecret.grantRead(companyLookupLambda);
+    apiKeysSecret.grantRead(companyEnrichLambda);
+    apiKeysSecret.grantRead(productSuggestLambda);
+    apiKeysSecret.grantRead(competitorFindLambda);
+    apiKeysSecret.grantRead(domainSuggestLambda);
+
+    // API Gateway routes
+    const companiesResource = api.root.addResource('companies');
+    const companyLookupIntegration = new apigateway.LambdaIntegration(companyLookupLambda);
+    const companyEnrichIntegration = new apigateway.LambdaIntegration(companyEnrichLambda);
+    const domainSuggestIntegration = new apigateway.LambdaIntegration(domainSuggestLambda);
+
+    // GET /companies/lookup
+    companiesResource.addResource('lookup').addMethod('GET', companyLookupIntegration);
+    
+    // POST /companies/enrich  
+    companiesResource.addResource('enrich').addMethod('POST', companyEnrichIntegration);
+    
+    // GET /companies/suggest-domain
+    companiesResource.addResource('suggest-domain').addMethod('GET', domainSuggestIntegration);
+
+    // Products and competitors resources
+    const productsResource = api.root.addResource('products');
+    const productSuggestIntegration = new apigateway.LambdaIntegration(productSuggestLambda);
+    productsResource.addResource('suggest').addMethod('POST', productSuggestIntegration);
+
+    const competitorsResource = api.root.addResource('competitors');
+    const competitorFindIntegration = new apigateway.LambdaIntegration(competitorFindLambda);
+    competitorsResource.addResource('find').addMethod('POST', competitorFindIntegration);
 
     // CloudFormation Outputs
     new cdk.CfnOutput(this, 'ApiEndpoint', {

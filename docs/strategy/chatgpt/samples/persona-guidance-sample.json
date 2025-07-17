@@ -1,0 +1,18 @@
+"persona_guidance": {
+  "CSM": {
+    "meeting_focus": "Reduce churn risk, improve NPS",
+    "key_metrics_to_watch": ["MFA adoption", "support ticket volume"],
+    "recommended_actions": [
+      "Share zero trust rollout guide",
+      "Invite security lead to a success session"
+    ]
+  },
+  "AE": {
+    "meeting_focus": "Drive expansion into new departments",
+    "key_metrics_to_watch": ["hiring rate", "usage patterns"],
+    "recommended_actions": [
+      "Frame SCIM as enabler for scale",
+      "Position IDP switch as value play"
+    ]
+  }
+}

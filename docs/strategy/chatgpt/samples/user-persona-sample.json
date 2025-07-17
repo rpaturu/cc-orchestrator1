@@ -1,0 +1,9 @@
+"userPersona": {
+  "name": "Taylor",
+  "role": "CSM",
+  "company": "Okta",
+  "productLine": "Identity Cloud",
+  "region": "EMEA",
+  "segment": "Mid-Market",
+  "primaryCompetitors": ["Microsoft Entra ID", "Ping Identity", "Auth0"]
+}

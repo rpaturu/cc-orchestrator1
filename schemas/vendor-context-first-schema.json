@@ -1,0 +1,179 @@
+{
+  "schemaVersion": "2.0-vendor-first",
+  "analysisContext": {
+    "vendorCompany": {
+      "name": "string",
+      "industry": "string", 
+      "primaryValue": "string",
+      "competitivePosition": "incumbent|challenger|niche|disruptor"
+    },
+    "userPersona": {
+      "role": "AE|CSM|SE", 
+      "name": "string",
+      "region": "string",
+      "segment": "enterprise|commercial|smb",
+      "specialization": "string"
+    },
+    "targetCustomer": {
+      "name": "string",
+      "industry": "string",
+      "size": "string",
+      "region": "string"
+    }
+  },
+  "vendorProductCatalog": [
+    {
+      "productName": "string",
+      "category": "string",
+      "targetBuyer": "economic|technical|user",
+      "pricePoint": "entry|mid|premium",
+      "competitiveAdvantage": "string",
+      "idealCustomerProfile": {
+        "company_size": "string",
+        "use_case": "string", 
+        "tech_stack": ["string"]
+      }
+    }
+  ],
+  "competitiveLandscape": {
+    "primaryCompetitors": [
+      {
+        "name": "string",
+        "marketPosition": "leader|challenger|visionary|niche",
+        "strengths": ["string"],
+        "weaknesses": ["string"],
+        "ourAdvantage": "string",
+        "commonObjections": [
+          {
+            "objection": "string",
+            "response": "string",
+            "proofPoints": ["string"]
+          }
+        ]
+      }
+    ],
+    "indirectCompetitors": [
+      {
+        "name": "string",
+        "category": "build_vs_buy|status_quo|adjacent_vendor",
+        "ourPositioning": "string"
+      }
+    ]
+  },
+  "customerIntelligence": {
+    "companyOverview": {
+      "name": "string",
+      "industry": "string",
+      "size": "string",
+      "headquarters": "string",
+      "founded": "string",
+      "businessModel": "string",
+      "vendorFitScore": "high|medium|low",
+      "fitReasoning": "string"
+    },
+    "currentEnvironment": {
+      "techStack": {
+        "infrastructure": ["string"],
+        "applications": ["string"], 
+        "security": ["string"],
+        "incumbentVendors": [
+          {
+            "vendor": "string",
+            "product": "string",
+            "deploymentScope": "string",
+            "satisfactionSignals": "positive|neutral|negative",
+            "replacementOpportunity": "high|medium|low"
+          }
+        ]
+      }
+    },
+    "buyingSignals": [
+      {
+        "signal": "string",
+        "strength": "strong|moderate|weak",
+        "source": "string",
+        "date": "string",
+        "vendorImplication": "string"
+      }
+    ],
+    "stakeholderMapping": [
+      {
+        "name": "string",
+        "title": "string",
+        "buyerType": "economic|technical|user|champion|coach",
+        "influence": "high|medium|low",
+        "vendorPreference": "friendly|neutral|skeptical|competitor_champion",
+        "approachStrategy": "string"
+      }
+    ]
+  },
+  "vendorRecommendations": {
+    "primaryStrategy": {
+      "approach": "displace|overlay|greenfield|expansion",
+      "rationale": "string",
+      "riskLevel": "low|medium|high",
+      "timeToValue": "string"
+    },
+    "productFit": [
+      {
+        "customerNeed": "string",
+        "recommendedProduct": "string", 
+        "businessJustification": "string",
+        "competitiveAdvantage": "string",
+        "estimatedValue": "string",
+        "implementationComplexity": "low|medium|high"
+      }
+    ],
+    "competitiveStrategy": {
+      "primaryCompetitorThreat": "string",
+      "differentiationStrategy": "string",
+      "keyBattles": [
+        {
+          "battlefield": "price|features|implementation|support|vision",
+          "ourPosition": "string",
+          "keyMessages": ["string"],
+          "proofPoints": ["string"]
+        }
+      ]
+    }
+  },
+  "vendorContent": {
+    "relevantAssets": [
+      {
+        "title": "string",
+        "type": "case_study|demo|white_paper|roi_calculator|reference_call",
+        "url": "string",
+        "competitiveAngle": "string",
+        "customerRelevance": "high|medium|low",
+        "useCase": "prospecting|demo|proof|negotiation"
+      }
+    ],
+    "customizedMessaging": [
+      {
+        "audience": "economic_buyer|technical_buyer|end_user",
+        "message": "string",
+        "valueProps": ["string"],
+        "differentiators": ["string"]
+      }
+    ]
+  },
+  "actionPlan": {
+    "nextBestActions": [
+      {
+        "action": "string",
+        "priority": "high|medium|low",
+        "timeline": "immediate|this_week|this_month",
+        "expectedOutcome": "string",
+        "vendorResources": ["string"]
+      }
+    ],
+    "meetingPrep": {
+      "primaryObjective": "string",
+      "keyQuestions": ["string"],
+      "talkingPoints": ["string"],
+      "landminesAvoid": ["string"],
+      "leaveBehinds": ["string"],
+      "followUpPlan": "string"
+    }
+  }
+} 

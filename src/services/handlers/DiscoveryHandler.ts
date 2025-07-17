@@ -94,7 +94,7 @@ export class DiscoveryHandler extends BaseEndpointHandler {
 
     // Only cache successful analysis results, not failures
     if (this.isAnalysisSuccessful(insights)) {
-      await this.cacheResult(cacheKey, cacheData, { domain, endpoint: 'discovery' });
+    await this.cacheResult(cacheKey, cacheData, { domain, endpoint: 'discovery' });
       this.logger.info('Cached successful discovery result', { domain, cacheKey });
     } else {
       this.logger.warn('Discovery analysis failed - not caching result to allow retry', { 

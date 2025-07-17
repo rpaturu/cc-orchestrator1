@@ -1,0 +1,92 @@
+{
+  "persona": "Customer Success Manager (CSM)",
+  "customer": {
+    "name": "string",
+    "industry": "string",
+    "size": "string", 
+    "accountTier": "enterprise|commercial|smb",
+    "relationshipStart": "string",
+    "contractDetails": {
+      "arr": "string",
+      "renewalDate": "string",
+      "contractLength": "string",
+      "autoRenewal": "boolean"
+    }
+  },
+  "healthMetrics": {
+    "overallScore": "healthy|at_risk|critical",
+    "usageHealth": {
+      "adoptionRate": "string",
+      "activeUsers": "string", 
+      "featureUtilization": "string",
+      "trend": "growing|stable|declining"
+    },
+    "relationshipHealth": {
+      "stakeholderSatisfaction": "string",
+      "executiveSponsor": "strong|moderate|weak",
+      "meetingCadence": "string",
+      "responsiveness": "string"
+    },
+    "supportHealth": {
+      "ticketVolume": "string",
+      "avgResolutionTime": "string", 
+      "escalationRate": "string",
+      "recentCriticalIssues": ["string"]
+    }
+  },
+  "renewalRisk": {
+    "riskLevel": "low|medium|high",
+    "riskFactors": ["string"],
+    "mitigationActions": ["string"],
+    "earlyWarningSignals": ["string"]
+  },
+  "expansionOpportunities": [
+    {
+      "type": "seat_expansion|product_upsell|new_use_case",
+      "description": "string",
+      "estimatedValue": "string",
+      "readiness": "ready|developing|future",
+      "champions": ["string"]
+    }
+  ],
+  "stakeholderMapping": [
+    {
+      "name": "string",
+      "title": "string",
+      "role": "champion|satisfied_user|neutral|detractor",
+      "influence": "high|medium|low",
+      "lastInteraction": "string",
+      "sentiment": "positive|neutral|negative"
+    }
+  ],
+  "usageInsights": [
+    {
+      "metric": "string",
+      "value": "string", 
+      "trend": "string",
+      "benchmark": "string",
+      "actionable": "string"
+    }
+  ],
+  "successPlanning": {
+    "currentGoals": ["string"],
+    "challengesToSuccess": ["string"],
+    "recommendedActions": ["string"],
+    "successMetrics": ["string"]
+  },
+  "competitiveThreats": [
+    {
+      "competitor": "string",
+      "threatLevel": "low|medium|high",
+      "reasoning": "string",
+      "defenseStrategy": "string"
+    }
+  ],
+  "meetingPrep": {
+    "healthSummary": "string",
+    "discussionTopics": ["string"],
+    "concerns": ["string"],
+    "wins": ["string"],
+    "nextSteps": ["string"]
+  }
+} 

@@ -1,0 +1,118 @@
+{
+  "persona": "Solutions Engineer (SE)",
+  "customer": {
+    "name": "string",
+    "industry": "string",
+    "size": "string",
+    "technicalMaturity": "low|medium|high",
+    "complianceRequirements": ["string"]
+  },
+  "techStack": {
+    "infrastructure": {
+      "cloudProviders": ["string"],
+      "onPremise": ["string"],
+      "hybrid": "boolean",
+      "orchestration": ["string"]
+    },
+    "applications": {
+      "identityProviders": ["string"],
+      "crmSystems": ["string"],
+      "hrSystems": ["string"],
+      "collaborationTools": ["string"],
+      "businessApplications": ["string"]
+    },
+    "security": {
+      "authenticationMethods": ["string"],
+      "currentMFA": ["string"],
+      "ssoImplementation": ["string"],
+      "privilegedAccess": ["string"],
+      "complianceFrameworks": ["string"]
+    },
+    "dataFlow": {
+      "userDirectories": ["string"],
+      "provisioningMethods": ["string"],
+      "integrationPatterns": ["string"]
+    }
+  },
+  "technicalRequirements": [
+    {
+      "requirement": "string",
+      "priority": "must_have|nice_to_have|future",
+      "currentSolution": "string",
+      "gaps": ["string"]
+    }
+  ],
+  "integrationComplexity": {
+    "overallComplexity": "low|medium|high",
+    "complexityFactors": ["string"],
+    "integrationPoints": [
+      {
+        "system": "string",
+        "method": "api|scim|saml|custom",
+        "difficulty": "low|medium|high",
+        "timeline": "string"
+      }
+    ]
+  },
+  "technicalDecisionMakers": [
+    {
+      "name": "string",
+      "title": "string",
+      "role": "architect|admin|implementer|evaluator",
+      "influence": "high|medium|low",
+      "technicalConcerns": ["string"],
+      "preferredApproach": "string"
+    }
+  ],
+  "currentChallenges": [
+    {
+      "challenge": "string",
+      "impact": "high|medium|low",
+      "technicalRoot": "string",
+      "workarounds": ["string"]
+    }
+  ],
+  "solutionMapping": [
+    {
+      "customerNeed": "string",
+      "proposedSolution": "string", 
+      "technicalApproach": "string",
+      "implementationSteps": ["string"],
+      "timeline": "string",
+      "risks": ["string"]
+    }
+  ],
+  "proofOfConcept": {
+    "recommended": "boolean",
+    "scope": ["string"],
+    "successCriteria": ["string"],
+    "timeline": "string",
+    "resources": ["string"]
+  },
+  "implementationPlanning": {
+    "phases": [
+      {
+        "phase": "string",
+        "activities": ["string"],
+        "duration": "string",
+        "dependencies": ["string"]
+      }
+    ],
+    "risksAndMitigation": ["string"],
+    "resourceRequirements": ["string"]
+  },
+  "competitiveTechnical": [
+    {
+      "competitor": "string",
+      "technicalAdvantage": "string",
+      "ourDifferentiator": "string",
+      "proofPoints": ["string"]
+    }
+  ],
+  "meetingPrep": {
+    "technicalDemo": ["string"],
+    "architectureDiscussion": ["string"],
+    "questionsToValidate": ["string"],
+    "technicalConcerns": ["string"]
+  }
+} 

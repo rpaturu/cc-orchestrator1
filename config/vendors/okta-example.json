@@ -1,0 +1,293 @@
+{
+  "vendorInfo": {
+    "name": "Okta",
+    "industry": "Identity & Access Management",
+    "publicCompany": true,
+    "headquarters": "San Francisco, CA",
+    "foundedYear": 2009,
+    "primaryMarkets": ["Enterprise", "Commercial", "SMB"],
+    "competitivePosition": "challenger",
+    "brandingColors": {
+      "primary": "#007dc1",
+      "secondary": "#1f2937"
+    }
+  },
+  "messagingFramework": {
+    "primaryValue": "Identity-first security for the modern enterprise",
+    "elevator": "Okta connects any person with any application on any device",
+    "keyDifferentiators": [
+      "7000+ pre-built integrations",
+      "Customer-first approach vs. product-first",
+      "Cloud-native architecture", 
+      "Best-in-class user experience",
+      "Fastest time-to-value in identity"
+    ],
+    "targetBuyers": {
+      "economic": "CIO, CISO, VP IT",
+      "technical": "Identity Architect, IT Admin",
+      "user": "End users, HR teams"
+    }
+  },
+  "productCatalog": [
+    {
+      "productName": "Workforce Identity Cloud",
+      "category": "workforce_identity",
+      "description": "SSO, MFA, and lifecycle management for employees",
+      "targetPersona": ["AE", "CSM", "SE"],
+      "priceRange": "$2-8 per user/month",
+      "idealCustomerProfile": {
+        "companySize": "500-10000 employees",
+        "useCases": ["cloud_migration", "security_modernization", "remote_work"],
+        "techStack": ["Salesforce", "Google Workspace", "AWS", "Office365"],
+        "currentPainPoints": ["password fatigue", "manual provisioning", "security gaps"]
+      },
+      "competitiveAdvantage": "Unified identity across cloud and on-premise with superior UX",
+      "estimatedARR": {
+        "smb": "$15K-50K",
+        "midmarket": "$50K-250K", 
+        "enterprise": "$250K-2M+"
+      }
+    },
+    {
+      "productName": "Customer Identity Cloud",
+      "category": "customer_identity",
+      "description": "CIAM for customer-facing applications",
+      "targetPersona": ["AE", "SE"],
+      "priceRange": "$0.05-0.15 per monthly active user",
+      "idealCustomerProfile": {
+        "companySize": "Any",
+        "useCases": ["customer_registration", "social_login", "progressive_profiling"],
+        "techStack": ["React", "Node.js", "Mobile apps"],
+        "currentPainPoints": ["high abandon rates", "security concerns", "dev complexity"]
+      },
+      "competitiveAdvantage": "Developer-friendly APIs with enterprise security",
+      "estimatedARR": {
+        "startup": "$5K-25K",
+        "growth": "$25K-150K",
+        "enterprise": "$150K-1M+"
+      }
+    },
+    {
+      "productName": "Privileged Access",
+      "category": "privileged_access",
+      "description": "Secure access to servers and infrastructure",
+      "targetPersona": ["AE", "CSM", "SE"],
+      "priceRange": "$8-15 per privileged user/month",
+      "idealCustomerProfile": {
+        "companySize": "1000+ employees",
+        "useCases": ["server_access", "compliance", "zero_trust"],
+        "techStack": ["AWS", "Kubernetes", "Linux", "Windows"],
+        "currentPainPoints": ["jump boxes", "shared accounts", "audit trails"]
+      },
+      "competitiveAdvantage": "Unified with workforce identity vs standalone PAM",
+      "estimatedARR": {
+        "midmarket": "$50K-200K",
+        "enterprise": "$200K-1M+"
+      }
+    }
+  ],
+  "competitiveLandscape": {
+    "primaryCompetitors": [
+      {
+        "name": "Microsoft Entra ID",
+        "category": "direct",
+        "marketPosition": "incumbent",
+        "strengths": [
+          "Bundled with Office 365",
+          "Strong Windows integration",
+          "Enterprise relationships"
+        ],
+        "weaknesses": [
+          "Complex conditional access policies",
+          "Poor non-Microsoft app integration", 
+          "Steep learning curve",
+          "Limited customization"
+        ],
+        "ourAdvantage": "Best-of-breed vs platform approach with superior UX and broader integrations",
+        "commonObjections": [
+          {
+            "objection": "We already have Active Directory",
+            "response": "Okta extends AD to cloud apps that Microsoft struggles to integrate well",
+            "proofPoints": [
+              "7000+ app integrations vs 1000+ for Microsoft",
+              "95% customer satisfaction vs 65% for Entra ID",
+              "Deploy in 30 days vs 6 months typical for Entra"
+            ]
+          },
+          {
+            "objection": "Microsoft is cheaper because it's bundled",
+            "response": "Hidden costs in complexity, customization, and integration time",
+            "proofPoints": [
+              "40% faster employee onboarding with Okta",
+              "Reduced IT tickets by 60% vs DIY Microsoft setup",
+              "Professional services costs 3x higher with Microsoft"
+            ]
+          }
+        ],
+        "battlecard": {
+          "whenToUse": "Customer has Office 365 but struggling with non-Microsoft apps",
+          "keyMessages": [
+            "Best-of-breed identity beats platform approach",
+            "Better user experience drives adoption",
+            "Faster implementation with proven ROI"
+          ],
+          "demoFocus": ["Visual policy builder", "App integration breadth", "User dashboard"],
+          "referenceCustomers": ["Zoom", "FedEx", "T-Mobile"]
+        }
+      },
+      {
+        "name": "Ping Identity",
+        "category": "direct",
+        "marketPosition": "niche",
+        "strengths": [
+          "Strong federation capabilities",
+          "Enterprise security focus",
+          "API-first architecture"
+        ],
+        "weaknesses": [
+          "Complex configuration and management",
+          "Poor user experience",
+          "Limited pre-built integrations",
+          "Slow implementation cycles"
+        ],
+        "ourAdvantage": "Superior UX and faster deployment with broader ecosystem",
+        "commonObjections": [
+          {
+            "objection": "Ping has stronger federation",
+            "response": "Okta provides enterprise-grade federation with much better usability",
+            "proofPoints": [
+              "Visual policy configuration vs XML coding",
+              "95% faster policy deployment",
+              "No professional services required for basic setup"
+            ]
+          }
+        ],
+        "battlecard": {
+          "whenToUse": "Customer values federation but needs easier management",
+          "keyMessages": [
+            "Enterprise security with consumer-grade UX",
+            "Self-service configuration vs professional services",
+            "Proven at scale with faster time-to-value"
+          ],
+          "demoFocus": ["Policy management UI", "Quick app integration", "End-user experience"],
+          "referenceCustomers": ["Adobe", "MGM Resorts", "News Corp"]
+        }
+      },
+      {
+        "name": "CyberArk",
+        "category": "adjacent",
+        "marketPosition": "niche",
+        "strengths": [
+          "Strong privileged access management",
+          "Security-first approach",
+          "Compliance focus"
+        ],
+        "weaknesses": [
+          "Limited to privileged access only",
+          "Complex deployment",
+          "Poor user experience for workforce identity"
+        ],
+        "ourAdvantage": "Unified workforce + privileged identity vs point solution",
+        "commonObjections": [
+          {
+            "objection": "CyberArk is the PAM leader",
+            "response": "Okta provides PAM as part of unified identity platform, reducing complexity",
+            "proofPoints": [
+              "Single platform for workforce + privileged access",
+              "Better user experience increases adoption",
+              "Lower total cost of ownership"
+            ]
+          }
+        ]
+      }
+    ],
+    "indirectCompetitors": [
+      {
+        "name": "Build vs Buy",
+        "category": "status_quo",
+        "ourPositioning": "Focus on core business vs building identity infrastructure"
+      },
+      {
+        "name": "Legacy on-premise solutions",
+        "category": "status_quo", 
+        "ourPositioning": "Cloud-first architecture for modern workforce"
+      }
+    ]
+  },
+  "contentLibrary": {
+    "caseStudies": [
+      {
+        "customerName": "Zoom",
+        "title": "How Zoom secured 500K+ users during rapid growth",
+        "url": "https://okta.com/customers/zoom/",
+        "useCase": "Scale and security during hypergrowth",
+        "competitiveAngle": "Handling scale that breaks traditional solutions",
+        "targetPersona": ["AE", "CSM"],
+        "relevantFor": ["fast_growth", "remote_work", "security_scale"]
+      },
+      {
+        "customerName": "FedEx",
+        "title": "FedEx modernizes identity for 500K users worldwide",
+        "url": "https://okta.com/customers/fedex/",
+        "useCase": "Global identity transformation",
+        "competitiveAngle": "Complex enterprise migration from legacy systems",
+        "targetPersona": ["AE", "SE"],
+        "relevantFor": ["enterprise_migration", "global_rollout", "legacy_replacement"]
+      }
+    ],
+    "demos": [
+      {
+        "name": "Workforce Identity Overview",
+        "duration": "15 minutes",
+        "focus": "SSO, MFA, and lifecycle management",
+        "competitiveAdvantage": "Visual policy builder vs competitors' complex config",
+        "targetPersona": ["AE", "CSM", "SE"]
+      },
+      {
+        "name": "Privileged Access Demo", 
+        "duration": "10 minutes",
+        "focus": "Server access and session recording",
+        "competitiveAdvantage": "Unified with workforce identity",
+        "targetPersona": ["SE", "AE"]
+      }
+    ],
+    "whitepapers": [
+      {
+        "title": "The State of Zero Trust 2024",
+        "url": "https://okta.com/resources/zero-trust-report/",
+        "useCase": "Industry trends and best practices",
+        "targetPersona": ["AE", "CSM"]
+      }
+    ],
+    "roiCalculators": [
+      {
+        "name": "Identity ROI Calculator",
+        "url": "https://okta.com/roi-calculator/",
+        "metrics": ["IT time savings", "Security risk reduction", "User productivity"],
+        "targetPersona": ["AE"]
+      }
+    ]
+  },
+  "salesPlaybooks": {
+    "discovery": {
+      "qualifyingQuestions": [
+        "How many applications do your users need to access daily?",
+        "What's your current process for onboarding new employees?",
+        "How do you handle access for contractors and partners?",
+        "What identity-related security incidents have you experienced?",
+        "How much IT time is spent on password resets and access requests?"
+      ],
+      "painPointMapping": {
+        "password_fatigue": "Workforce Identity Cloud SSO",
+        "manual_provisioning": "Lifecycle Management automation",
+        "security_gaps": "Adaptive MFA and Zero Trust",
+        "poor_user_experience": "Consumer-grade UX for enterprise security"
+      }
+    },
+    "competitive": {
+      "microsoftStrategy": "Position as best-of-breed overlay, not rip-and-replace",
+      "pingStrategy": "Emphasize UX and implementation speed advantages",
+      "cyberarkStrategy": "Unified platform approach vs point solutions"
+    }
+  }
+} 
