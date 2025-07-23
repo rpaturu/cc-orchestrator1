@@ -1,0 +1,51 @@
+#!/bin/bash
+
+set -e;
+
+# Load environment variables from .env.local if it exists
+if [ -f .env.local ]; then
+  source .env.local
+fi
+
+# Parse arguments
+CDK_PROFILE=${AWS_PROFILE:-default}
+CDK_REGION=${AWS_REGION:-us-west-2}
+while [[ "$#" -gt 0 ]]; do case $1 in
+  --profile) CDK_PROFILE="$2"; shift;;
+  --region) AWS_REGION="$2"; shift;;
+esac; shift; done
+
+# Check if region is set
+if [ -z "$AWS_REGION" ]; then
+  # Try to get region from AWS config
+  AWS_REGION=$(aws configure get region --profile $CDK_PROFILE 2>/dev/null)
+  
+  if [ -z "$AWS_REGION" ]; then
+    echo "Error: AWS region is required"
+    echo "Usage: ./destroy [--profile <aws_profile>] [--region <aws_region>]"
+    echo "Example: ./destroy --profile dev --region us-west-2"
+    echo "You may also configure your region by running 'aws configure'"
+    exit 1
+  fi
+fi
+
+echo "Using AWS Profile: $CDK_PROFILE"
+echo "Using AWS Region: $AWS_REGION"
+
+# Find existing stack
+echo "Finding existing SalesIntelligence stack..."
+STACK_NAME=$(aws cloudformation list-stacks \
+  --profile $CDK_PROFILE \
+  --region $AWS_REGION \
+  --stack-status-filter CREATE_COMPLETE UPDATE_COMPLETE UPDATE_ROLLBACK_COMPLETE \
+  --query "StackSummaries[?starts_with(StackName, 'SalesIntelligenceStack')].StackName" \
+  --output text | head -n 1)
+
+if [ -z "$STACK_NAME" ]; then
+  echo "No existing SalesIntelligence stack found."
+  exit 0
+fi
+
+echo "Found stack: $STACK_NAME"
+echo "Destroying stack..."
+npx cdk --profile $CDK_PROFILE --region $AWS_REGION destroy --stack-name $STACK_NAME --force 

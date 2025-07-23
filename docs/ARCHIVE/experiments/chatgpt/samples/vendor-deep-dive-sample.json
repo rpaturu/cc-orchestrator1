@@ -1,0 +1,105 @@
+{
+  "enrichedCompanyData": {
+    "name": "Acme Corp",
+    "industry": "FinTech",
+    "size": "500–1000 employees",
+    "headquarters": "London, UK",
+    "founded": "2016",
+    "funding": {
+      "totalRaised": "$120M",
+      "latestRound": {
+        "type": "Series C",
+        "amount": "$40M",
+        "date": "2024-03-01",
+        "purpose": "Platform expansion in EMEA"
+      }
+    },
+    "hiringTrends": [
+      "Hiring multiple security engineers in EMEA",
+      "New Director of IT role opened in Berlin"
+    ]
+  },
+  "newsAnalysis": [
+    {
+      "article": "Acme Corp raises $40M Series C for European growth",
+      "date": "2024-03-02",
+      "source": "TechCrunch",
+      "relevance": "Funding expansion in EMEA – opportunity to grow Okta footprint",
+      "insights": "Acme is rapidly growing in regulated financial markets and is focused on onboarding engineers securely."
+    },
+    {
+      "article": "CISO of Acme discusses Zero Trust priorities",
+      "date": "2024-05-10",
+      "source": "Security Weekly",
+      "relevance": "Leadership is prioritizing security architecture over next 12 months",
+      "insights": "Desire to reduce reliance on Microsoft stack and improve multi-cloud access controls"
+    }
+  ],
+  "techStack": [
+    "AWS",
+    "Salesforce",
+    "Slack",
+    "Zendesk",
+    "Azure AD",
+    "Atlassian",
+    "Snowflake"
+  ],
+  "contactProfiles": [
+    {
+      "name": "Isabelle Tan",
+      "title": "Director of IT Operations",
+      "role": "Decision Maker",
+      "signal": "Posted on LinkedIn about scaling onboarding automation",
+      "source": "LinkedIn"
+    },
+    {
+      "name": "Rajiv Shah",
+      "title": "CISO",
+      "role": "Champion",
+      "signal": "Quoted in recent Zero Trust strategy article",
+      "source": "Security Weekly"
+    },
+    {
+      "name": "Marko Lehner",
+      "title": "Head of People Ops",
+      "role": "Technical Buyer",
+      "signal": "Hiring aggressively in Germany",
+      "source": "Greenhouse Jobs"
+    }
+  ],
+  "competitorInsights": [
+    {
+      "competitor": "Microsoft Entra ID",
+      "known_issues": [
+        "Complex configuration for multi-cloud federation",
+        "Lack of agility when supporting non-Microsoft apps"
+      ],
+      "why_we_win": "Okta’s independent architecture allows faster onboarding and broad app support"
+    },
+    {
+      "competitor": "Ping Identity",
+      "known_issues": [
+        "Slower deployment cycles",
+        "UI/UX issues with self-service portal"
+      ],
+      "why_we_win": "Okta has superior admin experience and customer support scores"
+    }
+  ],
+  "vendorContentLinks": [
+    {
+      "url": "https://www.okta.com/resources/whitepaper-zero-trust-architecture",
+      "type": "pdf",
+      "summary": "Best practices to implement Zero Trust for scaling companies"
+    },
+    {
+      "url": "https://www.okta.com/customers/global-fintech-scaling-okta/",
+      "type": "case_study",
+      "summary": "How a fintech scaled identity securely with Okta"
+    },
+    {
+      "url": "https://www.okta.com/products/lifecycle-management/",
+      "type": "product_page",
+      "summary": "Product overview of Okta Lifecycle Management"
+    }
+  ]
+}

@@ -43,6 +43,11 @@ export interface ContentAnalysis {
 export interface SalesInsights {
   companyOverview: CompanyInsights;
   painPoints: CitedContent[];
+  keyInsights?: string[];  // Added missing property
+  opportunities?: CitedContent[];  // Added missing property
+  competitiveAdvantages?: CitedContent[];  // Added missing property
+  riskFactors?: CitedContent[];  // Added missing property
+  nextSteps?: CitedContent[];  // Added missing property
   technologyStack: TechStack;
   keyContacts: Contact[];
   competitiveLandscape: CompetitiveIntel;
@@ -51,6 +56,11 @@ export interface SalesInsights {
   recommendedActions: CitedContent[];
   dealProbability: number;
   dealProbabilityCitations: number[];
+  confidence?: {  // Added missing confidence property
+    overall: number;
+    dataQuality: number;
+    sourceReliability: number;
+  };
 }
 
 export interface CompanyInsights {

@@ -1,0 +1,10 @@
+"competitive_positioning": [
+  {
+    "competitor": "Microsoft Entra ID",
+    "known_issues": [
+      "Conditional Access configuration complexity",
+      "Limited non-Microsoft app federation"
+    ],
+    "how_to_win": "Highlight Okta’s prebuilt integrations and faster rollout"
+  }
+]

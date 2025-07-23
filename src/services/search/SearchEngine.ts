@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import { SearchResult, SearchEngineResponse, SearchConfig } from '@/types';
 import { Logger } from '../core/Logger';
 import { CacheService } from '../core/CacheService';
+import { CacheType } from '@/types/cache-types';
 
 interface GoogleSearchResponse {
   items?: Array<{
@@ -290,7 +291,7 @@ export class SearchEngine {
         citationMap: {}
       };
       
-      await this.cache.set(cacheKey, cacheData);
+      await this.cache.set(cacheKey, cacheData, CacheType.COMPANY_SEARCH);
       this.logger.info('Cached search results', { cacheKey, query: searchResult.query });
     } catch (error) {
       this.logger.error('Error caching search results', { 

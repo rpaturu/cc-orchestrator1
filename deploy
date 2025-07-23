@@ -11,10 +11,12 @@ fi
 CDK_PROFILE=${AWS_PROFILE:-default}
 CDK_REGION=${AWS_REGION:-us-west-2}
 ADMIN_PROFILE=${ADMIN_PROFILE:-iamadminrp}
+DEPLOYMENT_ENV=${NODE_ENV:-development}  # Default to development for testing
 while [[ "$#" -gt 0 ]]; do case $1 in
   --profile) CDK_PROFILE="$2"; shift;;
   --region) AWS_REGION="$2"; shift;;
   --admin-profile) ADMIN_PROFILE="$2"; shift;;
+  --env) DEPLOYMENT_ENV="$2"; shift;;
 esac; shift; done
 
 # Check if region is set
@@ -24,8 +26,9 @@ if [ -z "$AWS_REGION" ]; then
   
   if [ -z "$AWS_REGION" ]; then
     echo "Error: AWS region is required"
-    echo "Usage: ./deploy [--profile <aws_profile>] [--region <aws_region>] [--admin-profile <admin_profile>]"
-    echo "Example: ./deploy --profile dev --region us-west-2 --admin-profile iamadminrp"
+    echo "Usage: ./deploy [--profile <aws_profile>] [--region <aws_region>] [--admin-profile <admin_profile>] [--env <environment>]"
+    echo "Example: ./deploy --profile dev --region us-west-2 --admin-profile iamadminrp --env development"
+    echo "Environment options: development (30-day cache), production (24-hour cache)"
     echo "You may also configure your region by running 'aws configure'"
     exit 1
   fi
@@ -34,6 +37,7 @@ fi
 echo "Using AWS Profile: $CDK_PROFILE"
 echo "Using Admin Profile: $ADMIN_PROFILE (for API key retrieval)"
 echo "Using AWS Region: $AWS_REGION"
+echo "Using Environment: $DEPLOYMENT_ENV (cache TTL: $([ "$DEPLOYMENT_ENV" = "development" ] && echo "30 days" || echo "24 hours"))"
 
 # Build and deploy infrastructure
 echo "Building and deploying infrastructure..."
@@ -54,8 +58,13 @@ done
 GOOGLE_SEARCH_API_KEY=${GOOGLE_SEARCH_API_KEY:-}
 GOOGLE_SEARCH_ENGINE_ID=${GOOGLE_SEARCH_ENGINE_ID:-}
 
+# Set defaults for SerpAPI (empty string if not provided)
+SERPAPI_API_KEY=${SERPAPI_API_KEY:-}
+
 CDK_CONTEXT_PARAMS="$CDK_CONTEXT_PARAMS -c googleSearchApiKey=$GOOGLE_SEARCH_API_KEY"
 CDK_CONTEXT_PARAMS="$CDK_CONTEXT_PARAMS -c googleSearchEngineId=$GOOGLE_SEARCH_ENGINE_ID"
+CDK_CONTEXT_PARAMS="$CDK_CONTEXT_PARAMS -c serpApiKey=$SERPAPI_API_KEY"
+CDK_CONTEXT_PARAMS="$CDK_CONTEXT_PARAMS -c nodeEnv=$DEPLOYMENT_ENV"
 
 if [ ! -z "$GOOGLE_SEARCH_API_KEY" ]; then
   if [ "$SHOW_KEYS" = true ]; then
@@ -71,6 +80,16 @@ if [ ! -z "$GOOGLE_SEARCH_ENGINE_ID" ]; then
   echo "Using Google Search Engine ID: $GOOGLE_SEARCH_ENGINE_ID"
 else
   echo "Warning: GOOGLE_SEARCH_ENGINE_ID not set in .env.local - search functionality will not work"
+fi
+
+if [ ! -z "$SERPAPI_API_KEY" ]; then
+  if [ "$SHOW_KEYS" = true ]; then
+    echo "Using SerpAPI Key: $SERPAPI_API_KEY"
+  else
+    echo "Using SerpAPI Key: [HIDDEN]"
+  fi
+else
+  echo "Warning: SERPAPI_API_KEY not set in .env.local - company domain extraction will use fallback methods"
 fi
 
 # Bedrock configuration (uses AWS credentials, no API key needed)
@@ -125,8 +144,9 @@ fi
 # Get stack outputs
 echo "Getting stack outputs..."
 
-# Get API endpoint
-API_ENDPOINT=$(aws cloudformation describe-stacks \
+# Get API endpoint and remove any trailing slash
+echo "Retrieving API endpoint from stack outputs..."
+API_ENDPOINT_RAW=$(aws cloudformation describe-stacks \
   --profile $CDK_PROFILE \
   --region $AWS_REGION \
   --no-cli-pager \
@@ -134,7 +154,25 @@ API_ENDPOINT=$(aws cloudformation describe-stacks \
   --query 'Stacks[0].Outputs[?OutputKey==`ApiEndpoint`].OutputValue' \
   --output text)
 
+if [ -z "$API_ENDPOINT_RAW" ] || [ "$API_ENDPOINT_RAW" = "None" ]; then
+  echo "Error: API endpoint not found in stack outputs."
+  echo "Available stack outputs:"
+  aws cloudformation describe-stacks \
+    --profile $CDK_PROFILE \
+    --region $AWS_REGION \
+    --no-cli-pager \
+    --stack-name SalesIntelligenceStack \
+    --query 'Stacks[0].Outputs[].{Key:OutputKey,Value:OutputValue}' \
+    --output table
+  echo "Please redeploy the stack to ensure outputs are available."
+  exit 1
+fi
+
+API_ENDPOINT=$(echo "$API_ENDPOINT_RAW" | sed 's|/$||')
+echo "Found API Endpoint: $API_ENDPOINT"
+
 # Get API Key ID
+echo "Retrieving API Key ID from stack outputs..."
 API_KEY_ID=$(aws cloudformation describe-stacks \
   --profile $CDK_PROFILE \
   --region $AWS_REGION \
@@ -143,8 +181,24 @@ API_KEY_ID=$(aws cloudformation describe-stacks \
   --query 'Stacks[0].Outputs[?OutputKey==`ApiKeyId`].OutputValue' \
   --output text)
 
+if [ -z "$API_KEY_ID" ] || [ "$API_KEY_ID" = "None" ]; then
+  echo "Error: API Key ID not found in stack outputs."
+  echo "Available stack outputs:"
+  aws cloudformation describe-stacks \
+    --profile $CDK_PROFILE \
+    --region $AWS_REGION \
+    --no-cli-pager \
+    --stack-name SalesIntelligenceStack \
+    --query 'Stacks[0].Outputs[].{Key:OutputKey,Value:OutputValue}' \
+    --output table
+  echo "Please redeploy the stack to ensure outputs are available."
+  exit 1
+fi
+
+echo "Found API Key ID: ${API_KEY_ID:0:8}..."
+
 # Get the actual API key value (using admin profile)
-echo "Retrieving API key using admin profile..."
+echo "Retrieving API key value using admin profile: $ADMIN_PROFILE"
 API_KEY_VALUE=$(aws apigateway get-api-key \
   --profile $ADMIN_PROFILE \
   --region $AWS_REGION \
@@ -164,10 +218,16 @@ API_KEY=$API_KEY_VALUE
 GOOGLE_SEARCH_API_KEY=$GOOGLE_SEARCH_API_KEY
 GOOGLE_SEARCH_ENGINE_ID=$GOOGLE_SEARCH_ENGINE_ID
 
+# SerpAPI
+SERPAPI_API_KEY=$SERPAPI_API_KEY
+
 # AWS Bedrock Configuration
 BEDROCK_MODEL=$BEDROCK_MODEL
 BEDROCK_MAX_TOKENS=$BEDROCK_MAX_TOKENS
 BEDROCK_TEMPERATURE=$BEDROCK_TEMPERATURE
+
+# Environment Configuration
+NODE_ENV=$DEPLOYMENT_ENV
 
 # AWS Configuration
 AWS_REGION=$AWS_REGION
@@ -189,45 +249,64 @@ SECRET_NAME=$(aws cloudformation describe-stacks \
   --query 'Stacks[0].Outputs[?OutputKey==`ApiKeysSecretName`].OutputValue' \
   --output text)
 
-# Update the secret with actual API keys
-SECRET_VALUE=$(cat << EOF
+echo "Debug: SECRET_NAME = '$SECRET_NAME'"
+
+if [ -z "$SECRET_NAME" ] || [ "$SECRET_NAME" = "None" ]; then
+  echo "Warning: Secret name not found in stack outputs. Skipping Secrets Manager update."
+else
+  # Prepare the secret value
+  SECRET_VALUE=$(cat << EOF
 {
   "googleSearchApiKey": "$GOOGLE_SEARCH_API_KEY",
-  "googleSearchEngineId": "$GOOGLE_SEARCH_ENGINE_ID"
+  "googleSearchEngineId": "$GOOGLE_SEARCH_ENGINE_ID",
+  "serpApiKey": "$SERPAPI_API_KEY"
 }
 EOF
 )
 
-aws secretsmanager update-secret \
-  --profile $ADMIN_PROFILE \
-  --region $AWS_REGION \
-  --no-cli-pager \
-  --secret-id $SECRET_NAME \
-  --secret-string "$SECRET_VALUE" > /dev/null
+  # Check if secret exists, create if it doesn't, otherwise update it
+  if aws secretsmanager describe-secret \
+    --profile $ADMIN_PROFILE \
+    --region $AWS_REGION \
+    --no-cli-pager \
+    --secret-id "$SECRET_NAME" > /dev/null 2>&1; then
+    # Secret exists, update it
+    echo "Updating existing secret..."
+    aws secretsmanager update-secret \
+      --profile $ADMIN_PROFILE \
+      --region $AWS_REGION \
+      --no-cli-pager \
+      --secret-id "$SECRET_NAME" \
+      --secret-string "$SECRET_VALUE" > /dev/null
+  else
+    # Secret doesn't exist, create it
+    echo "Creating new secret..."
+    aws secretsmanager create-secret \
+      --profile $ADMIN_PROFILE \
+      --region $AWS_REGION \
+      --no-cli-pager \
+      --name "$SECRET_NAME" \
+      --description "API keys for Sales Intelligence application" \
+      --secret-string "$SECRET_VALUE" > /dev/null
+  fi
+  echo "Secrets Manager update completed."
+fi
 
 echo ""
 echo "🎉 Sales Intelligence deployment complete!"
 echo ""
 echo "📊 API Endpoint: $API_ENDPOINT"
-echo "🔑 API Key: $API_KEY_VALUE"
+echo "🔑 API Key: ✅ Generated and saved to .env file"
 echo "🔍 Search: Using Google Search API with intelligent caching"
+echo "💾 Cache TTL: $([ "$DEPLOYMENT_ENV" = "development" ] && echo "30 days (development)" || echo "24 hours (production)")"
+echo "🌐 Environment: $DEPLOYMENT_ENV"
 echo ""
-# Remove trailing slash from API_ENDPOINT if it exists
-API_ENDPOINT_CLEAN=$(echo "$API_ENDPOINT" | sed 's|/$||')
-
-# Update .env with clean endpoint for easy testing
-cat >> .env << EOF
-
-# For easy testing (no trailing slash)
-API_ENDPOINT_CLEAN=$API_ENDPOINT_CLEAN
-EOF
 
 echo "📚 API Documentation: docs/api-endpoints.md"
 echo ""
 echo "🧪 Quick Test Commands:"
-echo "# Set environment variables"
-echo "export API_ENDPOINT=\"$API_ENDPOINT_CLEAN\""
-echo "export API_KEY=\"$API_KEY_VALUE\""
+echo "# Load environment variables"
+echo "source .env"
 echo ""
 echo "# Test health check"
 echo "curl \$API_ENDPOINT/health"

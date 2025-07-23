@@ -18,7 +18,9 @@
     "cdk:destroy": "cdk destroy",
     "cdk:synth": "cdk synth",
     "cdk:diff": "cdk diff",
-    "deploy": "npm run build && npm run cdk:deploy"
+    "deploy": "npm run build && npm run cdk:deploy",
+    "cache:migrate": "node scripts/migrate-cache-types.js",
+    "cache:migrate:dry-run": "node scripts/migrate-cache-types.js --dry-run"
   },
   "keywords": [
     "sales",
@@ -37,6 +39,8 @@
     "@aws-sdk/client-bedrock-runtime": "^3.450.0",
     "@aws-sdk/client-dynamodb": "^3.840.0",
     "@aws-sdk/client-lambda": "^3.840.0",
+    "@aws-sdk/client-secrets-manager": "^3.848.0",
+    "@aws-sdk/client-sfn": "^3.848.0",
     "@aws-sdk/lib-dynamodb": "^3.840.0",
     "aws-cdk-lib": "^2.124.0",
     "axios": "^1.6.0",
@@ -74,4 +78,3 @@
     "node": ">=18.0.0"
   }
 }
- 

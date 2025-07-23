@@ -1,0 +1,938 @@
+{
+  "search_metadata": {
+    "id": "687a29b1d3c5123f973c85d4",
+    "status": "Success",
+    "json_endpoint": "https://serpapi.com/searches/1b385a9a68cdb18f/687a29b1d3c5123f973c85d4.json",
+    "created_at": "2025-07-18 11:02:09 UTC",
+    "processed_at": "2025-07-18 11:02:09 UTC",
+    "google_url": "https://www.google.com/search?q=Shopify&oq=Shopify&hl=en&gl=us&sourceid=chrome&ie=UTF-8",
+    "raw_html_file": "https://serpapi.com/searches/1b385a9a68cdb18f/687a29b1d3c5123f973c85d4.html",
+    "total_time_taken": 3.63
+  },
+  "search_parameters": {
+    "engine": "google",
+    "q": "Shopify",
+    "google_domain": "google.com",
+    "hl": "en",
+    "gl": "us",
+    "device": "desktop"
+  },
+  "search_information": {
+    "query_displayed": "Shopify",
+    "total_results": 0,
+    "time_taken_displayed": 0.13,
+    "organic_results_state": "Results for exact spelling"
+  },
+  "twitter_results": {
+    "title": "Shopify (@Shopify) · X",
+    "link": "https://x.com/Shopify?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor",
+    "displayed_link": "https://x.com/Shopify"
+  },
+  "inline_videos": [
+    {
+      "position": 1,
+      "title": "How to Start a Shopify Store in 2025 & GET SALES FAST ...",
+      "link": "https://www.youtube.com/watch?v=bLTb-ZIOVFA",
+      "thumbnail": "https://serpapi.com/searches/687a29b1d3c5123f973c85d4/images/cccd10733ca4a704f148b103289d8c975ebe5e5cf4806e1febda1ff79b905c67.jpeg",
+      "channel": "Baddie In Business",
+      "duration": "16:16",
+      "platform": "YouTube"
+    },
+    {
+      "position": 2,
+      "title": "Shopify Tutorial for Beginners 2025 | Shopify Web Design ...",
+      "link": "https://www.youtube.com/watch?v=YmVBbW3e9Q8",
+      "thumbnail": "https://serpapi.com/searches/687a29b1d3c5123f973c85d4/images/cccd10733ca4a704484e67ff870a9c1b5ace8431d976f8a03a6936aad552fe4c.jpeg",
+      "channel": "Hogan Chua",
+      "duration": "1:39:37",
+      "platform": "YouTube"
+    },
+    {
+      "position": 3,
+      "title": "Shopify Tutorial for Beginners 2025 - Step by Step",
+      "link": "https://www.youtube.com/watch?v=nJMqRgKkkBg",
+      "thumbnail": "https://serpapi.com/searches/687a29b1d3c5123f973c85d4/images/cccd10733ca4a7046077447b9c3aee0787c8b45e3fbabf077b239d4ed4ac3983.jpeg",
+      "channel": "Metics Media",
+      "duration": "35:53",
+      "platform": "YouTube"
+    }
+  ],
+  "related_questions": [
+    {
+      "question": "What does Shopify do exactly?",
+      "type": "ai_overview",
+      "text_blocks": [
+        {
+          "type": "paragraph",
+          "snippet": "Shopify is a platform that allows individuals and businesses to create and manage their online stores, sell products, and handle payments and shipping. It provides a user-friendly interface, various tools for customization, and integrates with other platforms for marketing and sales. Essentially, Shopify empowers users to build and operate their e-commerce businesses, whether online or in physical stores, with options for selling various products and services.",
+          "snippet_highlighted_words": [
+            "allows individuals and businesses to create and manage their online stores, sell products, and handle payments and shipping"
+          ],
+          "reference_indexes": [
+            1,
+            2,
+            6,
+            7,
+            8,
+            10,
+            11
+          ]
+        },
+        {
+          "type": "paragraph",
+          "snippet": "Here's a more detailed breakdown:"
+        },
+        {
+          "type": "heading",
+          "snippet": "Core Functions:"
+        },
+        {
+          "type": "list",
+          "list": [
+            {
+              "title": "Online Store Creation:",
+              "snippet": "Shopify provides tools for building and customizing online stores, including themes, templates, and a drag-and-drop interface.",
+              "reference_indexes": [
+                0,
+                10,
+                11
+              ]
+            },
+            {
+              "title": "Product Management:",
+              "snippet": "Merchants can list products, manage inventory, and organize product information.",
+              "reference_indexes": [
+                2,
+                3
+              ]
+            },
+            {
+              "title": "Payment Processing:",
+              "snippet": "Shopify integrates with various payment gateways, including its own solution, Shop Pay, to facilitate secure online payments.",
+              "reference_indexes": [
+                2,
+                11,
+                12
+              ]
+            },
+            {
+              "title": "Order Management:",
+              "snippet": "Shopify helps manage orders, track shipments, and handle fulfillment processes.",
+              "reference_indexes": [
+                2,
+                3
+              ]
+            },
+            {
+              "title": "Marketing and Sales:",
+              "snippet": "The platform offers tools for marketing, including SEO, social media integration, and email marketing capabilities.",
+              "reference_indexes": [
+                2,
+                11
+              ]
+            },
+            {
+              "title": "Point of Sale (POS):",
+              "snippet": "Shopify also offers a POS system for managing sales in physical stores, allowing for integration with online stores.",
+              "reference_indexes": [
+                2,
+                11,
+                12
+              ]
+            },
+            {
+              "title": "Analytics and Reporting:",
+              "snippet": "Shopify provides tools to track sales data, customer behavior, and other key metrics to analyze business performance.",
+              "reference_indexes": [
+                3,
+                9,
+                11,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "snippet": "Who Uses Shopify:",
+          "reference_indexes": [
+            8,
+            11
+          ]
+        },
+        {
+          "type": "list",
+          "list": [
+            {
+              "title": "Small Businesses:",
+              "snippet": "Shopify is a popular choice for startups and small businesses looking to establish an online presence.",
+              "reference_indexes": [
+                2,
+                4,
+                10
+              ]
+            },
+            {
+              "title": "Entrepreneurs:",
+              "snippet": "Individuals with a passion for selling products or services can leverage Shopify to launch their businesses.",
+              "reference_indexes": [
+                4,
+                10,
+                11
+              ]
+            },
+            {
+              "title": "Established Businesses:",
+              "snippet": "Larger companies also use Shopify to manage their online sales channels, often integrating it with their existing systems.",
+              "reference_indexes": [
+                2,
+                5,
+                10
+              ]
+            },
+            {
+              "title": "Brands:",
+              "snippet": "Shopify is used by a wide range of brands, from independent designers to established retailers.",
+              "reference_indexes": [
+                1,
+                2,
+                5,
+                7,
+                10,
+                14
+              ]
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "snippet": "Key Features:"
+        },
+        {
+          "type": "list",
+          "list": [
+            {
+              "title": "Ease of Use:",
+              "snippet": "Shopify is known for its user-friendly interface and intuitive tools, making it accessible to users with varying levels of technical expertise.",
+              "reference_indexes": [
+                4,
+                7,
+                10,
+                13,
+                16
+              ]
+            },
+            {
+              "title": "Scalability:",
+              "snippet": "Shopify provides different pricing plans and features to accommodate businesses of all sizes and growth stages.",
+              "reference_indexes": [
+                2,
+                7,
+                10
+              ]
+            },
+            {
+              "title": "Customization:",
+              "snippet": "The platform offers a wide range of themes, templates, and apps for customization, allowing businesses to create unique online storefronts.",
+              "reference_indexes": [
+                0,
+                7,
+                10
+              ]
+            },
+            {
+              "title": "Integration:",
+              "snippet": "Shopify integrates with various third-party apps and services, extending its functionality and capabilities.",
+              "reference_indexes": [
+                2,
+                3,
+                10
+              ]
+            },
+            {
+              "title": "Global Reach:",
+              "snippet": "Shopify supports multiple languages and currencies, allowing businesses to sell internationally.",
+              "reference_indexes": [
+                7,
+                12
+              ]
+            }
+          ]
+        }
+      ],
+      "references": [
+        {
+          "title": "What Is Shopify and How Does It Work? (2025)",
+          "link": "https://www.shopify.com/blog/what-is-shopify#:~:text=Build%20an%20online%20store,product%20descriptions%20and%20manage%20content.",
+          "snippet": "Build an online store. Use AI to create product collections and informational pages. Build your online store in minutes with Shopi...",
+          "source": "Shopify",
+          "index": 0
+        },
+        {
+          "title": "What Is Shopify and How Does It Work? (2025) - Shopify UK",
+          "link": "https://www.shopify.com/uk/blog/what-is-shopify#:~:text=What%20is%20Shopify?-,Shopify%20is%20a%20commerce%20platform%20that%20helps%20you%20sell%20online,journey%20with%20a%20free%20trial.",
+          "snippet": "Shopify is a commerce platform that helps you sell online and in person. Entrepreneurs, retailers, and global brands use Shopify t...",
+          "source": "Shopify",
+          "index": 1
+        },
+        {
+          "title": "What Is Shopify and How Does It Work? - NerdWallet",
+          "link": "https://www.nerdwallet.com/article/small-business/what-is-shopify",
+          "snippet": "Apr 11, 2023",
+          "source": "NerdWallet",
+          "index": 2
+        },
+        {
+          "title": "How Does Shopify Work? 5 Simple Steps to Start Selling Online - PageFly",
+          "link": "https://pagefly.io/blogs/shopify/how-does-shopify-work#:~:text=It%20offers%20tools%20for%20product,products%2C%20subscriptions%2C%20and%20services.",
+          "snippet": "It offers tools for product listing, secure payments, inventory tracking, order fulfillment, marketing, and analytics—making it an...",
+          "source": "PageFly",
+          "index": 3
+        },
+        {
+          "title": "What is Shopify? Learn How It Works and Start Selling Today!",
+          "link": "https://www.youtube.com/watch?v=eWy58tHIBFc&pp=0gcJCfwAo7VqN5tD",
+          "snippet": "Sep 27, 2024 — now if you're here I'm guessing you're either wondering if Shopify is the right e-commerce platform for your business ...",
+          "source": "YouTube · Merchant Maverick",
+          "index": 4
+        },
+        {
+          "title": "Shopify - Wikipedia",
+          "link": "https://en.wikipedia.org/wiki/Shopify#:~:text=Shopify%20Inc.%2C%20stylized%20as%20shopify,%2C%20Red%20Bull%2C%20and%20Hyatt.",
+          "snippet": "Shopify Inc., stylized as shopify, headquartered in Ottawa, Ontario, operates an e-commerce platform for retail point-of-sale syst...",
+          "source": "Wikipedia, the free encyclopedia",
+          "index": 5
+        },
+        {
+          "title": "What Is Shopify? A Beginner's Guide to Building an Online Store - Wise",
+          "link": "https://wise.com/us/blog/what-is-shopify",
+          "snippet": "Nov 7, 2024 — You can sell a wide variety of goods and services through Shopify, including: * Physical products - everything from ha...",
+          "source": "Wise",
+          "index": 6
+        },
+        {
+          "title": "What is Shopify & How Does It Work? [Full Guide 2025] - YouTube",
+          "link": "https://www.youtube.com/watch?v=Pmjm-TQjebs#:~:text=What%20is%20Shopify%20&%20How%20Does,and%20enhance%20customer%20engagement%20effectively.",
+          "snippet": "Jan 8, 2025 — What is Shopify & How Does It Work? [Full Guide 2025] - YouTube. This content isn't available. 👉 Get a 3 day Shopify FR...",
+          "source": "YouTube",
+          "index": 7
+        },
+        {
+          "title": "What Is Shopify and How Does It Work? - Coursera",
+          "link": "https://www.coursera.org/articles/what-is-shopify#:~:text=The%20core%20of%20Shopify%20is,a%20Basic%20plan%20%5B3%5D.",
+          "snippet": "Oct 7, 2024 — The core of Shopify is to consolidate the many factors that go into online selling, including marketing, payments, and ...",
+          "source": "Coursera",
+          "index": 8
+        },
+        {
+          "title": "What Is Shopify? And How Does it Work? (Beginner Overview 2025)",
+          "link": "https://www.youtube.com/watch?v=Ne5CLCHnco0",
+          "snippet": "Sep 23, 2024 — shopify it's literally everywhere. but what actually is Shopify. and more importantly. how does it work well that's ex...",
+          "source": "YouTube · How To Shopify",
+          "index": 9
+        },
+        {
+          "title": "What Is Shopify & How Does Shopify Work?",
+          "link": "https://www.charleagency.com/articles/how-does-shopify-work/#:~:text=Shopify%20leaves%20merchants%20in%20control,little%20later%20in%20the%20article.",
+          "snippet": "Sep 26, 2024 — Shopify leaves merchants in control, allowing them to quickly build stores and sell products with integrations out-of-",
+          "source": "Shopify Agency",
+          "index": 10
+        },
+        {
+          "title": "Start and grow your e-commerce business - 3-Day Free Trial - Shopify USA",
+          "link": "https://www.shopify.com/",
+          "source": "Shopify",
+          "index": 11
+        },
+        {
+          "title": "All About Shopify",
+          "link": "https://www.shopify.com/about",
+          "snippet": "* Sell your products. Sell online or in person. * Check out customers. World-class checkout. * Sell online. Grow your business on...",
+          "source": "Shopify",
+          "index": 12
+        },
+        {
+          "title": "Is Shopify Worth It In 2025?",
+          "link": "https://topgrowthmarketing.com/is-shopify-worth-it/#:~:text=It%20(%20Shopify%20)%20's%20designed%20to,are%20at%20arm's%20reach%20at%20all%20times.",
+          "snippet": "It ( Shopify ) 's designed to be very intuitive and all the mission-critical options are at arm's reach at all times.",
+          "source": "Top Growth Marketing",
+          "index": 13
+        },
+        {
+          "title": "Wix ecommerce vs Shopify, Best Comparison 2024",
+          "link": "https://ecommerce.folio3.com/blog/wix-ecommerce-vs-shopify/#:~:text=On%20the%20credit%20of%20Shopify%2C%20the%20independent,purposefully%20developed%20for%20a%20range%20of%20industries.",
+          "snippet": "Aug 25, 2023 — On the credit of Shopify, the independent designers working with the platform ensure that you got some pretty amazing ...",
+          "source": "Folio3 eCommerce",
+          "index": 14
+        },
+        {
+          "title": "Shopify Web Development Company | Expert Services by Softtrix",
+          "link": "https://www.softtrix.com/shopify-web-development/#:~:text=Can%20I%20track%20and%20analyze%20the%20performance,as%20sales%2C%20website%20traffic%2C%20and%20customer%20behavior.",
+          "snippet": "Can I track and analyze the performance of my Shopify website? Yes, Shopify offers built-in analytics tools that allow you to trac...",
+          "source": "Softtrix",
+          "index": 15
+        },
+        {
+          "title": "Ultimate Guide to Shopify Development Services 2025",
+          "link": "https://www.internetsearchinc.com/ultimate-guide-to-shopify-development-services/#:~:text=Table%20of%20Contents:%20Shopify%20is%20a%20complex,range%20of%20Shopify%20development%20services%20and%20solutions.",
+          "snippet": "Table of Contents: Shopify is a complex system to set up and run for non-technical users. Trusted Shopify development companies or...",
+          "source": "internetsearchinc.com",
+          "index": 16
+        }
+      ],
+      "next_page_token": "eyJvbnMiOiIxMDA0MSIsImZjIjoiRXFFQkNtSkJUR3QwWDNaR1lWRjBSeTFxY1RWV1ozSjVNVFp3WWxoMVRtcHhORXBDTTFSS1VFcGtVelYyUkU1cWFITjFVVzFZWDFkNGRXOTFYM2xOTlUxWU5UVldZazl6U0ZSMmNFdzNjVTl4VEU1bE9FWlNWR1pSZDNFMWVucFZWV2h3TURCaFVSSVhkRU5zTm1GT1EyeEtTMU4zTlU1dlVHMWZZa2xuVVdNYUlrRkdUVUZIUjI4NVZrbzRjbXRZVjFaWE5VdFZkblZHVDJoTFRsbFJVbWt3VGtFIiwiZmN2IjoiMyIsImVpIjoidENsNmFOQ2xKS1N3NU5vUG1fYklnUWMiLCJxYyI6IkNnZHphRzl3YVdaNUVBQjlvaVF1UHciLCJxdWVzdGlvbiI6IldoYXQgZG9lcyBTaG9waWZ5IGRvIGV4YWN0bHk/IiwibGsiOiJHaHgzYUdGMElHUnZaWE1nYzJodmNHbG1lU0JrYnlCbGVHRmpkR3g1IiwiYnMiOiJjMzJPdlFyQ01CUkdjWkdTeWJFRWY2NmdpS2hROHdKRkozY0hWMk43UTRwdElpWVM5YTE4TGhfQVVhdFlwZmd6WGpqbjNJOU1TV01odVlWWW80RzUxSnRFSFBJRGNNOGpteDVDXzl4blRWcDNMOFo4TUdSSmhqUHRJTnRGc3R5eGZJMGd0am9ERHAxeEVJRGhLWWItcWNwR2RDQkxpdm1ua0JtQng4ckVnSldZRzA2WkpFYlFvdmdWLWhlUHRXbkxfY0NlX1h3cks1VVNJWENMS2tKWW9YV0lDaVlaUDJvRlhNWHY5dFZqUGRyOUFoZXo3elJfaUxYS0RRIiwiaWQiOiJmY190Q2w2YU5DbEpLU3c1Tm9QbV9iSWdRY18xIn0=",
+      "serpapi_link": "https://serpapi.com/search.json?device=desktop&engine=google_related_questions&google_domain=google.com&next_page_token=eyJvbnMiOiIxMDA0MSIsImZjIjoiRXFFQkNtSkJUR3QwWDNaR1lWRjBSeTFxY1RWV1ozSjVNVFp3WWxoMVRtcHhORXBDTTFSS1VFcGtVelYyUkU1cWFITjFVVzFZWDFkNGRXOTFYM2xOTlUxWU5UVldZazl6U0ZSMmNFdzNjVTl4VEU1bE9FWlNWR1pSZDNFMWVucFZWV2h3TURCaFVSSVhkRU5zTm1GT1EyeEtTMU4zTlU1dlVHMWZZa2xuVVdNYUlrRkdUVUZIUjI4NVZrbzRjbXRZVjFaWE5VdFZkblZHVDJoTFRsbFJVbWt3VGtFIiwiZmN2IjoiMyIsImVpIjoidENsNmFOQ2xKS1N3NU5vUG1fYklnUWMiLCJxYyI6IkNnZHphRzl3YVdaNUVBQjlvaVF1UHciLCJxdWVzdGlvbiI6IldoYXQgZG9lcyBTaG9waWZ5IGRvIGV4YWN0bHk%2FIiwibGsiOiJHaHgzYUdGMElHUnZaWE1nYzJodmNHbG1lU0JrYnlCbGVHRmpkR3g1IiwiYnMiOiJjMzJPdlFyQ01CUkdjWkdTeWJFRWY2NmdpS2hROHdKRkozY0hWMk43UTRwdElpWVM5YTE4TGhfQVVhdFlwZmd6WGpqbjNJOU1TV01odVlWWW80RzUxSnRFSFBJRGNNOGpteDVDXzl4blRWcDNMOFo4TUdSSmhqUHRJTnRGc3R5eGZJMGd0am9ERHAxeEVJRGhLWWItcWNwR2RDQkxpdm1ua0JtQng4ckVnSldZRzA2WkpFYlFvdmdWLWhlUHRXbkxfY0NlX1h3cks1VVNJWENMS2tKWW9YV0lDaVlaUDJvRlhNWHY5dFZqUGRyOUFoZXo3elJfaUxYS0RRIiwiaWQiOiJmY190Q2w2YU5DbEpLU3c1Tm9QbV9iSWdRY18xIn0%3D"
+    },
+    {
+      "question": "How much does Shopify take from a $100 sale?",
+      "type": "ai_overview",
+      "text_blocks": [
+        {
+          "type": "paragraph",
+          "snippet": "For a $100 sale on Shopify, the fee depends on the plan and whether you use Shopify Payments. With Shopify Payments on the Basic plan, the fee is 2.9% + $0.30, which equals $3.20. If you use a third-party payment provider, there's an additional 2% fee, bringing the total to $5.20.",
+          "snippet_highlighted_words": [
+            "With Shopify Payments on the Basic plan, the fee is 2.9% + $0.30, which equals $3.20"
+          ]
+        },
+        {
+          "type": "heading",
+          "snippet": "Here's a breakdown:"
+        },
+        {
+          "type": "list",
+          "list": [
+            {
+              "snippet": "Shopify Payments (Basic Plan): 2.9% of $100 = $2.90, plus $0.30, for a total of $3.20."
+            },
+            {
+              "snippet": "Third-party payment provider: 2.9% + $0.30 + 2% = $5.20."
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "snippet": "Shopify's fees decrease slightly as you upgrade to higher-tier plans. For example, the Shopify plan charges 2.6% + $0.30, and the Advanced plan charges 2.4% + $0.30."
+        },
+        {
+          "type": "paragraph",
+          "snippet": "To calculate the exact fees for your situation, you can use Shopify's pricing page or a Shopify fee calculator."
+        }
+      ],
+      "references": [
+        {
+          "title": "Quick Read on Shopify Pricing: How Much Do I Need? (Updated for 2024!)",
+          "link": "https://www.enzuzo.com/blog/guide-to-shopify-pricing#:~:text=For%20instance%2C%20with%20the%20Basic,processing%20has%20a%200.5%25%20fee.",
+          "snippet": "Jan 16, 2024 — For instance, with the Basic plan, you'll pay a 2.9% + $0.30 fee per transaction for each online domestic credit card ...",
+          "source": "Enzuzo",
+          "index": 0
+        },
+        {
+          "title": "Shopify Pricing Plans (2025): Comparison, Fees & Calculator",
+          "link": "https://fitsmallbusiness.com/ultimate-guide-shopify-pricing/#:~:text=How%20much%20does%20Shopify%20take,transaction%20costs%20at%20higher%20volumes.",
+          "snippet": "How much does Shopify take from a $100 sale? If you use Shopify Payments on the Basic plan, Shopify charges 2.9% + 30 cents per tr...",
+          "source": "Fit Small Business",
+          "index": 1
+        },
+        {
+          "title": "How Much Does Shopify Take on Each Sale? - LinkedIn",
+          "link": "https://www.linkedin.com/pulse/how-much-does-shopify-take-each-sale-rahul-kalra-7oodc#:~:text=5.,Total%20Deduction:%20$3.20",
+          "snippet": "Aug 29, 2024 — 5. Calculating Your Total Shopify Costs Per Sale. To get a clear picture of how much Shopify takes from each sale, let...",
+          "source": "LinkedIn",
+          "index": 2
+        },
+        {
+          "title": "How Much Does Shopify Take Per Sale in 2025 (Fees) - Yaguara",
+          "link": "https://www.yaguara.co/how-much-does-shopify-take-per-sale/#:~:text=all%20the%20details.-,Shopify%20Fees%20Per%20Sale,the%20Pricing%20page%20of%20Shopify.",
+          "snippet": "Mar 18, 2025 — Shopify Fees Per Sale Shopify charges 2.9% and $0.30 on online transactions for each sale in the Basic plan. However,",
+          "source": "yaguara.co",
+          "index": 3
+        },
+        {
+          "title": "Shopify Fees 2025: What is the True Cost? (Make it Easier)",
+          "link": "https://linkmybooks.com/blog/shopify-fees#:~:text=Shopify's%20Transaction%20Fees,your%20Shopify%20fees%20will%20be.",
+          "snippet": "Mar 19, 2025 — Shopify's Transaction Fees When you sell an item, you need to pay a percentage of the selling price to Shopify. It's c...",
+          "source": "Link My Books",
+          "index": 4
+        },
+        {
+          "title": "How Much Does Shopify Take From Each Sale? Understanding Fees ...",
+          "link": "https://powercommerce.com/blogs/shopify-hub/how-much-does-shopify-take-from-each-sale-understanding-fees-and-costs#:~:text=If%20a%20customer%20purchases%20an,the%20third%2Dparty%20provider).",
+          "snippet": "Mar 21, 2025 — If a customer purchases an item for $100 through the Basic Plan using Shopify Payments, the fee would be $3.20 (2.9% +",
+          "source": "Power Commerce",
+          "index": 5
+        },
+        {
+          "title": "Shopify Pricing Plans & Fees in 2025 [How Much It Costs]",
+          "link": "https://www.tidio.com/blog/shopify-pricing/#:~:text=You%20can%20use%20Shopify%20Fee%20Calculator%20to,learn%20how%20much%20Shopify%20will%20charge%20you.",
+          "snippet": "Nov 22, 2024 — You can use Shopify Fee Calculator to quickly learn how much Shopify will charge you.",
+          "source": "Tidio",
+          "index": 6
+        },
+        {
+          "title": "Knowing what type of Shopify Calculator to use for your fees",
+          "link": "https://linkmybooks.com/blog/shopify-fee-calculators#:~:text=As%20you%20can%20tell%2C%20calculating%20Shopify%20fees,is%20to%20use%20a%20Shopify%20fees%20calculator.",
+          "snippet": "Nov 16, 2022 — As you can tell, calculating Shopify fees can become complicated. The best way to keep track of all of your Shopify tr...",
+          "source": "Link My Books",
+          "index": 7
+        },
+        {
+          "title": "How Much Does It Cost to Have a Shopify Store and Develop It?",
+          "link": "https://wecanflyagency.com/blog/how-much-does-it-cost-to-run-a-store-on-shopify/#:~:text=It's%20an%20extremely%20catchy%20topic%2C%20which%20we,that%20will%20be%20suitable%20for%20your%20store.",
+          "snippet": "Dec 20, 2023 — It's an extremely catchy topic, which we have covered more than once in our publications. You can find quite a lot of ...",
+          "source": "WeCanFly Agency",
+          "index": 8
+        }
+      ],
+      "next_page_token": "eyJvbnMiOiIxMDA0MSIsImZjIjoiRXFFQkNtSkJUR3QwWDNaR1lWRjBSeTFxY1RWV1ozSjVNVFp3WWxoMVRtcHhORXBDTTFSS1VFcGtVelYyUkU1cWFITjFVVzFZWDFkNGRXOTFYM2xOTlUxWU5UVldZazl6U0ZSMmNFdzNjVTl4VEU1bE9FWlNWR1pSZDNFMWVucFZWV2h3TURCaFVSSVhkRU5zTm1GT1EyeEtTMU4zTlU1dlVHMWZZa2xuVVdNYUlrRkdUVUZIUjI4NVZrbzRjbXRZVjFaWE5VdFZkblZHVDJoTFRsbFJVbWt3VGtFIiwiZmN2IjoiMyIsImVpIjoidENsNmFOQ2xKS1N3NU5vUG1fYklnUWMiLCJxYyI6IkNnZHphRzl3YVdaNUVBQjlvaVF1UHciLCJxdWVzdGlvbiI6IkhvdyBtdWNoIGRvZXMgU2hvcGlmeSB0YWtlIGZyb20gYSAkMTAwIHNhbGU/IiwibGsiOiJHaXRvYjNjZ2JYVmphQ0JrYjJWeklITm9iM0JwWm5rZ2RHRnJaU0JtY205dElHRWdKREV3TUNCellXeGwiLCJicyI6ImMzMk92UXJDTUJSR2NaR1N5YkVFZjY2Z2lLaFE4d0pGSjNjSFYyTjdRNHB0SWlZUzlhMThMaF9BVWF0WXBmZ3pYampuM0k5TVNXTWh1WVZZbzRHNTFKdEVIUElEY004am14NUNfOXhuVFZwM0w4WjhNR1JKaGpQdElOdEZzdHl4ZkkwZ3Rqb0REcDF4RUlEaEtZYi1xY3BHZENCTGl2bW5rQm1CeDhyRWdKV1lHMDZaSkViUW92Z1YtaGVQdFduTF9jQ2VfWHdySzVVU0lYQ0xLa0pZb1hXSUNpWVpQMm9GWE1Ydjl0VmpQZHI5QWhlejd6Ul9pTFhLRFEiLCJpZCI6ImZjX3RDbDZhTkNsSktTdzVOb1BtX2JJZ1FjXzEifQ==",
+      "serpapi_link": "https://serpapi.com/search.json?device=desktop&engine=google_related_questions&google_domain=google.com&next_page_token=eyJvbnMiOiIxMDA0MSIsImZjIjoiRXFFQkNtSkJUR3QwWDNaR1lWRjBSeTFxY1RWV1ozSjVNVFp3WWxoMVRtcHhORXBDTTFSS1VFcGtVelYyUkU1cWFITjFVVzFZWDFkNGRXOTFYM2xOTlUxWU5UVldZazl6U0ZSMmNFdzNjVTl4VEU1bE9FWlNWR1pSZDNFMWVucFZWV2h3TURCaFVSSVhkRU5zTm1GT1EyeEtTMU4zTlU1dlVHMWZZa2xuVVdNYUlrRkdUVUZIUjI4NVZrbzRjbXRZVjFaWE5VdFZkblZHVDJoTFRsbFJVbWt3VGtFIiwiZmN2IjoiMyIsImVpIjoidENsNmFOQ2xKS1N3NU5vUG1fYklnUWMiLCJxYyI6IkNnZHphRzl3YVdaNUVBQjlvaVF1UHciLCJxdWVzdGlvbiI6IkhvdyBtdWNoIGRvZXMgU2hvcGlmeSB0YWtlIGZyb20gYSAkMTAwIHNhbGU%2FIiwibGsiOiJHaXRvYjNjZ2JYVmphQ0JrYjJWeklITm9iM0JwWm5rZ2RHRnJaU0JtY205dElHRWdKREV3TUNCellXeGwiLCJicyI6ImMzMk92UXJDTUJSR2NaR1N5YkVFZjY2Z2lLaFE4d0pGSjNjSFYyTjdRNHB0SWlZUzlhMThMaF9BVWF0WXBmZ3pYampuM0k5TVNXTWh1WVZZbzRHNTFKdEVIUElEY004am14NUNfOXhuVFZwM0w4WjhNR1JKaGpQdElOdEZzdHl4ZkkwZ3Rqb0REcDF4RUlEaEtZYi1xY3BHZENCTGl2bW5rQm1CeDhyRWdKV1lHMDZaSkViUW92Z1YtaGVQdFduTF9jQ2VfWHdySzVVU0lYQ0xLa0pZb1hXSUNpWVpQMm9GWE1Ydjl0VmpQZHI5QWhlejd6Ul9pTFhLRFEiLCJpZCI6ImZjX3RDbDZhTkNsSktTdzVOb1BtX2JJZ1FjXzEifQ%3D%3D"
+    },
+    {
+      "question": "What is the downside of Shopify?",
+      "type": "featured_snippet",
+      "snippet": "Key drawbacks of Shopify include its potential for high costs due to subscription fees, transaction fees (if not using Shopify Payments), and limitations in content marketing capabilities.",
+      "title": "Shopify Pros and Cons 2025 - Network Solutions",
+      "date": "May 19, 2025",
+      "link": "https://www.networksolutions.com/blog/pros-cons-shopify/#:~:text=Key%20drawbacks%20of%20Shopify%20include,limitations%20in%20content%20marketing%20capabilities.",
+      "displayed_link": "https://www.networksolutions.com › blog › pros-cons-sh...",
+      "source_logo": "https://serpapi.com/searches/687a29b1d3c5123f973c85d4/images/37877d7c772fdb15ce570701b64ab8b7214c65bfa42f3f6eb873f448d579b04c.png",
+      "next_page_token": "eyJvbnMiOiIxMDA0MSIsImZjIjoiRXFFQkNtSkJUR3QwWDNaR1lWRjBSeTFxY1RWV1ozSjVNVFp3WWxoMVRtcHhORXBDTTFSS1VFcGtVelYyUkU1cWFITjFVVzFZWDFkNGRXOTFYM2xOTlUxWU5UVldZazl6U0ZSMmNFdzNjVTl4VEU1bE9FWlNWR1pSZDNFMWVucFZWV2h3TURCaFVSSVhkRU5zTm1GT1EyeEtTMU4zTlU1dlVHMWZZa2xuVVdNYUlrRkdUVUZIUjI4NVZrbzRjbXRZVjFaWE5VdFZkblZHVDJoTFRsbFJVbWt3VGtFIiwiZmN2IjoiMyIsImVpIjoidENsNmFOQ2xKS1N3NU5vUG1fYklnUWMiLCJxYyI6IkNnZHphRzl3YVdaNUVBQjlvaVF1UHciLCJxdWVzdGlvbiI6IldoYXQgaXMgdGhlIGRvd25zaWRlIG9mIFNob3BpZnk/IiwibGsiOiJHaDkzYUdGMElHbHpJSFJvWlNCa2IzZHVjMmxrWlNCdlppQnphRzl3YVdaNSIsImJzIjoiYzMyT3ZRckNNQlJHY1pHU3liRUVmNjZnaUtoUTh3SkZKM2NIVjJON1E0cHRJaVlTOWExOExoX0FVYXRZcGZnelhqam4zSTlNU1dNaHVZVllvNEc1MUp0RUhQSURjTThqbXg1Q185eG5UVnAzTDhaOE1HUkpoalB0SU50RnN0eXhmSTBndGpvRERwMXhFSURoS1liLXFjcEdkQ0JMaXZtbmtCbUJ4OHJFZ0pXWUcwNlpKRWJRb3ZnVi1oZVB0V25MX2NDZV9Yd3JLNVVTSVhDTEtrSllvWFdJQ2lZWlAyb0ZYTVh2OXRWalBkcjlBaGV6N3pSX2lMWEtEUSIsImlkIjoiZmNfdENsNmFOQ2xKS1N3NU5vUG1fYklnUWNfMSJ9",
+      "serpapi_link": "https://serpapi.com/search.json?device=desktop&engine=google_related_questions&google_domain=google.com&next_page_token=eyJvbnMiOiIxMDA0MSIsImZjIjoiRXFFQkNtSkJUR3QwWDNaR1lWRjBSeTFxY1RWV1ozSjVNVFp3WWxoMVRtcHhORXBDTTFSS1VFcGtVelYyUkU1cWFITjFVVzFZWDFkNGRXOTFYM2xOTlUxWU5UVldZazl6U0ZSMmNFdzNjVTl4VEU1bE9FWlNWR1pSZDNFMWVucFZWV2h3TURCaFVSSVhkRU5zTm1GT1EyeEtTMU4zTlU1dlVHMWZZa2xuVVdNYUlrRkdUVUZIUjI4NVZrbzRjbXRZVjFaWE5VdFZkblZHVDJoTFRsbFJVbWt3VGtFIiwiZmN2IjoiMyIsImVpIjoidENsNmFOQ2xKS1N3NU5vUG1fYklnUWMiLCJxYyI6IkNnZHphRzl3YVdaNUVBQjlvaVF1UHciLCJxdWVzdGlvbiI6IldoYXQgaXMgdGhlIGRvd25zaWRlIG9mIFNob3BpZnk%2FIiwibGsiOiJHaDkzYUdGMElHbHpJSFJvWlNCa2IzZHVjMmxrWlNCdlppQnphRzl3YVdaNSIsImJzIjoiYzMyT3ZRckNNQlJHY1pHU3liRUVmNjZnaUtoUTh3SkZKM2NIVjJON1E0cHRJaVlTOWExOExoX0FVYXRZcGZnelhqam4zSTlNU1dNaHVZVllvNEc1MUp0RUhQSURjTThqbXg1Q185eG5UVnAzTDhaOE1HUkpoalB0SU50RnN0eXhmSTBndGpvRERwMXhFSURoS1liLXFjcEdkQ0JMaXZtbmtCbUJ4OHJFZ0pXWUcwNlpKRWJRb3ZnVi1oZVB0V25MX2NDZV9Yd3JLNVVTSVhDTEtrSllvWFdJQ2lZWlAyb0ZYTVh2OXRWalBkcjlBaGV6N3pSX2lMWEtEUSIsImlkIjoiZmNfdENsNmFOQ2xKS1N3NU5vUG1fYklnUWNfMSJ9"
+    },
+    {
+      "question": "What is the difference between Amazon and Shopify?",
+      "type": "ai_overview",
+      "text_blocks": [
+        {
+          "type": "paragraph",
+          "snippet": "Shopify and Amazon offer distinct approaches to online selling. Shopify is a platform for building your own branded online store, while Amazon is a marketplace where you sell your products alongside others. Shopify provides greater control over branding and customer experience, while Amazon offers access to a massive existing customer base.",
+          "snippet_highlighted_words": [
+            "Shopify is a platform for building your own branded online store, while Amazon is a marketplace where you sell your products alongside others"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "snippet": "Here's a more detailed breakdown:"
+        },
+        {
+          "type": "heading",
+          "snippet": "Shopify:"
+        },
+        {
+          "type": "list",
+          "list": [
+            {
+              "snippet": "Focus: Building a unique, branded online store."
+            },
+            {
+              "snippet": "Control: You have full control over your store's design, branding, and customer experience."
+            },
+            {
+              "snippet": "Traffic: You need to drive your own traffic through marketing efforts (SEO, social media, etc.)."
+            },
+            {
+              "snippet": "Fees: Monthly subscription fees plus transaction fees when using Shopify Payments."
+            },
+            {
+              "snippet": "Fulfillment: You handle fulfillment or use a third-party service."
+            },
+            {
+              "snippet": "Scalability: Scales gradually as you build your brand and customer base."
+            },
+            {
+              "snippet": "Ideal for: Businesses focused on building a strong brand identity and customer relationships."
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "snippet": "Amazon:"
+        },
+        {
+          "type": "list",
+          "list": [
+            {
+              "snippet": "Focus: Selling on a large marketplace with a massive existing customer base."
+            },
+            {
+              "snippet": "Control: Limited control over your store's design and branding."
+            },
+            {
+              "snippet": "Traffic: Access to Amazon's vast customer base from day one."
+            },
+            {
+              "snippet": "Fees: Referral fees and potentially fulfillment fees (FBA)."
+            },
+            {
+              "snippet": "Fulfillment: Can use Amazon's Fulfillment by Amazon (FBA) service or handle it yourself."
+            },
+            {
+              "snippet": "Scalability: Faster potential for growth due to built-in traffic and fulfillment options."
+            },
+            {
+              "snippet": "Ideal for: Businesses seeking quick exposure and access to a large customer base."
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "snippet": "In essence:"
+        },
+        {
+          "type": "list",
+          "list": [
+            {
+              "snippet": "If you want to build a long-term brand with full control over your online presence, Shopify is a strong choice."
+            },
+            {
+              "snippet": "If you want to quickly reach a large audience and leverage Amazon's infrastructure, Amazon is a good option."
+            }
+          ]
+        }
+      ],
+      "thumbnail": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-78JaSEAArOG3EkWaBbzr3gnGMN5CbRdVjck1P2T1pRTr1syJRtKlavHv&s",
+      "references": [
+        {
+          "title": "Amazon vs. Shopify: Differences, Pros, Cons, Fees and More - WebFX",
+          "link": "https://www.webfx.com/blog/marketing/amazon-vs-shopify/#:~:text=You%20get%20more%20traffic%20Amazon,Fulfillment%20by%20Amazon%20(FBA).",
+          "snippet": "You get more traffic Amazon has over 213 million unique U.S. visitors each month. This platform drives millions of people who want...",
+          "source": "WebFX",
+          "index": 0
+        },
+        {
+          "title": "Shopify and Amazon | Comparison",
+          "link": "https://www.shopify.com/compare/shopify-vs-amazon#:~:text=Shopify%20charges%20lower%20fees%20on,Powerful%2C%20stable%2C%20and%20secure",
+          "snippet": "Shopify charges lower fees on the sale price than Amazon and it doesn't charge transaction fees when merchants use Shopify Payment...",
+          "source": "Shopify",
+          "index": 1
+        },
+        {
+          "title": "Amazon FBA vs Shopify – Which Should You Sell on in 2025?",
+          "link": "https://www.repricerexpress.com/amazon-fba-vs-shopify/#:~:text=There%20are%20distinct%20advantages%20and,you%20stay%20on%20the%20ball.",
+          "snippet": "There are distinct advantages and disadvantages, pros and cons to both options. The considerable leverage you'll get through Amazo...",
+          "source": "RepricerExpress",
+          "index": 2
+        },
+        {
+          "title": "Amazon vs. Shopify: Ecommerce Platform Comparison - Triple Whale",
+          "link": "https://www.triplewhale.com/blog/amazon-vs-shopify#:~:text=%E2%80%8DShopify%20offers%20a%20variety%20of,take%20more%20time%20and%20effort.",
+          "snippet": "Jun 5, 2025 — ‍Shopify offers a variety of ecommerce tools such as CRM software and tools for automation to help your business. These...",
+          "source": "Triple Whale",
+          "index": 3
+        },
+        {
+          "title": "Amazon FBA vs. Shopify: How to Choose | DTC Podcast - Trend.io",
+          "link": "https://www.trend.io/blog/amazon-fba-vs-shopify",
+          "snippet": "6 differences between Amazon FBA versus Shopify * 1 - Pricing structure. Unfortunately, you're gonna fork over a good chunk of ca...",
+          "source": "Trend.io",
+          "index": 4
+        },
+        {
+          "title": "Shopify vs Amazon: Which Platform Is Best for Growth?",
+          "link": "https://www.onrampfunds.com/resources/shopify-vs-amazon-which-platform-is-best-for-growth#:~:text=Choosing%20between%20Shopify%20and%20Amazon,plus%20referral%20and%20fulfillment%20fees.",
+          "snippet": "Jan 29, 2025 — Choosing between Shopify and Amazon depends on your business goals. Shopify gives you full control over branding and c...",
+          "source": "Onramp Funds",
+          "index": 5
+        },
+        {
+          "title": "Shopify vs Amazon: Which Ecommerce Platform Suits Your ...",
+          "link": "https://www.cahoot.ai/shopify-vs-amazon/#:~:text=When%20it%20comes%20to%20selling,shop%20up%20and%20running%20quickly.",
+          "snippet": "Mar 20, 2025 — When it comes to selling products online, both Amazon and Shopify are giants in their own right, but they serve differ...",
+          "source": "Cahoot.ai",
+          "index": 6
+        },
+        {
+          "title": "Shopify vs Amazon: Which Platform Is Best for Your Online Business?",
+          "link": "https://www.youtube.com/watch?v=e9iUtFzo1wA#:~:text=Amazon%20has%20a%20pay%2Das,Video.",
+          "snippet": "Feb 24, 2025 — Amazon has a pay-as-you-go system with referral and fulfillment fees, which can add up quickly. However, it gives you ...",
+          "source": "YouTube",
+          "index": 7
+        },
+        {
+          "title": "Shopify vs Amazon: Which Should You Sell On?",
+          "link": "https://www.taxually.com/blog/shopify-vs-amazon-which-ecommerce-platform-should-you-sell-on#:~:text=If%20you%20are%20a%20small%20business%20or,brand%20loyalty%20and%20customer%20relationships%20are%20substantial.",
+          "snippet": "If you are a small business or start-up: Shopify might be a better choice if you want to build a brand and have a unique online pr...",
+          "source": "Taxually",
+          "index": 8
+        },
+        {
+          "title": "Shopify vs Etsy (2025): Which Platform Is Right for You?",
+          "link": "https://www.sumtracker.com/blog/shopify-or-etsy-which-is-the-best-for-your-business#:~:text=On%20the%20other%20hand%2C%20Shopify%20is%20where,you%20own%20every%20customer%20relationship%20you%20build.",
+          "snippet": "Jun 25, 2025 — On the other hand, Shopify is where you build your brand on your own terms. It gives you more freedom, control, and to...",
+          "source": "Sumtracker",
+          "index": 9
+        },
+        {
+          "title": "Shopify Pricing & Plans 2025 - NerdWallet",
+          "link": "https://www.nerdwallet.com/article/small-business/shopify-pricing",
+          "snippet": "Mar 24, 2025 — Table_title: Shopify pricing Table_content: header: | Plan | Monthly fee | row: | Plan: Retail | Monthly fee: $89 per ...",
+          "source": "NerdWallet",
+          "index": 10
+        }
+      ],
+      "next_page_token": "eyJvbnMiOiIxMDA0MSIsImZjIjoiRXFFQkNtSkJUR3QwWDNaR1lWRjBSeTFxY1RWV1ozSjVNVFp3WWxoMVRtcHhORXBDTTFSS1VFcGtVelYyUkU1cWFITjFVVzFZWDFkNGRXOTFYM2xOTlUxWU5UVldZazl6U0ZSMmNFdzNjVTl4VEU1bE9FWlNWR1pSZDNFMWVucFZWV2h3TURCaFVSSVhkRU5zTm1GT1EyeEtTMU4zTlU1dlVHMWZZa2xuVVdNYUlrRkdUVUZIUjI4NVZrbzRjbXRZVjFaWE5VdFZkblZHVDJoTFRsbFJVbWt3VGtFIiwiZmN2IjoiMyIsImVpIjoidENsNmFOQ2xKS1N3NU5vUG1fYklnUWMiLCJxYyI6IkNnZHphRzl3YVdaNUVBQjlvaVF1UHciLCJxdWVzdGlvbiI6IldoYXQgaXMgdGhlIGRpZmZlcmVuY2UgYmV0d2VlbiBBbWF6b24gYW5kIFNob3BpZnk/IiwibGsiOiJHaVZrYVdabVpYSmxibU5sSUdKbGRIZGxaVzRnYzJodmNHbG1lU0JoYm1RZ1lXMWhlbTl1IiwiYnMiOiJjMzJPdlFyQ01CUkdjWkdTeWJFRWY2NmdpS2hROHdKRkozY0hWMk43UTRwdElpWVM5YTE4TGhfQVVhdFlwZmd6WGpqbjNJOU1TV01odVlWWW80RzUxSnRFSFBJRGNNOGpteDVDXzl4blRWcDNMOFo4TUdSSmhqUHRJTnRGc3R5eGZJMGd0am9ERHAxeEVJRGhLWWItcWNwR2RDQkxpdm1ua0JtQng4ckVnSldZRzA2WkpFYlFvdmdWLWhlUHRXbkxfY0NlX1h3cks1VVNJWENMS2tKWW9YV0lDaVlaUDJvRlhNWHY5dFZqUGRyOUFoZXo3elJfaUxYS0RRIiwiaWQiOiJmY190Q2w2YU5DbEpLU3c1Tm9QbV9iSWdRY18xIn0=",
+      "serpapi_link": "https://serpapi.com/search.json?device=desktop&engine=google_related_questions&google_domain=google.com&next_page_token=eyJvbnMiOiIxMDA0MSIsImZjIjoiRXFFQkNtSkJUR3QwWDNaR1lWRjBSeTFxY1RWV1ozSjVNVFp3WWxoMVRtcHhORXBDTTFSS1VFcGtVelYyUkU1cWFITjFVVzFZWDFkNGRXOTFYM2xOTlUxWU5UVldZazl6U0ZSMmNFdzNjVTl4VEU1bE9FWlNWR1pSZDNFMWVucFZWV2h3TURCaFVSSVhkRU5zTm1GT1EyeEtTMU4zTlU1dlVHMWZZa2xuVVdNYUlrRkdUVUZIUjI4NVZrbzRjbXRZVjFaWE5VdFZkblZHVDJoTFRsbFJVbWt3VGtFIiwiZmN2IjoiMyIsImVpIjoidENsNmFOQ2xKS1N3NU5vUG1fYklnUWMiLCJxYyI6IkNnZHphRzl3YVdaNUVBQjlvaVF1UHciLCJxdWVzdGlvbiI6IldoYXQgaXMgdGhlIGRpZmZlcmVuY2UgYmV0d2VlbiBBbWF6b24gYW5kIFNob3BpZnk%2FIiwibGsiOiJHaVZrYVdabVpYSmxibU5sSUdKbGRIZGxaVzRnYzJodmNHbG1lU0JoYm1RZ1lXMWhlbTl1IiwiYnMiOiJjMzJPdlFyQ01CUkdjWkdTeWJFRWY2NmdpS2hROHdKRkozY0hWMk43UTRwdElpWVM5YTE4TGhfQVVhdFlwZmd6WGpqbjNJOU1TV01odVlWWW80RzUxSnRFSFBJRGNNOGpteDVDXzl4blRWcDNMOFo4TUdSSmhqUHRJTnRGc3R5eGZJMGd0am9ERHAxeEVJRGhLWWItcWNwR2RDQkxpdm1ua0JtQng4ckVnSldZRzA2WkpFYlFvdmdWLWhlUHRXbkxfY0NlX1h3cks1VVNJWENMS2tKWW9YV0lDaVlaUDJvRlhNWHY5dFZqUGRyOUFoZXo3elJfaUxYS0RRIiwiaWQiOiJmY190Q2w2YU5DbEpLU3c1Tm9QbV9iSWdRY18xIn0%3D"
+    }
+  ],
+  "organic_results": [
+    {
+      "position": 1,
+      "title": "Shopify: The All-in-One Commerce Platform for Businesses",
+      "link": "https://www.shopify.com/",
+      "redirect_link": "https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://www.shopify.com/&ved=2ahUKEwjQz__2oMaOAxUkGFkFHRs7MnAQFnoECAsQAQ",
+      "displayed_link": "https://www.shopify.com",
+      "favicon": "https://serpapi.com/searches/687a29b1d3c5123f973c85d4/images/affa6b321bdfe3b49e1f9ae578d1aed11f5e9ed60f1c76acf3457d27ec852489.png",
+      "snippet": "The one commerce platform behind it all. Sell online and in person. Sell locally and globally. Sell direct and wholesale. Sell on desktop and mobile. Image ...",
+      "sitelinks": {
+        "expanded": [
+          {
+            "title": "Log in to your Shopify store",
+            "link": "https://www.shopify.com/store-login",
+            "snippet": "Sell in person. ... Sell globally. International sales · Sell ..."
+          },
+          {
+            "title": "Plans & pricing",
+            "link": "https://www.shopify.com/pricing",
+            "snippet": "Basic · 2.9% + 30¢ USD online · 2.6% + 10¢ USD in person · 2 ..."
+          },
+          {
+            "title": "Shopify",
+            "link": "https://www.shopify.com/ca",
+            "snippet": "The one commerce platform behind it all. Sell online and in ..."
+          },
+          {
+            "title": "Build Your Online Store",
+            "link": "https://www.shopify.com/online",
+            "snippet": "Build fast and easy. With Liquid, Shopify's supercharged ..."
+          },
+          {
+            "title": "Hardware Store",
+            "link": "https://hardware.shopify.com/?srsltid=AfmBOoqfBn6dsEFyRFNnuZnphf8Mpqc8iGAxQDETtf26nXju3VlBrP3y",
+            "snippet": "Shop POS hardware · Every feature at your fingerprints · Tap ..."
+          }
+        ]
+      },
+      "source": "Shopify"
+    },
+    {
+      "position": 2,
+      "title": "Shopify (@shopify) • Instagram photos and videos",
+      "link": "https://www.instagram.com/shopify/",
+      "redirect_link": "https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://www.instagram.com/shopify/&ved=2ahUKEwjQz__2oMaOAxUkGFkFHRs7MnAQFnoECEUQAQ",
+      "displayed_link": "1.8M+ followers",
+      "favicon": "https://serpapi.com/searches/687a29b1d3c5123f973c85d4/images/affa6b321bdfe3b49e1f9ae578d1aed1756aecce1fcfdcd94369c0a155392048.png",
+      "snippet": "2M followers · 1.8K+ following · 3502 posts · @shopify: “The entrepreneurship company”",
+      "snippet_highlighted_words": [
+        "shopify"
+      ],
+      "source": "Instagram · shopify"
+    },
+    {
+      "position": 3,
+      "title": "Shopify",
+      "link": "https://en.wikipedia.org/wiki/Shopify",
+      "redirect_link": "https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://en.wikipedia.org/wiki/Shopify&ved=2ahUKEwjQz__2oMaOAxUkGFkFHRs7MnAQFnoECEEQAQ",
+      "displayed_link": "https://en.wikipedia.org › wiki › Shopify",
+      "favicon": "https://serpapi.com/searches/687a29b1d3c5123f973c85d4/images/affa6b321bdfe3b49e1f9ae578d1aed1c74d6e9a6086be380905e24bdf17459d.png",
+      "snippet": "Shopify Inc., stylized as shopify, headquartered in Ottawa, Ontario, operates an e-commerce platform for retail point-of-sale systems. The company has over ...",
+      "snippet_highlighted_words": [
+        "operates an e-commerce platform for retail point-of-sale systems"
+      ],
+      "source": "Wikipedia"
+    },
+    {
+      "position": 4,
+      "title": "Shopify Inc. (SHOP) Stock Price, News, Quote & History",
+      "link": "https://finance.yahoo.com/quote/SHOP/",
+      "redirect_link": "https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://finance.yahoo.com/quote/SHOP/&ved=2ahUKEwjQz__2oMaOAxUkGFkFHRs7MnAQFnoECEQQAQ",
+      "displayed_link": "https://finance.yahoo.com › quote › SHOP",
+      "favicon": "https://serpapi.com/searches/687a29b1d3c5123f973c85d4/images/affa6b321bdfe3b49e1f9ae578d1aed10f4f4a2795b6f0d6c35e9f4fc468432c.png",
+      "snippet": "Shopify Inc., a commerce technology company, provides tools to start, scale, market, and run a business of various sizes in Canada, the United States, ...",
+      "snippet_highlighted_words": [
+        "provides tools to start, scale, market, and run a business"
+      ],
+      "source": "Yahoo Finance"
+    }
+  ],
+  "related_searches": [
+    {
+      "block_position": 1,
+      "query": "Shopify login",
+      "link": "https://www.google.com/search?sca_esv=30db70402d7c8856&hl=en&gl=us&q=Shopify+login&sa=X&ved=2ahUKEwjQz__2oMaOAxUkGFkFHRs7MnAQ1QJ6BAhGEAE",
+      "serpapi_link": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=Shopify+login"
+    },
+    {
+      "block_position": 1,
+      "query": "Shopify online shopping",
+      "link": "https://www.google.com/search?sca_esv=30db70402d7c8856&hl=en&gl=us&q=Shopify+online+shopping&sa=X&ved=2ahUKEwjQz__2oMaOAxUkGFkFHRs7MnAQ1QJ6BAhDEAE",
+      "serpapi_link": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=Shopify+online+shopping"
+    },
+    {
+      "block_position": 1,
+      "query": "Shopify stores",
+      "link": "https://www.google.com/search?sca_esv=30db70402d7c8856&hl=en&gl=us&q=Shopify+stores&sa=X&ved=2ahUKEwjQz__2oMaOAxUkGFkFHRs7MnAQ1QJ6BAhAEAE",
+      "serpapi_link": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=Shopify+stores"
+    },
+    {
+      "block_position": 1,
+      "query": "Shopify login admin",
+      "link": "https://www.google.com/search?sca_esv=30db70402d7c8856&hl=en&gl=us&q=Shopify+login+admin&sa=X&ved=2ahUKEwjQz__2oMaOAxUkGFkFHRs7MnAQ1QJ6BAg_EAE",
+      "serpapi_link": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=Shopify+login+admin"
+    },
+    {
+      "block_position": 1,
+      "query": "Shopify download",
+      "link": "https://www.google.com/search?sca_esv=30db70402d7c8856&hl=en&gl=us&q=Shopify+download&sa=X&ved=2ahUKEwjQz__2oMaOAxUkGFkFHRs7MnAQ1QJ6BAg-EAE",
+      "serpapi_link": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=Shopify+download"
+    },
+    {
+      "block_position": 1,
+      "query": "Shopify dropshipping",
+      "link": "https://www.google.com/search?sca_esv=30db70402d7c8856&hl=en&gl=us&q=Shopify+dropshipping&sa=X&ved=2ahUKEwjQz__2oMaOAxUkGFkFHRs7MnAQ1QJ6BAg9EAE",
+      "serpapi_link": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=Shopify+dropshipping"
+    },
+    {
+      "block_position": 1,
+      "query": "Shopify Partner",
+      "link": "https://www.google.com/search?sca_esv=30db70402d7c8856&hl=en&gl=us&q=Shopify+Partner&sa=X&ved=2ahUKEwjQz__2oMaOAxUkGFkFHRs7MnAQ1QJ6BAg6EAE",
+      "serpapi_link": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=Shopify+Partner"
+    },
+    {
+      "block_position": 1,
+      "query": "Shopify app",
+      "link": "https://www.google.com/search?sca_esv=30db70402d7c8856&hl=en&gl=us&q=Shopify+app&sa=X&ved=2ahUKEwjQz__2oMaOAxUkGFkFHRs7MnAQ1QJ6BAg3EAE",
+      "serpapi_link": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=Shopify+app"
+    }
+  ],
+  "discussions_and_forums": [
+    {
+      "title": "What's one thing you wish you knew before starting your Shopify store? 🛍️",
+      "link": "https://www.reddit.com/r/shopify/comments/1llogt4/whats_one_thing_you_wish_you_knew_before_starting/",
+      "date": "3 weeks ago",
+      "extensions": [
+        "r/shopify",
+        "100+ comments"
+      ],
+      "source": "Reddit",
+      "answers": [
+        {
+          "snippet": "Importance of professional images in online store. If product pictures are not appealing ...",
+          "link": "https://www.reddit.com/r/shopify/comments/1llogt4/whats_one_thing_you_wish_you_knew_before_starting/n017r4o/",
+          "extensions": [
+            "Top answer",
+            "29 votes",
+            "3 weeks ago"
+          ]
+        },
+        {
+          "snippet": "I have a few from running my own stores + working on the agency side back then! Cash flow ...",
+          "link": "https://www.reddit.com/r/shopify/comments/1llogt4/whats_one_thing_you_wish_you_knew_before_starting/n01phx6/",
+          "extensions": [
+            "18 votes",
+            "2 weeks ago"
+          ]
+        },
+        {
+          "snippet": "I wish I knew about the Shopify Partner dev account before starting. We wasted over $1200 ...",
+          "link": "https://www.reddit.com/r/shopify/comments/1llogt4/whats_one_thing_you_wish_you_knew_before_starting/n0443lm/",
+          "extensions": [
+            "13 votes",
+            "2 weeks ago"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Can someone explain to me how Shopify stores work?",
+      "link": "https://www.reddit.com/r/ecommerce/comments/1dydo9o/can_someone_explain_to_me_how_shopify_stores_work/",
+      "date": "1 year ago",
+      "extensions": [
+        "r/ecommerce",
+        "30+ comments"
+      ],
+      "source": "Reddit",
+      "answers": [
+        {
+          "snippet": "Don't purchase any inventory until you know how ecommerce works. Go to somewhere like Coursera ...",
+          "link": "https://www.reddit.com/r/ecommerce/comments/1dydo9o/can_someone_explain_to_me_how_shopify_stores_work/lc8s8fr/",
+          "extensions": [
+            "Top answer",
+            "7 votes",
+            "a year ago"
+          ]
+        },
+        {
+          "snippet": "Shopify is just a place to build a website and collect the money like dozens of other ecommerce ...",
+          "link": "https://www.reddit.com/r/ecommerce/comments/1dydo9o/can_someone_explain_to_me_how_shopify_stores_work/lc8jjm3/",
+          "extensions": [
+            "5 votes",
+            "a year ago"
+          ]
+        },
+        {
+          "snippet": "You set up a store, people place orders on your store, you ship or process them and Shopify ...",
+          "link": "https://www.reddit.com/r/ecommerce/comments/1dydo9o/can_someone_explain_to_me_how_shopify_stores_work/lc85kk6/",
+          "extensions": [
+            "a year ago"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Review on my store",
+      "link": "https://community.shopify.com/c/store-feedback/review-on-my-store/td-p/2656173",
+      "date": "1 year ago",
+      "extensions": [
+        "8 answers"
+      ],
+      "source": "Shopify Community",
+      "answers": [
+        {
+          "snippet": "Hi @SamWither , thank you for posting here!When I vistit your store, I honestly have to say ...",
+          "link": "https://community.shopify.com/c/store-feedback/review-on-my-store/td-p/2656173",
+          "extensions": [
+            "Top answer",
+            "2 votes",
+            "a year ago"
+          ]
+        },
+        {
+          "snippet": "Hi @SamWither Sorry in advance if I may be a bit honest but there are so many posts here ...",
+          "link": "https://community.shopify.com/c/store-feedback/review-on-my-store/td-p/2656173",
+          "extensions": [
+            "a year ago"
+          ]
+        }
+      ]
+    }
+  ],
+  "pagination": {
+    "current": 1,
+    "next": "https://www.google.com/search?q=Shopify&sca_esv=30db70402d7c8856&hl=en&gl=us&ei=tCl6aNClJKSw5NoPm_bIgQc&start=10&sa=N&sstk=Ac65TH40fxWv9AEBceyfvE_W77T4HVngVU0rb77oNLa4wpOUv5EnVdYcVeTHyWFzioQidJGq4RngqvnCt8IBfvxic5CdSEO2M3gstQ&ved=2ahUKEwjQz__2oMaOAxUkGFkFHRs7MnAQ8NMDegQIMhAW",
+    "other_pages": {
+      "2": "https://www.google.com/search?q=Shopify&sca_esv=30db70402d7c8856&hl=en&gl=us&ei=tCl6aNClJKSw5NoPm_bIgQc&start=10&sa=N&sstk=Ac65TH40fxWv9AEBceyfvE_W77T4HVngVU0rb77oNLa4wpOUv5EnVdYcVeTHyWFzioQidJGq4RngqvnCt8IBfvxic5CdSEO2M3gstQ&ved=2ahUKEwjQz__2oMaOAxUkGFkFHRs7MnAQ8tMDegQIMhAE",
+      "3": "https://www.google.com/search?q=Shopify&sca_esv=30db70402d7c8856&hl=en&gl=us&ei=tCl6aNClJKSw5NoPm_bIgQc&start=20&sa=N&sstk=Ac65TH40fxWv9AEBceyfvE_W77T4HVngVU0rb77oNLa4wpOUv5EnVdYcVeTHyWFzioQidJGq4RngqvnCt8IBfvxic5CdSEO2M3gstQ&ved=2ahUKEwjQz__2oMaOAxUkGFkFHRs7MnAQ8tMDegQIMhAG",
+      "4": "https://www.google.com/search?q=Shopify&sca_esv=30db70402d7c8856&hl=en&gl=us&ei=tCl6aNClJKSw5NoPm_bIgQc&start=30&sa=N&sstk=Ac65TH40fxWv9AEBceyfvE_W77T4HVngVU0rb77oNLa4wpOUv5EnVdYcVeTHyWFzioQidJGq4RngqvnCt8IBfvxic5CdSEO2M3gstQ&ved=2ahUKEwjQz__2oMaOAxUkGFkFHRs7MnAQ8tMDegQIMhAI",
+      "5": "https://www.google.com/search?q=Shopify&sca_esv=30db70402d7c8856&hl=en&gl=us&ei=tCl6aNClJKSw5NoPm_bIgQc&start=40&sa=N&sstk=Ac65TH40fxWv9AEBceyfvE_W77T4HVngVU0rb77oNLa4wpOUv5EnVdYcVeTHyWFzioQidJGq4RngqvnCt8IBfvxic5CdSEO2M3gstQ&ved=2ahUKEwjQz__2oMaOAxUkGFkFHRs7MnAQ8tMDegQIMhAK",
+      "6": "https://www.google.com/search?q=Shopify&sca_esv=30db70402d7c8856&hl=en&gl=us&ei=tCl6aNClJKSw5NoPm_bIgQc&start=50&sa=N&sstk=Ac65TH40fxWv9AEBceyfvE_W77T4HVngVU0rb77oNLa4wpOUv5EnVdYcVeTHyWFzioQidJGq4RngqvnCt8IBfvxic5CdSEO2M3gstQ&ved=2ahUKEwjQz__2oMaOAxUkGFkFHRs7MnAQ8tMDegQIMhAM",
+      "7": "https://www.google.com/search?q=Shopify&sca_esv=30db70402d7c8856&hl=en&gl=us&ei=tCl6aNClJKSw5NoPm_bIgQc&start=60&sa=N&sstk=Ac65TH40fxWv9AEBceyfvE_W77T4HVngVU0rb77oNLa4wpOUv5EnVdYcVeTHyWFzioQidJGq4RngqvnCt8IBfvxic5CdSEO2M3gstQ&ved=2ahUKEwjQz__2oMaOAxUkGFkFHRs7MnAQ8tMDegQIMhAO",
+      "8": "https://www.google.com/search?q=Shopify&sca_esv=30db70402d7c8856&hl=en&gl=us&ei=tCl6aNClJKSw5NoPm_bIgQc&start=70&sa=N&sstk=Ac65TH40fxWv9AEBceyfvE_W77T4HVngVU0rb77oNLa4wpOUv5EnVdYcVeTHyWFzioQidJGq4RngqvnCt8IBfvxic5CdSEO2M3gstQ&ved=2ahUKEwjQz__2oMaOAxUkGFkFHRs7MnAQ8tMDegQIMhAQ",
+      "9": "https://www.google.com/search?q=Shopify&sca_esv=30db70402d7c8856&hl=en&gl=us&ei=tCl6aNClJKSw5NoPm_bIgQc&start=80&sa=N&sstk=Ac65TH40fxWv9AEBceyfvE_W77T4HVngVU0rb77oNLa4wpOUv5EnVdYcVeTHyWFzioQidJGq4RngqvnCt8IBfvxic5CdSEO2M3gstQ&ved=2ahUKEwjQz__2oMaOAxUkGFkFHRs7MnAQ8tMDegQIMhAS",
+      "10": "https://www.google.com/search?q=Shopify&sca_esv=30db70402d7c8856&hl=en&gl=us&ei=tCl6aNClJKSw5NoPm_bIgQc&start=90&sa=N&sstk=Ac65TH40fxWv9AEBceyfvE_W77T4HVngVU0rb77oNLa4wpOUv5EnVdYcVeTHyWFzioQidJGq4RngqvnCt8IBfvxic5CdSEO2M3gstQ&ved=2ahUKEwjQz__2oMaOAxUkGFkFHRs7MnAQ8tMDegQIMhAU"
+    }
+  },
+  "serpapi_pagination": {
+    "current": 1,
+    "next_link": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=Shopify&start=10",
+    "next": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=Shopify&start=10",
+    "other_pages": {
+      "2": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=Shopify&start=10",
+      "3": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=Shopify&start=20",
+      "4": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=Shopify&start=30",
+      "5": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=Shopify&start=40",
+      "6": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=Shopify&start=50",
+      "7": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=Shopify&start=60",
+      "8": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=Shopify&start=70",
+      "9": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=Shopify&start=80",
+      "10": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=Shopify&start=90"
+    }
+  }

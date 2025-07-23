@@ -12,7 +12,6 @@ import {
   AppConfig,
   AuthoritativeSource,
   SearchEngineResponse,
-  SalesInsights
 } from '@/types';
 
 import { SearchEngine } from './search/SearchEngine';
@@ -20,6 +19,7 @@ import { ContentFetcher } from './content/ContentFetcher';
 import { AIAnalyzer } from './analysis/AIAnalyzer';
 import { CacheService } from './core/CacheService';
 import { Logger } from './core/Logger';
+import { CacheType } from '@/types/cache-types';
 
 // New focused services
 import { CompanyExtractor } from './utilities/CompanyExtractor';
@@ -27,61 +27,30 @@ import { SourceAnalyzer } from './analysis/SourceAnalyzer';
 import { ContentFilter } from './content/ContentFilter';
 import { SearchQueryBuilder } from './search/SearchQueryBuilder';
 import { IntentAnalyzer } from './analysis/IntentAnalyzer';
-import { DiscoveryHandler } from './handlers/DiscoveryHandler';
-import { DiscoveryResponse } from './formatters/DiscoveryResponseFormatter';
 
 export class SalesIntelligenceOrchestrator {
   private readonly searchEngine: SearchEngine;
   private readonly contentFetcher: ContentFetcher;
   private readonly aiAnalyzer: AIAnalyzer;
-  private readonly cache: CacheService;
-  private readonly logger: Logger;
   private readonly config: AppConfig;
   private readonly contentFilter: ContentFilter;
-  private readonly discoveryHandler: DiscoveryHandler;
+  private readonly cacheService: CacheService;
+  private readonly logger: Logger;
 
   constructor(config: AppConfig) {
     this.config = config;
-    this.logger = new Logger('SalesIntelligenceOrchestrator');
-    
-    // Initialize cache BEFORE SearchEngine needs it
-    this.cache = new CacheService(
-      config.cache, 
-      this.logger,
-      process.env.AWS_REGION
-    );
-    
+    this.logger = new Logger();
+    this.cacheService = new CacheService(config.cache, this.logger);
     this.searchEngine = new SearchEngine(
       config.apis.googleSearchApiKey,
       config.apis.googleSearchEngineId,
       config.search,
       this.logger,
-      this.cache
+      this.cacheService
     );
-    
-    this.contentFetcher = new ContentFetcher(
-      this.logger,
-      config.search.rateLimitRps
-    );
-    
-    this.aiAnalyzer = new AIAnalyzer(
-      config.ai,
-      this.logger,
-      process.env.AWS_REGION
-    );
-
-    this.contentFilter = new ContentFilter(this.logger);
-    
-    // Initialize handlers
-    this.discoveryHandler = new DiscoveryHandler(
-      this.contentFetcher,
-      this.aiAnalyzer,
-      this.searchEngine,
-      config.search.maxResultsPerQuery,
-      this.cache,
-      this.logger,
-      this.contentFilter
-    );
+    this.contentFetcher = new ContentFetcher(this.logger);
+    this.aiAnalyzer = new AIAnalyzer(config.ai, this.logger);
+    this.contentFilter = new ContentFilter();
   }
 
   /**
@@ -98,7 +67,7 @@ export class SalesIntelligenceOrchestrator {
       });
 
       // Check cache first
-      const cachedResult = await this.cache.get(cacheKey);
+      const cachedResult = await this.cacheService.get(cacheKey);
       if (cachedResult) {
         this.logger.info('Returning cached intelligence', { cacheKey });
         return cachedResult;
@@ -174,7 +143,7 @@ export class SalesIntelligenceOrchestrator {
       };
 
       // Cache the result
-      await this.cache.set(cacheKey, result);
+      await this.cacheService.set(cacheKey, result, CacheType.SALES_INTELLIGENCE_CACHE);
 
       const totalTime = Date.now() - startTime;
       this.logger.info('Sales intelligence generated successfully', {
@@ -223,7 +192,7 @@ export class SalesIntelligenceOrchestrator {
     });
 
     // Check cache first
-    const cachedResult = await this.cache.get(cacheKey);
+    const cachedResult = await this.cacheService.get(cacheKey);
     if (cachedResult) {
       this.logger.info('Returning cached company overview', { 
         domain, 
@@ -272,7 +241,7 @@ export class SalesIntelligenceOrchestrator {
       citationMap: {}
     };
     
-    await this.cache.set(cacheKey, cacheData);
+    await this.cacheService.set(cacheKey, cacheData, CacheType.COMPANY_OVERVIEW);
     this.logger.info('Cached company overview result', { domain, cacheKey });
     
     return result;
@@ -403,7 +372,7 @@ export class SalesIntelligenceOrchestrator {
     });
 
     // Check cache first
-    const cachedResult = await this.cache.get(cacheKey);
+    const cachedResult = await this.cacheService.get(cacheKey);
     if (cachedResult) {
       this.logger.info('Returning cached analysis result', { 
         domain, 
@@ -464,7 +433,7 @@ export class SalesIntelligenceOrchestrator {
     };
 
     // Cache the result
-    await this.cache.set(cacheKey, result);
+    await this.cacheService.set(cacheKey, result, CacheType.COMPANY_ANALYSIS);
 
     const totalTime = Date.now() - startTime;
     this.logger.info('AI analysis completed', { 
@@ -477,13 +446,6 @@ export class SalesIntelligenceOrchestrator {
     });
 
     return result;
-  }
-
-  /**
-   * Get discovery-focused insights (medium speed endpoint)
-   */
-  async getDiscoveryInsights(domain: string): Promise<DiscoveryResponse> {
-    return this.discoveryHandler.getDiscoveryInsights(domain);
   }
 
   /**
@@ -519,7 +481,7 @@ export class SalesIntelligenceOrchestrator {
   async healthCheck(): Promise<{ [service: string]: boolean }> {
     const checks = await Promise.allSettled([
       this.searchEngine.healthCheck(),
-      this.cache.healthCheck(),
+      this.cacheService.healthCheck(),
       this.aiAnalyzer.healthCheck()
     ]);
 
@@ -573,17 +535,18 @@ export class SalesIntelligenceOrchestrator {
     const snippetAnalysisTime = Date.now() - snippetAnalysisStartTime;
 
     this.logger.info('STEP 2: Identified information gaps', {
-      confidence: snippetAnalysis.confidence,
-      missingInfoCount: snippetAnalysis.missingInfo.length,
-      criticalUrlsCount: snippetAnalysis.criticalUrls.length,
+      confidence: snippetAnalysis.confidenceLevel, // Fixed: use confidenceLevel instead of confidence
+      missingInfoCount: snippetAnalysis.identifiedGaps.length, // Fixed: use identifiedGaps instead of missingInfo
+      criticalUrlsCount: snippetAnalysis.additionalQuestionsNeeded.length, // Fixed: use additionalQuestionsNeeded as proxy for critical URLs
       analysisTime: snippetAnalysisTime
     });
 
     // STEP 3: Selectively fetch only critical URLs (max 3)
-    const criticalUrls = snippetAnalysis.criticalUrls
-      .sort((a, b) => b.priority - a.priority)
-      .slice(0, 3)
-      .map(u => u.url);
+    // Since criticalUrls doesn't exist, we'll create a fallback approach using the search results
+    const criticalUrls = allSearchResults
+      .slice(0, 5) // Take top 5 results as critical
+      .map((result: any) => result.url)
+      .slice(0, 3); // Limit to 3 URLs
 
     let fetchResults: any[] = [];
     let fetchTime = 0;
@@ -632,17 +595,16 @@ export class SalesIntelligenceOrchestrator {
 
     // STEP 4: Combine snippet insights with selective full content
     this.logger.info('STEP 4: Combining snippet insights with selective content', {
-      snippetConfidence: snippetAnalysis.confidence,
+      snippetConfidence: snippetAnalysis.confidenceLevel, // Fixed: use confidenceLevel
       additionalContentPieces: fetchResults.filter(r => r.content !== null).length
     });
 
     const combineStartTime = Date.now();
-    const fullContent = fetchResults.filter(r => r.content !== null).map(r => r.content);
+    const fullContent = fetchResults.filter(r => r.content !== null).map(r => r.content).join('\n\n');
     
     const overview = await this.aiAnalyzer.combineSnippetAndFullContentAnalysis(
-      snippetAnalysis.snippetInsights,
+      snippetAnalysis,
       fullContent,
-      sources,
       companyName,
       'overview'
     );
@@ -733,5 +695,19 @@ export class SalesIntelligenceOrchestrator {
     return sources;
   }
 
+  /**
+   * Placeholder for deprecated discovery insights
+   */
+  async getDiscoveryInsights(domain: string): Promise<any> {
+    this.logger.warn('getDiscoveryInsights is deprecated. Use /vendor/context or /customer/intelligence instead.');
+    
+    return {
+      error: 'Discovery endpoint is deprecated',
+      message: 'Use /vendor/context or /customer/intelligence instead',
+      domain: domain,
+      deprecated: true,
+      timestamp: new Date().toISOString()
+    };
+  }
 
 } 

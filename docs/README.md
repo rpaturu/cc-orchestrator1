@@ -1,58 +1,96 @@
-# Sales Intelligence Orchestrator Documentation
+# 📚 Sales Intelligence Documentation
 
-This directory contains comprehensive documentation for the Sales Intelligence Orchestrator project, organized into logical categories for easy navigation.
+> **Documentation has been reorganized chronologically for better navigation and evolution tracking.**
 
-## 📁 Directory Structure
+## 🚀 **Quick Start - Where to Go**
 
-### 🔌 [API Specifications](./api-specifications/)
-Complete specifications for all API endpoints including request/response formats, examples, and implementation details.
+### **👀 New to the Project?**
+**Start here** → [`EVOLUTION-LOG.md`](EVOLUTION-LOG.md) to understand our architectural journey
 
-- **[Overview Endpoint](./api-specifications/overview-endpoint-specification.md)** - Comprehensive company overview with snippet-first approach
-- **[Discovery Endpoint](./api-specifications/discovery-endpoint-specification.md)** - Sales discovery insights with pain points, opportunities, and contacts
-- **[Analysis Endpoint](./api-specifications/analysis-endpoint-specification.md)** - Deep AI analysis of search results for specific sales contexts
-- **[Search API Modes](./api-specifications/search-api-modes.md)** - Fast search functionality with relationship-aware queries
+### **🏗️ Implementing Features?**
+**Latest Architecture** → [`CURRENT/architecture-current.md`](CURRENT/architecture-current.md)
 
-### 🏗️ [Architecture](./architecture/)
-Technical architecture documentation, design patterns, and implementation approaches.
+### **📋 Planning Work?**
+**Current Strategy** → [`CURRENT/strategy-current.md`](CURRENT/strategy-current.md)
 
-- **[Snippet-First Approach](./architecture/snippet-first-approach.md)** - Efficient processing strategy using search snippets before full content
-- **[LLM Search and Response](./architecture/llm-search-and-response.md)** - AI integration patterns and response generation
+### **🔧 Operations & Debugging?**
+**Operations Guide** → [`CURRENT/operations-current.md`](CURRENT/operations-current.md)
 
-### 📊 [Project Management](./project-management/)
-Project tracking, analysis, and improvement documentation.
-
-- **[Implementation Gap Analysis](./project-management/implementation-gap-analysis.md)** - Analysis of current vs. documented specifications
-- **[Quality Improvements](./project-management/quality-improvements.md)** - Ongoing quality enhancements and optimizations
-- **[Project Evolution](./project-management/project-evolution.md)** - Project history, milestones, and evolution tracking
-
-## 🚀 Quick Start
-
-1. **New to the project?** Start with [Project Evolution](./project-management/project-evolution.md) for context
-2. **Need API details?** Check [API Specifications](./api-specifications/) for endpoint documentation
-3. **Understanding architecture?** Review [Architecture](./architecture/) for technical design
-4. **Tracking progress?** See [Project Management](./project-management/) for current status
-
-## 📖 Documentation Guidelines
-
-- **API Specifications** - Include request/response examples, error handling, and implementation notes
-- **Architecture** - Document design decisions, patterns, and technical approaches
-- **Project Management** - Track progress, issues, and improvements with clear action items
-
-## 🔄 Recent Updates
-
-- **2024-01-XX** - Refactored handlers into focused components with formatters
-- **2024-01-XX** - Organized services into logical folder structure
-- **2024-01-XX** - Completed implementation gap analysis and fixes
-- **2024-01-XX** - Reorganized documentation structure
-
-## 💡 Contributing
-
-When adding new documentation:
-1. Place in appropriate category folder
-2. Update this README with links
-3. Follow existing documentation patterns
-4. Include examples and implementation details
+### **🧭 Need Help Navigating?**
+**Navigation Hub** → [`CURRENT/README.md`](CURRENT/README.md)
 
 ---
 
-*This documentation is actively maintained and reflects the current state of the Sales Intelligence Orchestrator project.* 
+## 📁 **Folder Structure**
+
+| Folder | Purpose | When to Use |
+|--------|---------|-------------|
+| **📍 CURRENT/** | Latest, authoritative documents | When you need the current approach |
+| **📅 TIMELINE/** | Chronological evolution by phase | When you need historical context |
+| **🔄 ACTIVE/** | Work-in-progress by topic | When working on new features |
+| **📂 ARCHIVE/** | Historical and deprecated content | When researching past approaches |
+| **🗂️ META/** | Documentation about documentation | When understanding processes |
+
+---
+
+## 🎯 **Current State (April 2024)**
+
+- **Architecture**: Tiered Enrichment with Dataset Requirements Matrix
+- **Strategy**: M2 Implementation with Vendor-First Differentiation  
+- **Cache**: Three-layer cache strategy (Orchestrator → Source → Processor)
+- **Implementation**: Step Functions orchestration with source-based naming
+
+---
+
+## 🔍 **Finding Information**
+
+| I need to... | Go to... |
+|--------------|----------|
+| **Understand current architecture** | [`CURRENT/architecture-current.md`](CURRENT/architecture-current.md) |
+| **See how we got here** | [`EVOLUTION-LOG.md`](EVOLUTION-LOG.md) |
+| **Find a decision rationale** | [`META/DECISION-RECORDS/`](META/DECISION-RECORDS/) |
+| **Look at historical approaches** | [`TIMELINE/`](TIMELINE/) folders |
+| **Work on active features** | [`ACTIVE/`](ACTIVE/) folders |
+| **Debug cache issues** | [`CURRENT/operations-current.md`](CURRENT/operations-current.md) |
+
+---
+
+## 📈 **Evolution Timeline**
+
+Our architecture has evolved through 4 major phases:
+
+1. **🏗️ M1 Foundation** (`TIMELINE/2024-01-M1/`) - Basic SerpAPI + LLM intelligence
+2. **🎯 M2 Strategic Planning** (`TIMELINE/2024-02-M2/`) - Persona-specific insights and vendor focus  
+3. **🗂️ Cache Architecture** (`TIMELINE/2024-03-CACHE/`) - Multi-consumer cost optimization
+4. **⚡ Tiered Enrichment** (`TIMELINE/2024-04-TIERED/`) - Dataset-driven intelligent orchestration
+
+**📖 Full details**: [`EVOLUTION-LOG.md`](EVOLUTION-LOG.md)
+
+---
+
+## 🚦 **Document Status**
+
+- 🟢 **CURRENT**: Latest and authoritative
+- 🟡 **DRAFT**: Work in progress  
+- 🔵 **REFERENCE**: Historical but still relevant
+- 🔴 **DEPRECATED**: No longer valid
+
+---
+
+## 🤝 **Contributing**
+
+### **Working on Documentation**
+1. **New work**: Add to appropriate `ACTIVE/` subfolder
+2. **Finalized work**: Copy to `CURRENT/` when stable
+3. **Major decisions**: Add to `TIMELINE/` with date prefix + Create ADR in `META/DECISION-RECORDS/`
+4. **Deprecated approaches**: Move to `ARCHIVE/deprecated/`
+
+### **Making Architectural Decisions**
+1. Create ADR in `META/DECISION-RECORDS/`
+2. Update relevant documents in `ACTIVE/`
+3. When finalized, copy to `CURRENT/`
+4. Add entry to `EVOLUTION-LOG.md`
+
+---
+
+*📅 Documentation reorganized: April 2024 | 🔄 Structure: Chronological Evolution* 

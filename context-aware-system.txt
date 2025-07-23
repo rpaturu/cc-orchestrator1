@@ -1,0 +1,26 @@
+New Context-Aware System (Current & Future):
+✅ /vendor/context - Deep vendor profiling with products, positioning, competitors
+✅ /customer/intelligence - Context-aware prospect analysis using vendor knowledge
+✅ Step Functions workflow - Better async processing with real-time status
+✅ Multi-source orchestration - Intelligent data collection with cost optimization
+Core Endpoints That Will Remain:
+✅ Health Check (always needed)
+✅ Company Overview (foundational company data)
+✅ Company Search by Name (basic company lookup)
+The Evolution:
+Before: Generic company analysis → manual interpretation
+After: Vendor context → contextualized customer intelligence → actionable sales guidance
+Once fully migrated, the test menu could be as simple as:
+Health Check
+Company Overview
+Company Search by Name
+Vendor Context Analysis
+Customer Intelligence (Context-Aware)
+Complete Sales Workflow Demo
+This would be much cleaner and focused on the value-add features rather than low-level data collection endpoints.
+
+What We've Implemented So Far - Complete Walkthrough
+1. DataSourceOrchestrator (The Brain) 🧠
+2. Dataset Requirements Matrix (The Configuration) ⚙️
+3. Step Functions Workflow (The Orchestrator) 🔄
+4. SmartDataCollectionHandler (The Executor) ⚡

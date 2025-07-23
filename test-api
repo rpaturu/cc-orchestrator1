@@ -19,14 +19,14 @@ fi
 
 source .env
 
-if [ -z "$API_ENDPOINT_CLEAN" ] || [ -z "$API_KEY" ]; then
-  echo -e "${RED}Error: API_ENDPOINT_CLEAN or API_KEY not found in .env${NC}"
+if [ -z "$API_ENDPOINT" ] || [ -z "$API_KEY" ]; then
+  echo -e "${RED}Error: API_ENDPOINT or API_KEY not found in .env${NC}"
   echo "Please run ./deploy to set up environment variables"
   exit 1
 fi
 
 echo -e "${CYAN}🚀 Sales Intelligence API Tester${NC}"
-echo -e "${BLUE}API Endpoint: $API_ENDPOINT_CLEAN${NC}"
+echo -e "${BLUE}API Endpoint: $API_ENDPOINT${NC}"
 echo -e "${BLUE}API Key: ${API_KEY:0:8}...${NC}"
 echo ""
 
@@ -80,7 +80,7 @@ poll_async_result() {
     echo -e "${BLUE}Polling attempt $attempt/$max_attempts...${NC}"
     
     # Check request status
-    status_output=$(curl -s -X GET "$API_ENDPOINT_CLEAN/requests/$request_id" -H "X-API-Key: $API_KEY" 2>&1)
+    status_output=$(curl -s -X GET "$API_ENDPOINT/requests/$request_id" -H "X-API-Key: $API_KEY" 2>&1)
     
     if [ $? -eq 0 ]; then
       status=$(echo "$status_output" | jq -r '.status // empty' 2>/dev/null)
@@ -129,108 +129,40 @@ while true; do
   echo -e "${GREEN}=== Core Sales Intelligence APIs ===${NC}"
   echo "1)  Health Check"
   echo "2)  Company Overview (Async)"
-  echo "3)  Company Discovery (Async)"
-  echo "4)  Company Analysis (Async)" 
-  echo "5)  Company Search (Sync)"
-  echo "6)  Request Status Check"
   echo ""
   
   echo -e "${GREEN}=== Company Lookup APIs ===${NC}"
-  echo "7)  Company Lookup/Search"
-  echo "8)  Company Enrichment"
-  echo "9)  Product Suggestions"
-  echo "10) Competitor Discovery"
-  echo "11) Domain Suggestions"
+  echo "3)  Company Search by Name"
+  echo "4)  Domain Suggestions"
+  echo ""
+  
+  echo -e "${GREEN}=== Context-Aware Intelligence ===${NC}"
+  echo "5)  Vendor Context Analysis"
+  echo "6)  Customer Intelligence (Context-Aware)"
   echo ""
   
   echo -e "${GREEN}=== Cache Management ===${NC}"
-  echo "12) Cache Statistics"
-  echo "13) Clear Cache"
+  echo "7)  Cache Statistics"
+  echo "8)  Clear Cache"
   echo ""
   
   echo -e "${GREEN}=== Custom Test ===${NC}"
-  echo "14) Custom curl command"
+  echo "9)  Custom curl command"
   echo ""
   
   echo "0) Exit"
   echo ""
   
-  read -p "Enter your choice (0-14): " choice
+  read -p "Enter your choice (0-9): " choice
   
   case $choice in
     1)
       run_test "Health Check" \
-        "curl -s '$API_ENDPOINT_CLEAN/health'" \
+        "curl -s '$API_ENDPOINT/health'" \
         "false"
       ;;
       
     2)
-      read -p "Enter company domain (default: shopify.com): " domain
-      domain=${domain:-shopify.com}
-      run_test "Company Overview - $domain" \
-        "curl -s -X GET '$API_ENDPOINT_CLEAN/company/$domain/overview' -H 'X-API-Key: $API_KEY'" \
-        "true"
-      ;;
-      
-    3)
-      read -p "Enter company domain (default: shopify.com): " domain
-      domain=${domain:-shopify.com}
-      run_test "Company Discovery - $domain" \
-        "curl -s -X GET '$API_ENDPOINT_CLEAN/company/$domain/discovery' -H 'X-API-Key: $API_KEY'" \
-        "true"
-      ;;
-      
-    4)
-      read -p "Enter company domain (default: shopify.com): " domain
-      domain=${domain:-shopify.com}
-      echo "Enter search results JSON (press Enter for default sample):"
-      read -p "> " search_results
-      
-      if [ -z "$search_results" ]; then
-        search_results='[{"title":"Shopify Q3 2024 Results","url":"https://investors.shopify.com/news","snippet":"Strong Q3 performance with 26% revenue growth..."}]'
-      fi
-      
-      json_data="{\"context\":\"discovery\",\"searchResults\":$search_results}"
-      
-      run_test "Company Analysis - $domain" \
-        "curl -s -X POST '$API_ENDPOINT_CLEAN/company/$domain/analysis' -H 'X-API-Key: $API_KEY' -H 'Content-Type: application/json' -d '$json_data'" \
-        "true"
-      ;;
-      
-    5)
-      read -p "Enter company domain (default: shopify.com): " domain
-      read -p "Enter search query (default: latest news): " query
-      domain=${domain:-shopify.com}
-      query=${query:-latest news}
-      query_encoded=$(echo "$query" | sed 's/ /+/g')
-      run_test "Company Search - $domain: $query" \
-        "curl -s -X GET '$API_ENDPOINT_CLEAN/company/$domain/search?query=$query_encoded' -H 'X-API-Key: $API_KEY'" \
-        "false"
-      ;;
-      
-    6)
-      read -p "Enter request ID: " request_id
-      if [ -n "$request_id" ]; then
-        run_test "Request Status - $request_id" \
-          "curl -s -X GET '$API_ENDPOINT_CLEAN/requests/$request_id' -H 'X-API-Key: $API_KEY'" \
-          "false"
-      else
-        echo -e "${RED}Request ID is required${NC}"
-        sleep 2
-      fi
-      ;;
-      
-    7)
-      read -p "Enter company name to search (default: shopify): " query
-      read -p "Enter limit (default: 5): " limit
-      query=${query:-shopify}
-      limit=${limit:-5}
-      run_test "Company Lookup - $query" \
-        "curl -s -X GET '$API_ENDPOINT_CLEAN/api/companies/lookup?query=$query&limit=$limit' -H 'X-API-Key: $API_KEY'" \
-        "false"
-      ;;
-      
-    8)
       read -p "Enter company name (default: Shopify): " company_name
       read -p "Enter domain (optional): " domain
       company_name=${company_name:-Shopify}
@@ -239,86 +171,84 @@ while true; do
       if [ -n "$domain" ]; then
         json_data="$json_data,\"domain\":\"$domain\""
       fi
-      json_data="$json_data,\"includeProducts\":true,\"includeCompetitors\":true}"
+      json_data="$json_data}"
       
-      run_test "Company Enrichment - $company_name" \
-        "curl -s -X POST '$API_ENDPOINT_CLEAN/api/companies/enrich' -H 'X-API-Key: $API_KEY' -H 'Content-Type: application/json' -d '$json_data'" \
+      run_test "Company Overview - $company_name" \
+        "curl -s -X POST '$API_ENDPOINT/company/overview' -H 'X-API-Key: $API_KEY' -H 'Content-Type: application/json' -d '$json_data'" \
+        "true"
+      ;;
+      
+    3)
+      read -p "Enter company name to search (default: shopify): " query
+      read -p "Enter limit (default: 5): " limit
+      query=${query:-shopify}
+      limit=${limit:-5}
+      run_test "Company Search by Name - $query" \
+        "curl -s -X GET '$API_ENDPOINT/companies/lookup?query=$query&limit=$limit' -H 'X-API-Key: $API_KEY'" \
         "false"
       ;;
       
-    9)
+    4)
+      read -p "Enter company name (default: Shopify): " company_name
+      company_name=${company_name:-Shopify}
+      
+      json_data="{\"companyName\":\"$company_name\"}"
+      
+      run_test "Domain Suggestions - $company_name" \
+        "curl -s -X POST '$API_ENDPOINT/companies/domain-suggestions' -H 'X-API-Key: $API_KEY' -H 'Content-Type: application/json' -d '$json_data'" \
+        "false"
+      ;;
+      
+    5)
+      read -p "Enter company name (default: Shopify): " company_name
+      company_name=${company_name:-Shopify}
+      
+      json_data="{\"companyName\":\"$company_name\"}"
+      
+      run_test "Vendor Context Analysis - $company_name" \
+        "curl -s -X POST '$API_ENDPOINT/vendor/context' -H 'X-API-Key: $API_KEY' -H 'Content-Type: application/json' -d '$json_data'" \
+        "false"
+      ;;
+      
+    6)
       read -p "Enter company name (default: Tesla): " company_name
-      read -p "Enter industry (optional): " industry
       company_name=${company_name:-Tesla}
       
-      json_data="{\"companyName\":\"$company_name\""
-      if [ -n "$industry" ]; then
-        json_data="$json_data,\"industry\":\"$industry\""
-      fi
-      json_data="$json_data}"
+      json_data="{\"companyName\":\"$company_name\"}"
       
-      run_test "Product Suggestions - $company_name" \
-        "curl -s -X POST '$API_ENDPOINT_CLEAN/api/products/suggest' -H 'X-API-Key: $API_KEY' -H 'Content-Type: application/json' -d '$json_data'" \
+      run_test "Customer Intelligence (Context-Aware) - $company_name" \
+        "curl -s -X POST '$API_ENDPOINT/customer/intelligence' -H 'X-API-Key: $API_KEY' -H 'Content-Type: application/json' -d '$json_data'" \
         "false"
       ;;
       
-    10)
-      read -p "Enter company name (default: Slack): " company_name
-      read -p "Enter industry (optional): " industry
-      company_name=${company_name:-Slack}
-      
-      json_data="{\"companyName\":\"$company_name\""
-      if [ -n "$industry" ]; then
-        json_data="$json_data,\"industry\":\"$industry\""
-      fi
-      json_data="$json_data}"
-      
-      run_test "Competitor Discovery - $company_name" \
-        "curl -s -X POST '$API_ENDPOINT_CLEAN/api/competitors/find' -H 'X-API-Key: $API_KEY' -H 'Content-Type: application/json' -d '$json_data'" \
-        "false"
-      ;;
-      
-    11)
-      read -p "Enter company name (default: Acme Corp): " company_name
-      company_name=${company_name:-Acme Corp}
-      company_encoded=$(echo "$company_name" | sed 's/ /%20/g')
-      run_test "Domain Suggestions - $company_name" \
-        "curl -s -X GET '$API_ENDPOINT_CLEAN/api/companies/suggest-domain?name=$company_encoded' -H 'X-API-Key: $API_KEY'" \
-        "false"
-      ;;
-      
-    12)
+    7)
       run_test "Cache Statistics" \
-        "curl -s -X GET '$API_ENDPOINT_CLEAN/cache/stats' -H 'X-API-Key: $API_KEY'" \
+        "curl -s -X GET '$API_ENDPOINT/cache/stats' -H 'X-API-Key: $API_KEY'" \
         "false"
       ;;
       
-    13)
-      echo -e "${YELLOW}⚠️  This will clear the entire cache. Are you sure? (y/N)${NC}"
+    8)
+      echo -e "${YELLOW}⚠️  This will clear all cached data. Are you sure? (y/N)${NC}"
       read -p "" confirm
       if [[ $confirm =~ ^[Yy]$ ]]; then
         run_test "Clear Cache" \
-          "curl -s -X POST '$API_ENDPOINT_CLEAN/cache/clear' -H 'X-API-Key: $API_KEY'" \
+          "curl -s -X DELETE '$API_ENDPOINT/cache' -H 'X-API-Key: $API_KEY'" \
           "false"
       else
-        echo "Cache clear cancelled."
+        echo -e "${BLUE}Cache clear cancelled${NC}"
         sleep 1
       fi
       ;;
       
-    14)
-      echo "Enter your custom curl command (API_ENDPOINT and API_KEY variables available):"
-      echo "Example: curl -s \$API_ENDPOINT/health"
+    9)
+      echo -e "${YELLOW}Enter your custom curl command (without curl):${NC}"
       read -p "> " custom_command
-      
       if [ -n "$custom_command" ]; then
-        # Replace variables in custom command
-        custom_command="${custom_command//\$API_ENDPOINT/$API_ENDPOINT_CLEAN}"
-        custom_command="${custom_command//\$API_KEY/$API_KEY}"
-        
-        run_test "Custom Command" "$custom_command" "false"
+        run_test "Custom Command" \
+          "curl $custom_command" \
+          "false"
       else
-        echo "No command entered."
+        echo -e "${RED}No command entered${NC}"
         sleep 1
       fi
       ;;
@@ -329,7 +259,7 @@ while true; do
       ;;
       
     *)
-      echo -e "${RED}Invalid choice. Please try again.${NC}"
+      echo -e "${RED}Invalid option. Please choose 0-9.${NC}"
       sleep 1
       ;;
   esac
