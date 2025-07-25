@@ -9,9 +9,17 @@ export interface ApiGatewayProps {
     searchFunction: NodejsFunction;
     chatFunction: NodejsFunction;
     bedrockParseFunction: NodejsFunction;
+    vendorContextFunction: NodejsFunction;
+    customerIntelligenceFunction: NodejsFunction;
+    companyOverviewFunction: NodejsFunction;
+    companyLookupFunction: NodejsFunction;
+    cacheManagementFunction: NodejsFunction;
+    cacheListByTypeFunction: NodejsFunction;
+    cacheClearByTypeFunction: NodejsFunction;
     healthFunction: NodejsFunction;
-    debugFunction: NodejsFunction;
     profileFunction: NodejsFunction;
+    getAsyncRequestFunction: NodejsFunction;
+    getWorkflowStatusFunction: NodejsFunction;
   };
   // Will add other function groups as we create more constructs
 }
@@ -38,28 +46,111 @@ export class ApiGatewayConstruct extends Construct {
     const searchIntegration = new apigateway.LambdaIntegration(props.coreFunctions.searchFunction);
     const chatIntegration = new apigateway.LambdaIntegration(props.coreFunctions.chatFunction);
     const bedrockParseIntegration = new apigateway.LambdaIntegration(props.coreFunctions.bedrockParseFunction);
+    
+    // Clean Context-Aware Integrations
+    const vendorContextIntegration = new apigateway.LambdaIntegration(props.coreFunctions.vendorContextFunction);
+    const customerIntelligenceIntegration = new apigateway.LambdaIntegration(props.coreFunctions.customerIntelligenceFunction);
+    const companyOverviewIntegration = new apigateway.LambdaIntegration(props.coreFunctions.companyOverviewFunction);
+    const companyLookupIntegration = new apigateway.LambdaIntegration(props.coreFunctions.companyLookupFunction);
+    const cacheManagementIntegration = new apigateway.LambdaIntegration(props.coreFunctions.cacheManagementFunction);
+    
+    // Utility Integrations
     const healthIntegration = new apigateway.LambdaIntegration(props.coreFunctions.healthFunction);
-    const debugIntegration = new apigateway.LambdaIntegration(props.coreFunctions.debugFunction);
     const profileIntegration = new apigateway.LambdaIntegration(props.coreFunctions.profileFunction);
 
     // Create API resources and routes
     
-    // Company routes
-    const companyResource = this.api.root.addResource('company');
-    const companyDomainResource = companyResource.addResource('{domain}');
+    // =================================================================
+    // CLEAN CONTEXT-AWARE ENDPOINTS
+    // =================================================================
     
-    // GET /company/{domain}/search
+    // Vendor Context - POST /vendor/context
+    const vendorResource = this.api.root.addResource('vendor');
+    vendorResource.addResource('context').addMethod('POST', vendorContextIntegration, {
+      apiKeyRequired: true,
+    });
+    
+    // Customer Intelligence - POST /customer/intelligence (Now ASYNC)
+    const customerResource = this.api.root.addResource('customer');
+    customerResource.addResource('intelligence').addMethod('POST', customerIntelligenceIntegration, {
+      apiKeyRequired: true,
+    });
+    
+    // =================================================================
+    // INTERACTIVE WORKFLOW POLLING ENDPOINTS
+    // =================================================================
+    
+    // DynamoDB-based request status (Company Overview)
+    const requestsResource = this.api.root.addResource('requests');
+    const requestIdResource = requestsResource.addResource('{requestId}');
+    
+    // GET /requests/{requestId}/status - DynamoDB request tracking (Company Overview)
+    const requestStatusIntegration = new apigateway.LambdaIntegration(props.coreFunctions.getAsyncRequestFunction);
+    requestIdResource.addResource('status').addMethod('GET', requestStatusIntegration, {
+      apiKeyRequired: true,
+    });
+    
+    // GET /requests/{requestId}/result - DynamoDB request results
+    requestIdResource.addResource('result').addMethod('GET', requestStatusIntegration, {
+      apiKeyRequired: true,
+    });
+    
+    // Step Functions-based workflow status (Vendor Context & Customer Intelligence)
+    const workflowsResource = this.api.root.addResource('workflows');
+    const workflowIdResource = workflowsResource.addResource('{requestId}');
+    
+    // GET /workflows/{requestId}/status - Step Functions workflow tracking
+    const workflowStatusIntegration = new apigateway.LambdaIntegration(props.coreFunctions.getWorkflowStatusFunction);
+    workflowIdResource.addResource('status').addMethod('GET', workflowStatusIntegration, {
+      apiKeyRequired: true,
+    });
+    
+    // GET /workflows/{requestId}/result - Step Functions workflow results
+    workflowIdResource.addResource('result').addMethod('GET', workflowStatusIntegration, {
+      apiKeyRequired: true,
+    });
+    
+    // Companies endpoints
+    const companiesResource = this.api.root.addResource('companies');
+    
+    // GET /companies/lookup - dedicated company search/autocomplete
+    companiesResource.addResource('lookup').addMethod('GET', companyLookupIntegration, {
+      apiKeyRequired: true,
+    });
+    
+    // Company Overview - POST /companies/{domain}/overview (ASYNC)
+    const companiesDomainResource = companiesResource.addResource('{domain}');
+    companiesDomainResource.addResource('overview').addMethod('POST', companyOverviewIntegration, {
+      apiKeyRequired: true,
+    });
+    
+    // Cache Management
+    const cacheResource = this.api.root.addResource('cache');
+    cacheResource.addMethod('DELETE', cacheManagementIntegration, { apiKeyRequired: true }); // Clear cache
+    cacheResource.addResource('stats').addMethod('GET', cacheManagementIntegration, { apiKeyRequired: true }); // Cache stats
+    
+    // Cache Management by Type
+    const cacheListByTypeIntegration = new apigateway.LambdaIntegration(props.coreFunctions.cacheListByTypeFunction);
+    const cacheClearByTypeIntegration = new apigateway.LambdaIntegration(props.coreFunctions.cacheClearByTypeFunction);
+    
+    cacheResource.addResource('list').addMethod('GET', cacheListByTypeIntegration, { apiKeyRequired: true }); // List cache by type
+    cacheResource.addResource('clear-type').addMethod('DELETE', cacheClearByTypeIntegration, { apiKeyRequired: true }); // Clear cache by type
+    
+    // =================================================================
+    // LEGACY ENDPOINTS (for backward compatibility)
+    // =================================================================
+    
+    // Create legacy company resource for backward compatibility
+    const companyResource = this.api.root.addResource('company');
+    
+    // GET /company/{domain}/search (legacy)
+    const companyDomainResource = companyResource.addResource('{domain}');
     companyDomainResource.addResource('search').addMethod('GET', searchIntegration, {
       apiKeyRequired: true,
     });
 
     // Health check (no API key required)
     this.api.root.addResource('health').addMethod('GET', healthIntegration);
-
-    // Debug endpoint
-    this.api.root.addResource('debug').addMethod('GET', debugIntegration, {
-      apiKeyRequired: true,
-    });
 
     // Chat endpoint
     this.api.root.addResource('chat').addMethod('POST', chatIntegration, {

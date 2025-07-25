@@ -1,6 +1,7 @@
 import { Logger } from '../../core/Logger';
 import { BedrockCore } from '../core/BedrockCore';
-import { 
+import { JsonExtractor } from '../../utilities/JsonExtractor';
+import {
   AnalysisRequest,
   SalesInsights,
   SalesContext,
@@ -16,6 +17,9 @@ export class SalesContextEngine {
   constructor(config: AnalysisConfig, logger: Logger, region?: string) {
     this.logger = logger;
     this.bedrockCore = new BedrockCore(config, logger, region);
+    
+    // Set logger for JsonExtractor utility
+    JsonExtractor.setLogger(logger);
   }
 
   /**
@@ -262,13 +266,15 @@ Ensure all insights are:
    */
   private parseInsights(response: string): SalesInsights {
     try {
-      // Try to extract JSON from the response
-      const jsonMatch = response.match(/\{[\s\S]*\}/);
-      if (!jsonMatch) {
+      // Use shared JsonExtractor utility
+      const parsed = JsonExtractor.extractAndParse(response, {
+        logErrors: true,
+        context: 'SalesContextEngine'
+      });
+      
+      if (!parsed) {
         throw new Error('No JSON found in response');
       }
-
-      const parsed = JSON.parse(jsonMatch[0]);
 
       // Return minimal but correct SalesInsights structure
       return {
@@ -331,6 +337,8 @@ Ensure all insights are:
       typeof item === 'string' ? { text: item, citations: [] } : item
     );
   }
+
+
 
   /**
    * Fallback method to parse insights from unstructured text

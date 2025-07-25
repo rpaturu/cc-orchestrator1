@@ -1,7 +1,21 @@
 /**
  * Sales Intelligence Orchestrator
  * 
- * Coordinates between all the focused services to provide comprehensive sales intelligence.
+ * ========================================
+ * BATCH PROCESSING SERVICE
+ * ========================================
+ * 
+ * This service is designed for comprehensive, one-shot sales intelligence generation.
+ * It coordinates between focused services to provide complete company analysis reports.
+ * 
+ * PURPOSE: Generate complete intelligence reports for companies
+ * INPUT: Company domain + sales context
+ * OUTPUT: Comprehensive ContentAnalysis with insights, sources, and recommendations
+ * MODE: Batch processing with caching - NOT for interactive/streaming use
+ * 
+ * For interactive experiences, chat, or streaming - use separate services
+ * that leverage DataSourceOrchestrator and existing async workflows.
+ * 
  * This replaces the monolithic SalesIntelligenceService with a clean orchestrator pattern.
  */
 

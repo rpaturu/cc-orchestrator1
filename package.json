@@ -36,7 +36,7 @@
   "author": "Your Name",
   "license": "MIT",
   "dependencies": {
-    "@aws-sdk/client-bedrock-runtime": "^3.450.0",
+    "@aws-sdk/client-bedrock-runtime": "^3.848.0",
     "@aws-sdk/client-dynamodb": "^3.840.0",
     "@aws-sdk/client-lambda": "^3.840.0",
     "@aws-sdk/client-secrets-manager": "^3.848.0",
@@ -47,7 +47,7 @@
     "cheerio": "^1.0.0-rc.12",
     "constructs": "^10.0.0",
     "cors": "^2.8.5",
-    "dotenv": "^16.3.1",
+    "dotenv": "^16.6.1",
     "express": "^4.18.2",
     "helmet": "^7.1.0",
     "robots-parser": "^3.0.1",

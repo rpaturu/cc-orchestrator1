@@ -5,6 +5,7 @@ import { Logger } from '../../core/Logger';
 import { CacheService } from '../../core/CacheService';
 import { ContentFilter } from '../../content/ContentFilter';
 import { AIAnalyzer } from '../../analysis/AIAnalyzer';
+import { CacheType } from '../../../types/cache-types';
 
 export interface CustomerIntelligenceRequest {
   prospectCompany: string;
@@ -75,13 +76,13 @@ export class CustomerIntelligenceHandler extends BaseEndpointHandler {
     // Initialize AIAnalyzer for LLM-based extraction
     this.aiAnalyzer = new AIAnalyzer(
       {
-        model: process.env.BEDROCK_MODEL_ID || 'anthropic.claude-3-haiku-20240307-v1:0',
-        maxTokens: parseInt(process.env.BEDROCK_MAX_TOKENS || '4000'),
-        temperature: parseFloat(process.env.BEDROCK_TEMPERATURE || '0.1'),
+                  model: process.env.BEDROCK_MODEL!,
+                  maxTokens: parseInt(process.env.BEDROCK_MAX_TOKENS!),
+          temperature: parseFloat(process.env.BEDROCK_TEMPERATURE!),
         systemPrompt: 'You are a customer intelligence analyst specializing in extracting structured company insights for sales optimization.'
       },
       this.logger,
-      process.env.AWS_REGION || 'us-west-2'
+      process.env.AWS_REGION
     );
   }
 
@@ -165,7 +166,7 @@ export class CustomerIntelligenceHandler extends BaseEndpointHandler {
 
         // Cache the customer intelligence
         const cacheKey = `customer_intel:${prospectCompany.toLowerCase().replace(/\s+/g, '_')}:${vendorCompany.toLowerCase().replace(/\s+/g, '_')}`;
-        await this.cache.setRawJSON(cacheKey, customerIntelligence, 'CUSTOMER_INTELLIGENCE_ANALYSIS' as any);
+        await this.cache.setRawJSON(cacheKey, customerIntelligence, CacheType.CUSTOMER_INTELLIGENCE_ANALYSIS);
 
         this.logger.info('Customer intelligence collected and cached', {
           requestId,

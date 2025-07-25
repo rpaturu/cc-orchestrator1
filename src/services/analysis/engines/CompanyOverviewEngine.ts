@@ -1,6 +1,7 @@
 import { Logger } from '../../core/Logger';
 import { BedrockCore } from '../core/BedrockCore';
-import { 
+import { JsonExtractor } from '../../utilities/JsonExtractor';
+import {
   CompanyOverviewRequest,
   ParsedOverviewResponse,
   AnalysisConfig
@@ -13,6 +14,9 @@ export class CompanyOverviewEngine {
   constructor(config: AnalysisConfig, logger: Logger, region?: string) {
     this.logger = logger;
     this.bedrockCore = new BedrockCore(config, logger, region);
+    
+    // Set logger for JsonExtractor utility
+    JsonExtractor.setLogger(logger);
   }
 
   /**
@@ -147,13 +151,15 @@ Guidelines:
    */
   private parseComprehensiveOverviewResponse(response: string): ParsedOverviewResponse {
     try {
-      // Try to extract JSON from the response
-      const jsonMatch = response.match(/\{[\s\S]*\}/);
-      if (!jsonMatch) {
+      // Use shared JsonExtractor utility
+      const parsed = JsonExtractor.extractAndParse(response, {
+        logErrors: true,
+        context: 'CompanyOverviewEngine'
+      });
+      
+      if (!parsed) {
         throw new Error('No JSON found in response');
       }
-
-      const parsed = JSON.parse(jsonMatch[0]);
       
       // Validate and ensure all required fields exist
       return {
@@ -246,7 +252,7 @@ Return "Not available" for any metrics not found in the content.`;
       const response = await this.bedrockCore.invokeModel({
         systemPrompt,
         userPrompt,
-        maxTokens: 1000,
+        maxTokens: this.bedrockCore.maxTokens,  // ✅ Use configured maxTokens instead of hardcoded 1000
       });
 
       const jsonMatch = response.match(/\{[\s\S]*\}/);
@@ -267,4 +273,6 @@ Return "Not available" for any metrics not found in the content.`;
       growth: 'Not available',
     };
   }
+
+
 } 

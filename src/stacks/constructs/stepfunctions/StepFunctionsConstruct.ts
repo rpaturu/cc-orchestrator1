@@ -36,9 +36,9 @@ export class StepFunctionsConstruct extends Construct {
       REQUESTS_TABLE_NAME: props.requestsTable.tableName,
       PROFILES_TABLE_NAME: props.profilesTable.tableName,
       API_KEYS_SECRET_NAME: props.apiKeysSecret.secretName,
-      BEDROCK_MODEL_ID: scope.node.tryGetContext('bedrockModel') || 'anthropic.claude-3-haiku-20240307-v1:0',
-      BEDROCK_MAX_TOKENS: scope.node.tryGetContext('bedrockMaxTokens') || '4000',
-      BEDROCK_TEMPERATURE: scope.node.tryGetContext('bedrockTemperature') || '0.1',
+      BEDROCK_MODEL: scope.node.tryGetContext('bedrockModel')!,
+      BEDROCK_MAX_TOKENS: scope.node.tryGetContext('bedrockMaxTokens')!,
+      BEDROCK_TEMPERATURE: scope.node.tryGetContext('bedrockTemperature')!,
       SERPAPI_API_KEY: scope.node.tryGetContext('serpApiKey') || '',
       LOG_LEVEL: scope.node.tryGetContext('logLevel') || 'INFO',
       ALLOWED_ORIGINS: props.allowedOriginsString,
@@ -75,7 +75,7 @@ export class StepFunctionsConstruct extends Construct {
     const llmAnalysisFunction = new NodejsFunction(this, 'LLMAnalysisFunction', {
       functionName: 'sales-intelligence-llm-analysis',
       runtime: lambda.Runtime.NODEJS_20_X,
-      entry: path.join(__dirname, '../../../services/handlers/stepfunctions/LLMAnalysisHandler.ts'),
+      entry: path.join(__dirname, '../../../services/handlers/stepfunctions/LLMAnalysisDispatcher.ts'),
       handler: 'llmAnalysisHandler',
       timeout: cdk.Duration.minutes(10),
       memorySize: 1024,
@@ -107,7 +107,7 @@ export class StepFunctionsConstruct extends Construct {
 
     const llmAnalysisTask = new stepfunctionsTasks.LambdaInvoke(this, 'LLMAnalysisTask', {
       lambdaFunction: llmAnalysisFunction,
-      inputPath: '$.collectionResult',
+      inputPath: '$',  // Pass the whole object from SmartCollectionHandler
       outputPath: '$.Payload',
     });
 
@@ -115,9 +115,13 @@ export class StepFunctionsConstruct extends Construct {
       lambdaFunction: cacheResponseFunction,
       payload: stepfunctions.TaskInput.fromObject({
         'companyName.$': '$.companyName',
+        'vendorCompany.$': '$.vendorCompany',
         'requester.$': '$.requester',
-        'analysis.$': '$.analysis',
-        'requestId.$': '$.requestId'
+        'analysisResult.$': '$',  // ✅ Pass entire result object (includes analysisRef, rawResponseRef, etc.)
+        'collectionResult.$': '$.data',    // Map collection data
+        'requestId.$': '$.requestId',
+        'workflowType.$': '$.workflowType'
+        // Note: userPersona is optional - will be handled in CacheResponseHandler with defaults
       }),
       outputPath: '$.Payload',
     });
@@ -126,8 +130,9 @@ export class StepFunctionsConstruct extends Construct {
     const cacheHitChoice = new stepfunctions.Choice(this, 'CacheHitChoice')
       .when(stepfunctions.Condition.booleanEquals('$.hit', true), 
         new stepfunctions.Pass(this, 'ReturnCachedResult', {
-          result: stepfunctions.Result.fromObject({ source: 'cache' }),
-          outputPath: '$.data'
+          // Preserve the complete cache hit response structure
+          inputPath: '$',
+          outputPath: '$'
         })
       )
       .otherwise(

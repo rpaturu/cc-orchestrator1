@@ -40,13 +40,12 @@ Ultra-clean context-aware sales intelligence system with purpose-built endpoints
 
 ### **Supporting APIs:**
 - ✅ `/health` - System health check
-- ✅ `/company/{domain}/search` - Basic company lookup
-- ✅ `/companies/domain-suggestions` - Domain utilities
-- ✅ `/cache/*` - Cache management
+- ✅ `/companies/lookup` - Clean company search/autocomplete
+- ✅ `/cache/*` - Cache management  
 - ✅ `/company/overview` - **KEPT FOR TESTING** (evaluate frontend needs)
 
 ### **Clean Services:**
-- ✅ `CompanyLookupHandler` - Simplified, direct service usage
+- ✅ `CompanyLookupHandler` - Dedicated company search with query parameters
 - ✅ `SerpAPIService` - Multi-engine data collection
 - ✅ `VendorContextHandler` - Context-aware vendor analysis
 - ✅ `CustomerIntelligenceHandler` - Context-aware customer research
@@ -65,20 +64,19 @@ Ultra-clean context-aware sales intelligence system with purpose-built endpoints
 
 ## 📊 **Current Test Options**
 
-**9 clean test options:**
+**8 ultra-clean test options:**
 
 ### **Available Tests:**
 ```
 Context-Aware Intelligence:
-1)  Cache Management
+1)  Health Check
 2)  Company Overview (TESTING - may remove)
-3)  Company Search/Lookup
-4)  Domain Suggestions  
-5)  Vendor Context (WHO YOU ARE)
-6)  Customer Intelligence (WHO YOU TARGET)
-7)  Cache Operations
-8)  Step Functions Testing
-9)  Health Checks
+3)  Company Search/Lookup (dedicated handler)
+4)  Vendor Context (WHO YOU ARE)
+5)  Customer Intelligence (WHO YOU TARGET)
+6)  Cache Statistics
+7)  Cache Clear Operations
+8)  Custom Testing
 ```
 
 ## 🎯 **Architecture Benefits**

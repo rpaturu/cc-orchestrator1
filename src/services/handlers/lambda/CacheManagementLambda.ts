@@ -341,4 +341,158 @@ export const cacheTypesHandler = async (
       }),
     };
   }
+};
+
+/**
+ * Lambda handler for viewing cache by type
+ */
+export const cacheListByTypeHandler = async (
+  event: APIGatewayProxyEvent,
+  context: Context
+): Promise<APIGatewayProxyResult> => {
+  try {
+    console.log('Cache List By Type Lambda invoked', { requestId: context.awsRequestId });
+
+    const origin = event.headers.Origin || event.headers.origin;
+    const corsHeaders = getCorsHeaders(origin);
+
+    // Get cache type from query parameters
+    const cacheType = event.queryStringParameters?.type;
+    const limit = parseInt(event.queryStringParameters?.limit || '20');
+
+    if (!cacheType) {
+      return {
+        statusCode: 400,
+        headers: corsHeaders,
+        body: JSON.stringify({
+          error: 'Cache type is required',
+          message: 'Please provide a cache type as a query parameter: ?type=company_overview',
+          requestId: context.awsRequestId,
+        }),
+      };
+    }
+
+    // Initialize cache service
+    const logger = new Logger('CacheListByTypeHandler');
+    const cacheService = new CacheService(cacheConfig, logger, process.env.AWS_REGION);
+
+    // Get cache entries by type
+    const result = await cacheService.listKeys(undefined, limit, cacheType);
+
+    return {
+      statusCode: 200,
+      headers: corsHeaders,
+      body: JSON.stringify({
+        ...result,
+        cacheType,
+        requestId: context.awsRequestId,
+      }),
+    };
+
+  } catch (error) {
+    console.error('Cache List By Type Lambda error:', error);
+
+    const origin = event.headers.Origin || event.headers.origin;
+    const corsHeaders = getCorsHeaders(origin);
+    
+    return {
+      statusCode: 500,
+      headers: corsHeaders,
+      body: JSON.stringify({
+        error: 'Internal server error',
+        message: error instanceof Error ? error.message : 'Unknown error',
+        requestId: context.awsRequestId,
+      }),
+    };
+  }
+};
+
+/**
+ * Lambda handler for clearing cache by type
+ */
+export const cacheClearByTypeHandler = async (
+  event: APIGatewayProxyEvent,
+  context: Context
+): Promise<APIGatewayProxyResult> => {
+  try {
+    console.log('Cache Clear By Type Lambda invoked', { requestId: context.awsRequestId });
+
+    const origin = event.headers.Origin || event.headers.origin;
+    const corsHeaders = getCorsHeaders(origin);
+
+    // Get cache type from query parameters or body
+    let cacheType = event.queryStringParameters?.type;
+    
+    if (!cacheType && event.body) {
+      try {
+        const body = JSON.parse(event.body);
+        cacheType = body.type;
+      } catch (e) {
+        // Ignore JSON parse errors
+      }
+    }
+
+    if (!cacheType) {
+      return {
+        statusCode: 400,
+        headers: corsHeaders,
+        body: JSON.stringify({
+          error: 'Cache type is required',
+          message: 'Please provide a cache type as a query parameter: ?type=company_overview',
+          requestId: context.awsRequestId,
+        }),
+      };
+    }
+
+    // Initialize cache service
+    const logger = new Logger('CacheClearByTypeHandler');
+    const cacheService = new CacheService(cacheConfig, logger, process.env.AWS_REGION);
+
+    // Get all keys for this cache type
+    const keysResult = await cacheService.listKeys(undefined, 1000, cacheType);
+    
+    if (keysResult.total === 0) {
+      return {
+        statusCode: 200,
+        headers: corsHeaders,
+        body: JSON.stringify({
+          message: `No cache entries found for type: ${cacheType}`,
+          cleared: 0,
+          cacheType,
+          requestId: context.awsRequestId,
+        }),
+      };
+    }
+
+    // Delete all keys for this cache type
+    const deletePromises = keysResult.keys.map(item => cacheService.delete(item.key));
+    await Promise.all(deletePromises);
+
+    return {
+      statusCode: 200,
+      headers: corsHeaders,
+      body: JSON.stringify({
+        message: `Successfully cleared ${keysResult.total} cache entries for type: ${cacheType}`,
+        cleared: keysResult.total,
+        cacheType,
+        requestId: context.awsRequestId,
+      }),
+    };
+
+  } catch (error) {
+    console.error('Cache Clear By Type Lambda error:', error);
+
+    const origin = event.headers.Origin || event.headers.origin;
+    const corsHeaders = getCorsHeaders(origin);
+    
+    return {
+      statusCode: 500,
+      headers: corsHeaders,
+      body: JSON.stringify({
+        error: 'Internal server error',
+        message: error instanceof Error ? error.message : 'Unknown error',
+        requestId: context.awsRequestId,
+      }),
+    };
+  }
 }; 

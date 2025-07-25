@@ -44,11 +44,10 @@ export class SalesIntelligenceStack extends cdk.Stack {
       nodeEnv,
     });
 
-    // 4. Add Step Function ARN to Core Lambda functions that need it
+    // 4. Add Step Function ARN only to Lambda functions that start step functions
     // (but not to the Step Function's own Lambda functions to avoid circular dependency)
-    Object.values(coreLambda.functions).forEach(fn => {
-      fn.addEnvironment('STEP_FUNCTION_ARN', stepFunctions.resources.stateMachine.stateMachineArn);
-    });
+    coreLambda.functions.vendorContextFunction.addEnvironment('STEP_FUNCTION_ARN', stepFunctions.resources.stateMachine.stateMachineArn);
+    coreLambda.functions.customerIntelligenceFunction.addEnvironment('STEP_FUNCTION_ARN', stepFunctions.resources.stateMachine.stateMachineArn);
 
     // 5. API Gateway
     const apiConstruct = new ApiGatewayConstruct(this, 'ApiGateway', {
@@ -93,23 +92,94 @@ export class SalesIntelligenceStack extends cdk.Stack {
     stepFunctions: StepFunctionsConstruct
   ): void {
     // Grant Lambda functions access to DynamoDB tables
+    
+    // Legacy Core Functions
     infrastructure.cacheTable.grantReadWriteData(coreLambda.functions.searchFunction);
     infrastructure.cacheTable.grantReadWriteData(coreLambda.functions.chatFunction);
     infrastructure.requestsTable.grantReadWriteData(coreLambda.functions.searchFunction);
     infrastructure.profilesTable.grantReadWriteData(coreLambda.functions.profileFunction);
+
+    // Clean Context-Aware Functions - DynamoDB Permissions
+    infrastructure.cacheTable.grantReadWriteData(coreLambda.functions.vendorContextFunction);
+    infrastructure.cacheTable.grantReadWriteData(coreLambda.functions.customerIntelligenceFunction);
+    infrastructure.cacheTable.grantReadWriteData(coreLambda.functions.companyOverviewFunction);
+    infrastructure.cacheTable.grantReadWriteData(coreLambda.functions.companyLookupFunction);
+    infrastructure.cacheTable.grantReadWriteData(coreLambda.functions.cacheManagementFunction);
+    infrastructure.cacheTable.grantReadWriteData(coreLambda.functions.cacheListByTypeFunction);
+    infrastructure.cacheTable.grantReadWriteData(coreLambda.functions.cacheClearByTypeFunction);
+    
+    infrastructure.requestsTable.grantReadWriteData(coreLambda.functions.customerIntelligenceFunction);
+    infrastructure.requestsTable.grantReadWriteData(coreLambda.functions.companyOverviewFunction);
+    
+    // Grant async request handler access to requests table for status polling
+    infrastructure.requestsTable.grantReadWriteData(coreLambda.functions.getAsyncRequestFunction);
+    
+    // Grant processing functions access to DynamoDB tables
+    infrastructure.requestsTable.grantReadWriteData(coreLambda.functions.processOverviewFunction);
+    infrastructure.requestsTable.grantReadWriteData(coreLambda.functions.processDiscoveryFunction);
+    infrastructure.requestsTable.grantReadWriteData(coreLambda.functions.processAnalysisFunction);
+    infrastructure.cacheTable.grantReadWriteData(coreLambda.functions.processOverviewFunction);
+    infrastructure.cacheTable.grantReadWriteData(coreLambda.functions.processDiscoveryFunction);
+    infrastructure.cacheTable.grantReadWriteData(coreLambda.functions.processAnalysisFunction);
+    
+    // Grant lambda invocation permissions for async processing
+    coreLambda.functions.processOverviewFunction.grantInvoke(coreLambda.functions.companyOverviewFunction);
+    coreLambda.functions.processDiscoveryFunction.grantInvoke(coreLambda.functions.companyOverviewFunction);
+    coreLambda.functions.processAnalysisFunction.grantInvoke(coreLambda.functions.companyOverviewFunction);
+    
+    // Grant Bedrock permissions for processing functions
+    coreLambda.functions.processOverviewFunction.addToRolePolicy(
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        actions: ['bedrock:InvokeModel'],
+        resources: ['*'],
+      })
+    );
+
+    coreLambda.functions.processDiscoveryFunction.addToRolePolicy(
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        actions: ['bedrock:InvokeModel'],
+        resources: ['*'],
+      })
+    );
+
+    coreLambda.functions.processAnalysisFunction.addToRolePolicy(
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        actions: ['bedrock:InvokeModel'],
+        resources: ['*'],
+      })
+    );
 
     // Grant Step Functions access to DynamoDB tables
     infrastructure.cacheTable.grantReadWriteData(stepFunctions.resources.cacheCheckFunction);
     infrastructure.cacheTable.grantReadWriteData(stepFunctions.resources.smartCollectionFunction);
     infrastructure.cacheTable.grantReadWriteData(stepFunctions.resources.llmAnalysisFunction);
     infrastructure.cacheTable.grantReadWriteData(stepFunctions.resources.cacheResponseFunction);
+    
+    // Grant Step Functions execution permissions to context-aware lambdas
+    stepFunctions.resources.stateMachine.grantStartExecution(coreLambda.functions.vendorContextFunction);
+    stepFunctions.resources.stateMachine.grantStartExecution(coreLambda.functions.customerIntelligenceFunction);
 
     // Grant Secrets Manager access
+    
+    // Legacy Functions
     infrastructure.apiKeysSecret.grantRead(coreLambda.functions.searchFunction);
+    
+    // Clean Context-Aware Functions - Secrets Manager Access
+    infrastructure.apiKeysSecret.grantRead(coreLambda.functions.vendorContextFunction);
+    infrastructure.apiKeysSecret.grantRead(coreLambda.functions.customerIntelligenceFunction);
+    infrastructure.apiKeysSecret.grantRead(coreLambda.functions.companyOverviewFunction);
+    infrastructure.apiKeysSecret.grantRead(coreLambda.functions.companyLookupFunction);
+    
+    // Step Functions
     infrastructure.apiKeysSecret.grantRead(stepFunctions.resources.smartCollectionFunction);
     infrastructure.apiKeysSecret.grantRead(stepFunctions.resources.llmAnalysisFunction);
 
     // Grant Bedrock access to analysis functions
+    
+    // Legacy Functions
     coreLambda.functions.bedrockParseFunction.addToRolePolicy(
       new iam.PolicyStatement({
         effect: iam.Effect.ALLOW,
@@ -118,11 +188,60 @@ export class SalesIntelligenceStack extends cdk.Stack {
       })
     );
 
+    // Clean Context-Aware Functions - Bedrock Access
+    coreLambda.functions.vendorContextFunction.addToRolePolicy(
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        actions: ['bedrock:InvokeModel'],
+        resources: ['*'],
+      })
+    );
+
+    coreLambda.functions.customerIntelligenceFunction.addToRolePolicy(
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        actions: ['bedrock:InvokeModel'],
+        resources: ['*'],
+      })
+    );
+
+    coreLambda.functions.companyOverviewFunction.addToRolePolicy(
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        actions: ['bedrock:InvokeModel'],
+        resources: ['*'],
+      })
+    );
+
+    // Step Functions
     stepFunctions.resources.llmAnalysisFunction.addToRolePolicy(
       new iam.PolicyStatement({
         effect: iam.Effect.ALLOW,
         actions: ['bedrock:InvokeModel'],
         resources: ['*'],
+      })
+    );
+
+    // Smart Collection Function - Bedrock Access (for auto-trigger vendor context analysis)
+    stepFunctions.resources.smartCollectionFunction.addToRolePolicy(
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        actions: ['bedrock:InvokeModel'],
+        resources: ['*'],
+      })
+    );
+
+    // Workflow Status Function - Step Functions Access
+    coreLambda.functions.getWorkflowStatusFunction.addToRolePolicy(
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        actions: [
+          'states:DescribeExecution',
+          'states:GetExecutionHistory'  // ✅ Added for progress tracking
+        ],
+        resources: [
+          `arn:aws:states:${this.region}:${this.account}:execution:sales-intelligence-enrichment:*`
+        ],
       })
     );
   }

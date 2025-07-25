@@ -20,7 +20,7 @@ export class BedrockCore {
   constructor(config: AnalysisConfig, logger: Logger, region?: string) {
     this.config = config;
     this.logger = logger;
-    this.bedrock = new BedrockRuntimeClient({ region: region || 'us-east-1' });
+    this.bedrock = new BedrockRuntimeClient({ region: region || process.env.AWS_REGION });
   }
 
   /**
@@ -193,7 +193,14 @@ export class BedrockCore {
   }
 
   /**
-   * Parse user input with a simple model call
+   * Get the configured max tokens
+   */
+  get maxTokens(): number {
+    return this.config.maxTokens;
+  }
+
+  /**
+   * Parse user input with AI assistance
    */
   async parseUserInput(prompt: string): Promise<string> {
     const systemPrompt = `You are a helpful assistant that clarifies and structures user input. 
@@ -202,7 +209,7 @@ export class BedrockCore {
     return this.invokeModel({
       systemPrompt,
       userPrompt: prompt,
-      maxTokens: 1000,
+      maxTokens: this.config.maxTokens,  // ✅ Use configured maxTokens instead of hardcoded 1000
       temperature: 0.1,
     });
   }

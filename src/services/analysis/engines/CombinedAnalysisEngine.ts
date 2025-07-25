@@ -1,5 +1,8 @@
 import { Logger } from '../../core/Logger';
 import { BedrockCore } from '../core/BedrockCore';
+import { CacheService } from '../../core/CacheService';
+import { CacheType } from '../../../types/cache-types';
+import { JsonExtractor } from '../../utilities/JsonExtractor';
 import {
   SalesInsights,
   AuthoritativeSource,
@@ -13,22 +16,32 @@ interface CombinedAnalysisRequest {
   fullContent: string;
   companyName: string;
   analysisType: string;
+  sources?: AuthoritativeSource[];  // Add sources for Perplexity-style citations
 }
 
 export class CombinedAnalysisEngine {
   private bedrockCore: BedrockCore;
   private logger: Logger;
+  private cacheService: CacheService;
 
   constructor(config: AnalysisConfig, logger: Logger, region?: string) {
     this.logger = logger;
     this.bedrockCore = new BedrockCore(config, logger, region);
+    this.cacheService = new CacheService(
+      { ttlHours: 24, maxEntries: 1000, compressionEnabled: false },
+      logger,
+      region
+    );
+    
+    // Set logger for JsonExtractor utility
+    JsonExtractor.setLogger(logger);
   }
 
   /**
    * Combine snippet analysis with full content analysis
    */
   async combineSnippetAndFullContentAnalysis(request: CombinedAnalysisRequest): Promise<SalesInsights> {
-    const { snippetAnalysis, fullContent, companyName, analysisType } = request;
+    const { snippetAnalysis, fullContent, companyName, analysisType, sources } = request;
 
     try {
       this.logger.info('Starting combined analysis', {
@@ -43,7 +56,8 @@ export class CombinedAnalysisEngine {
         snippetAnalysis,
         fullContent,
         companyName,
-        analysisType
+        analysisType,
+        sources
       );
 
       const response = await this.bedrockCore.invokeModel({
@@ -51,13 +65,33 @@ export class CombinedAnalysisEngine {
         userPrompt,
       });
 
-      const insights = this.parseCombinedAnalysisResponse(response);
+      // Cache raw LLM response for debugging
+      const rawResponseKey = `llm_raw_response:combined_analysis:${companyName}:${Date.now()}`;
+      await this.cacheService.setRawJSON(rawResponseKey, {
+        response,
+        companyName,
+        analysisType,
+        timestamp: new Date().toISOString(),
+        responseLength: response.length,
+        prompt: { systemPrompt: systemPrompt.substring(0, 200), userPrompt: userPrompt.substring(0, 200) }
+      }, CacheType.LLM_RAW_RESPONSE);
+      
+      this.logger.info('Raw LLM response cached for debugging', {
+        companyName,
+        analysisType,
+        rawResponseKey,
+        responseLength: response.length
+      });
+
+      const insights = this.parseCombinedAnalysisResponse(response, sources);
 
       this.logger.info('Combined analysis completed', {
         companyName,
         analysisType,
         insightsCount: insights.keyInsights?.length || 0,
         opportunitiesCount: insights.opportunities?.length || 0,
+        sourcesCount: sources?.length || 0,
+        hasPerplexityStyleCitations: true
       });
 
       return insights;
@@ -117,13 +151,14 @@ export class CombinedAnalysisEngine {
    * Build system prompt for combined analysis
    */
   private buildCombinedAnalysisSystemPrompt(analysisType: string): string {
-    const basePrompt = `You are an expert business analyst specializing in comprehensive intelligence synthesis.
+    const basePrompt = `You are an expert business analyst specializing in comprehensive intelligence synthesis with PERPLEXITY-STYLE TRANSPARENCY.
 
 Your task is to combine insights from preliminary snippet analysis with detailed content analysis to provide:
 1. Enhanced and validated insights from the snippet analysis
-2. Additional insights discovered from the full content
+2. Additional insights discovered from the full content  
 3. Comprehensive sales intelligence recommendations
 4. Gap-filled analysis with increased confidence levels
+5. TRANSPARENT SOURCE ATTRIBUTION for every claim
 
 Analysis Type: ${analysisType}
 
@@ -133,13 +168,15 @@ Key Objectives:
 - Provide comprehensive sales recommendations
 - Increase analysis confidence through data triangulation
 - Suggest strategic actions based on complete picture
+- CITE EVERY FACTUAL CLAIM with inline source numbers [1], [2], [3]
 
 Synthesis Approach:
 1. Review snippet analysis findings
 2. Validate against full content
 3. Identify additional insights from comprehensive data
 4. Synthesize into actionable sales intelligence
-5. Provide confidence-weighted recommendations`;
+5. Provide confidence-weighted recommendations
+6. ADD INLINE CITATIONS for transparency and credibility`;
 
     const contextSpecificGuidance = {
       discovery: `
@@ -185,24 +222,44 @@ For NEGOTIATION synthesis, focus on:
     snippetAnalysis: any,
     fullContent: string,
     companyName: string,
-    analysisType: string
+    analysisType: string,
+    sources?: AuthoritativeSource[]
   ): string {
+    // Build numbered source list for Perplexity-style citations
+    let sourceList = '';
+    if (sources && sources.length > 0) {
+      sourceList = '\n\nSOURCES (for citation):\n' + 
+        sources.map((source, index) => 
+          `[${index + 1}] ${source.title} (${source.sourceType}) - ${source.domain} - Credibility: ${Math.round(source.credibilityScore * 100)}%`
+        ).join('\n') + '\n';
+    }
+
     return `Please provide a comprehensive analysis by combining the preliminary snippet analysis with the full content for ${companyName}.
 
 PRELIMINARY SNIPPET ANALYSIS:
 ${JSON.stringify(snippetAnalysis, null, 2)}
 
 FULL CONTENT FOR VALIDATION AND ENHANCEMENT:
-${fullContent}
+${fullContent}${sourceList}
 
 Please provide a comprehensive analysis in the following JSON format:
 {
-  "keyInsights": ["Enhanced insight 1", "New insight 2", ...],
-  "painPoints": ["Validated pain point 1", "New pain point 2", ...],
-  "opportunities": ["Enhanced opportunity 1", "New opportunity 2", ...],
-  "competitiveAdvantages": ["Validated advantage 1", "New advantage 2", ...],
-  "riskFactors": ["Enhanced risk 1", "New risk 2", ...],
-  "nextSteps": ["Strategic step 1", "Tactical step 2", ...],
+  "companyOverview": {
+    "name": "Company Name",
+    "size": "Employee count or size range",
+    "industry": "Primary industry or sector",
+    "revenue": "Revenue information or range",
+    "description": "Brief company description"
+  },
+  "keyInsights": ["Enhanced insight 1 with inline citation [1]", "New insight 2 based on source [2]", ...],
+  "painPoints": ["Validated pain point 1 mentioned in [1]", "New pain point 2 from analysis [2]", ...],
+  "opportunities": ["Enhanced opportunity 1 identified from [1][3]", "New opportunity 2 based on [2]", ...],
+  "competitiveAdvantages": ["Validated advantage 1 confirmed by [1]", "New advantage 2 from sources [2][3]", ...],
+  "riskFactors": ["Enhanced risk 1 highlighted in [1]", "New risk 2 from analysis [2]", ...],
+  "nextSteps": ["Strategic step 1 based on findings [1]", "Tactical step 2 suggested by [2]", ...],
+  "talkingPoints": ["Talking point 1 supported by [1]", "Talking point 2 from [2]", ...],
+  "recommendedActions": ["Action 1 based on evidence [1]", "Action 2 from insights [2]", ...],
+  "dealProbability": 0-100,
   "confidence": "high|medium|low",
   "sources": ["source 1", "source 2", ...],
   "citations": ["Enhanced citation 1 [source]", ...]
@@ -215,31 +272,41 @@ Synthesis Guidelines:
 - Increase confidence levels where full content supports findings
 - Provide comprehensive, actionable recommendations
 - Ensure all insights are well-supported by evidence
-- Focus on ${analysisType}-specific strategic recommendations`;
+- Focus on ${analysisType}-specific strategic recommendations
+
+CRITICAL CITATION REQUIREMENTS (Perplexity-style):
+- Add inline citations [1], [2], [3] etc. within each insight text
+- Use citation numbers that correspond to the SOURCES list above
+- Multiple citations per insight are encouraged: [1][2] or [1][3]
+- Every factual claim should have a citation
+- Only cite sources that actually support the claim
+- Be transparent about which sources support which insights`;
   }
 
   /**
    * Parse combined analysis response into structured insights
    */
-  private parseCombinedAnalysisResponse(response: string): SalesInsights {
+  private parseCombinedAnalysisResponse(response: string, sources?: AuthoritativeSource[]): SalesInsights {
     try {
-      // Try to extract JSON from the response
-      const jsonMatch = response.match(/\{[\s\S]*\}/);
-      if (!jsonMatch) {
-        throw new Error('No JSON found in response');
+      // Use shared JsonExtractor utility
+      const parsed = JsonExtractor.extractAndParse(response, {
+        logErrors: true,
+        context: 'CombinedAnalysisEngine'
+      });
+      
+      if (!parsed) {
+        throw new Error('No valid JSON found in response');
       }
-
-      const parsed = JSON.parse(jsonMatch[0]);
 
       // Validate and ensure all required fields exist
       // Build complete SalesInsights structure
       return {
-        companyOverview: parsed.companyOverview || {
-          name: '',
-          size: '',
+        companyOverview: {
+          name: parsed.companyOverview?.name || '',
+          size: parsed.companyOverview?.size || '',
           sizeCitations: [],
-          industry: '',
-          revenue: '',
+          industry: parsed.companyOverview?.industry || '',
+          revenue: parsed.companyOverview?.revenue || '',
           revenueCitations: [],
           recentNews: [],
           growth: {
@@ -254,18 +321,18 @@ Synthesis Guidelines:
           },
           challenges: []
         },
-        painPoints: this.convertToCitedContent(parsed.painPoints || []),
+        painPoints: this.convertToSimpleCitedContent(parsed.painPoints || []),
         keyInsights: parsed.keyInsights || [],
-        opportunities: this.convertToCitedContent(parsed.opportunities || []),
-        competitiveAdvantages: this.convertToCitedContent(parsed.competitiveAdvantages || []),
-        riskFactors: this.convertToCitedContent(parsed.riskFactors || []),
-        nextSteps: this.convertToCitedContent(parsed.nextSteps || []),
+        opportunities: this.convertToSimpleCitedContent(parsed.opportunities || []),
+        competitiveAdvantages: this.convertToSimpleCitedContent(parsed.competitiveAdvantages || []),
+        riskFactors: this.convertToSimpleCitedContent(parsed.riskFactors || []),
+        nextSteps: this.convertToSimpleCitedContent(parsed.nextSteps || []),
         technologyStack: parsed.technologyStack || { current: [], planned: [], vendors: [], modernizationAreas: [] },
         keyContacts: parsed.keyContacts || [],
         competitiveLandscape: parsed.competitiveLandscape || { competitors: [], marketPosition: '', differentiators: [], vulnerabilities: [], battleCards: [] },
-        talkingPoints: this.convertToCitedContent(parsed.talkingPoints || []),
+        talkingPoints: this.convertToSimpleCitedContent(parsed.talkingPoints || []),
         potentialObjections: parsed.potentialObjections || [],
-        recommendedActions: this.convertToCitedContent(parsed.recommendedActions || []),
+        recommendedActions: this.convertToSimpleCitedContent(parsed.recommendedActions || []),
         dealProbability: parsed.dealProbability || 0,
         dealProbabilityCitations: parsed.dealProbabilityCitations || [],
         confidence: {
@@ -424,10 +491,25 @@ Synthesis Guidelines:
   }
 
   /**
+   * Convert strings to simple CitedContent format (no citation extraction)
+   * Keep inline citations [1][2] in text for separate display
+   */
+  private convertToSimpleCitedContent(items: string[]): CitedContent[] {
+    if (!Array.isArray(items)) return [];
+    
+    return items.map(item => ({
+      text: typeof item === 'string' ? item : String(item),
+      citations: [] // Empty citations - let UI handle the [1][2] numbers separately
+    }));
+  }
+
+  /**
    * Extract text from CitedContent arrays for confidence scoring
    */
   private extractTextFromCited(citedArray?: CitedContent[]): string[] {
     if (!citedArray || !Array.isArray(citedArray)) return [];
     return citedArray.map(item => item.text);
   }
+
+
 } 

@@ -268,7 +268,7 @@ export const bedrockParseHandler = async (
       };
     }
 
-    const { prompt, message, maxTokens = 500 } = JSON.parse(event.body);
+    const { prompt, message, maxTokens = parseInt(process.env.BEDROCK_MAX_TOKENS!)} = JSON.parse(event.body);
     
     if (!prompt || !message) {
       return {

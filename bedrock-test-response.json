@@ -1,0 +1,104 @@
+{
+  "customer": {
+    "name": "Tesla",
+    "industry": "Automotive & Clean Energy",
+    "size": "127,855 employees",
+    "headquarters": "Austin, Texas",
+    "founded": "2003",
+    "description": "Leading manufacturer of electric vehicles, energy storage systems, and solar products, known for innovation in sustainable transportation and energy solutions"
+  },
+  "news_signals": [
+    {
+      "date": "2024-01",
+      "headline": "Tesla Opens New Retail Locations Globally",
+      "source": "Reuters",
+      "insight": "Expansion of retail presence indicates need for unified commerce solution",
+      "signal_type": "expansion"
+    },
+    {
+      "date": "2023-12",
+      "headline": "Tesla Launches New Online Merchandise Store",
+      "source": "TechCrunch",
+      "insight": "Growing direct-to-consumer e-commerce presence",
+      "signal_type": "product"
+    }
+  ],
+  "tech_stack": {
+    "frontend": ["React", "Angular"],
+    "backend": ["Python", "Node.js"],
+    "infrastructure": ["AWS", "Google Cloud"],
+    "analytics": ["Looker", "Snowflake"],
+    "collaboration": ["Slack", "Atlassian Suite"],
+    "security": ["Okta", "Palo Alto Networks"],
+    "observations": [
+      "Modern tech stack indicates readiness for enterprise e-commerce platform",
+      "Current use of React aligns with Shopify's technology ecosystem"
+    ]
+  },
+  "target_contacts": [
+    {
+      "name": "Alex Martinez",
+      "title": "Global Head of Digital Retail",
+      "role": "Decision Maker",
+      "persona_fit": "Oversees online and offline retail strategy",
+      "signal": "Recently posted about omnichannel retail innovation"
+    },
+    {
+      "name": "Sarah Chen",
+      "title": "Director of E-commerce",
+      "role": "Champion",
+      "persona_fit": "Direct responsibility for online sales platforms",
+      "signal": "Engaged with Shopify content on LinkedIn"
+    }
+  ],
+  "recommended_products": [
+    {
+      "product": "Shopify Plus",
+      "reason": "Enterprise-grade platform to support global merchandise sales and scalability",
+      "outcome": "Unified online/offline commerce experience with enhanced customer engagement",
+      "dataset_source": "Current e-commerce infrastructure analysis",
+      "vendor_alignment": "Scalability and multi-channel capabilities match Tesla's growth"
+    },
+    {
+      "product": "Shopify POS",
+      "reason": "Seamless integration for Tesla's retail locations",
+      "outcome": "Unified inventory and customer experience across channels",
+      "dataset_source": "Retail expansion plans",
+      "vendor_alignment": "Modern retail solution fitting Tesla's innovative brand"
+    }
+  ],
+  "competitor_context": {
+    "known_usage": ["Custom-built e-commerce solution", "Legacy POS systems"],
+    "pain_points": [
+      "Lack of unified commerce experience",
+      "Limited scalability for global expansion",
+      "Complex integration requirements"
+    ],
+    "positioning_advantage": "Shopify's unified commerce platform offers faster deployment and better scalability than custom solutions",
+    "objection_handling": [
+      "Enterprise-grade security compliance",
+      "Customization capabilities for unique requirements",
+      "Proven scalability with major brands"
+    ],
+    "competitive_intel": "Current custom solution requires significant maintenance and limits speed-to-market for new features"
+  },
+  "talking_points": [
+    "How does your current e-commerce platform support your global retail expansion plans?",
+    "What challenges do you face in maintaining consistency across online and retail channels?",
+    "Similar automotive brands have achieved 40% faster market expansion using Shopify Plus"
+  ],
+  "opportunity_signals": [
+    {
+      "signal": "Global retail expansion announcement",
+      "urgency": "high",
+      "source": "Press Release",
+      "action": "Schedule meeting with Global Head of Digital Retail"
+    },
+    {
+      "signal": "New merchandise store launch",
+      "urgency": "medium",
+      "source": "Company Website",
+      "action": "Prepare ROI analysis comparing Shopify Plus to current solution"
+    }
+  ]
+}

@@ -48,10 +48,20 @@ export enum CacheType {
   // Vendor Context Cache Types (NEW)
   VENDOR_CONTEXT_ENRICHMENT = 'vendor_context_enrichment',
   VENDOR_CONTEXT_PARSED = 'vendor_context_parsed',
+  VENDOR_CONTEXT_ANALYSIS = 'vendor_context_analysis',
+  VENDOR_CONTEXT_RAW_DATA = 'vendor_context_raw_data',
+  VENDOR_CONTEXT_REFERENCE = 'vendor_context_reference',
   
   // Customer Intelligence Cache Types (NEW)
   CUSTOMER_INTELLIGENCE_RAW = 'customer_intelligence_raw',
   CUSTOMER_INTELLIGENCE_PARSED = 'customer_intelligence_parsed',
+  CUSTOMER_INTELLIGENCE_ANALYSIS = 'customer_intelligence_analysis',
+  CUSTOMER_INTELLIGENCE_ENRICHMENT = 'customer_intelligence_enrichment',
+  
+  // LLM Analysis Cache Types (NEW)
+  LLM_ANALYSIS = 'llm_analysis',
+  LLM_CUSTOMER_INTELLIGENCE = 'llm_customer_intelligence',
+  LLM_RAW_RESPONSE = 'llm_raw_response',
 
   // Enhanced Enrichment Cache Types (NEW)
   BRIGHTDATA_COMPANY_ENRICHMENT = 'brightdata_company_enrichment',
@@ -126,10 +136,20 @@ export const CACHE_TYPE_DISPLAY_NAMES: Record<CacheType, string> = {
   // Vendor Context Types
   [CacheType.VENDOR_CONTEXT_ENRICHMENT]: 'Vendor Context Enrichment',
   [CacheType.VENDOR_CONTEXT_PARSED]: 'Vendor Context Parsed',
+  [CacheType.VENDOR_CONTEXT_ANALYSIS]: 'Vendor Context Analysis',
+  [CacheType.VENDOR_CONTEXT_RAW_DATA]: 'Vendor Context Raw Data',
+  [CacheType.VENDOR_CONTEXT_REFERENCE]: 'Vendor Context Reference',
 
   // Customer Intelligence Types
   [CacheType.CUSTOMER_INTELLIGENCE_RAW]: 'Customer Intelligence Raw',
   [CacheType.CUSTOMER_INTELLIGENCE_PARSED]: 'Customer Intelligence Parsed',
+  [CacheType.CUSTOMER_INTELLIGENCE_ANALYSIS]: 'Customer Intelligence Analysis',
+  [CacheType.CUSTOMER_INTELLIGENCE_ENRICHMENT]: 'Customer Intelligence Enrichment',
+
+  // LLM Analysis Types
+  [CacheType.LLM_ANALYSIS]: 'LLM Analysis',
+  [CacheType.LLM_CUSTOMER_INTELLIGENCE]: 'LLM Customer Intelligence',
+  [CacheType.LLM_RAW_RESPONSE]: 'LLM Raw Response',
 
   // Enhanced Enrichment Types
   [CacheType.BRIGHTDATA_COMPANY_ENRICHMENT]: 'BrightData Company Enrichment',
@@ -202,7 +222,20 @@ export const CACHE_TYPE_GROUPS = {
   ],
   vendor_context: [
     CacheType.VENDOR_CONTEXT_ENRICHMENT,
-    CacheType.VENDOR_CONTEXT_PARSED
+    CacheType.VENDOR_CONTEXT_PARSED,
+    CacheType.VENDOR_CONTEXT_ANALYSIS,
+    CacheType.VENDOR_CONTEXT_RAW_DATA,
+    CacheType.VENDOR_CONTEXT_REFERENCE
+  ],
+  customer_intelligence: [
+    CacheType.CUSTOMER_INTELLIGENCE_RAW,
+    CacheType.CUSTOMER_INTELLIGENCE_PARSED,
+    CacheType.CUSTOMER_INTELLIGENCE_ANALYSIS,
+    CacheType.CUSTOMER_INTELLIGENCE_ENRICHMENT
+  ],
+  llm_analysis: [
+    CacheType.LLM_ANALYSIS,
+    CacheType.LLM_CUSTOMER_INTELLIGENCE
   ],
   legacy: [
     CacheType.COMPANY_LOOKUP_LEGACY,
@@ -298,12 +331,15 @@ export function getCacheEntryType(cacheType: CacheType): 'raw' | 'processed' | '
     return 'raw';
   }
   
-  if (cacheType === CacheType.VENDOR_CONTEXT_ENRICHMENT || cacheType === CacheType.VENDOR_CONTEXT_PARSED) {
+  if (cacheType === CacheType.VENDOR_CONTEXT_ENRICHMENT || cacheType === CacheType.VENDOR_CONTEXT_PARSED ||
+      cacheType === CacheType.VENDOR_CONTEXT_ANALYSIS || cacheType === CacheType.VENDOR_CONTEXT_RAW_DATA ||
+      cacheType === CacheType.VENDOR_CONTEXT_REFERENCE) {
     return 'vendor_context';
   }
   
   if (cacheType === CacheType.SALES_INTELLIGENCE_CACHE || 
-      cacheType === CacheType.COMPANY_ANALYSIS) {
+      cacheType === CacheType.COMPANY_ANALYSIS ||
+      cacheType === CacheType.LLM_ANALYSIS || cacheType === CacheType.LLM_CUSTOMER_INTELLIGENCE) {
     return 'content_analysis';
   }
   
@@ -352,6 +388,20 @@ export function inferCacheTypeFromKeyPattern(key: string): CacheType {
   // Vendor context patterns
   if (key.startsWith('vendor_context:')) return CacheType.VENDOR_CONTEXT_ENRICHMENT;
   if (key.startsWith('vendor_parsed:')) return CacheType.VENDOR_CONTEXT_PARSED;
+  if (key.startsWith('vendor_analysis:')) return CacheType.VENDOR_CONTEXT_ANALYSIS;
+  if (key.startsWith('vendor_raw_data:')) return CacheType.VENDOR_CONTEXT_RAW_DATA;
+  if (key.startsWith('vendor_reference:')) return CacheType.VENDOR_CONTEXT_REFERENCE;
+  
+  // Customer Intelligence patterns
+  if (key.startsWith('customer_intelligence_raw:')) return CacheType.CUSTOMER_INTELLIGENCE_RAW;
+  if (key.startsWith('customer_intelligence_parsed:')) return CacheType.CUSTOMER_INTELLIGENCE_PARSED;
+  if (key.startsWith('customer_intelligence_analysis:')) return CacheType.CUSTOMER_INTELLIGENCE_ANALYSIS;
+  if (key.startsWith('customer_intelligence_enrichment:')) return CacheType.CUSTOMER_INTELLIGENCE_ENRICHMENT;
+
+  // LLM Analysis patterns
+  if (key.startsWith('llm_analysis:')) return CacheType.LLM_ANALYSIS;
+  if (key.startsWith('llm_customer_intelligence:')) return CacheType.LLM_CUSTOMER_INTELLIGENCE;
+  if (key.startsWith('llm_raw_response:')) return CacheType.LLM_RAW_RESPONSE;
   
   // Specific feature patterns
   if (key.includes('competitor')) return CacheType.COMPETITOR_ANALYSIS;

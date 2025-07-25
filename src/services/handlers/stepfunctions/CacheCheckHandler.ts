@@ -30,11 +30,23 @@ export const cacheCheckHandler = async (event: any): Promise<any> => {
       process.env.AWS_REGION
     );
     
-    // Check Layer 1: Complete enriched profile cache
-    const profileKey = `enriched_profile:${companyName}:${requester}`;
-    console.log('Checking cache key:', profileKey);
+    // Check Layer 1: Complete enriched profile cache (workflow-specific keys)
+    let profileKey: string;
     
-    const cachedProfile = await cacheService.get(profileKey);
+    if (event.workflowType === 'vendor_context') {
+      profileKey = `enriched_vendor_profile:${companyName.toLowerCase().replace(/\s+/g, '_')}:${requester}`;
+    } else if (event.workflowType === 'customer_intelligence') {
+      const vendorCompany = event.vendorCompany || 'unknown';
+      const personaRole = event.userPersona?.role || 'unknown';
+      profileKey = `enriched_customer_profile:${companyName.toLowerCase().replace(/\s+/g, '_')}:${vendorCompany.toLowerCase().replace(/\s+/g, '_')}:${personaRole}:${requester}`;
+    } else {
+      // Fallback to legacy key
+      profileKey = `enriched_profile:${companyName}:${requester}`;
+    }
+    
+    console.log('Checking workflow-specific cache key:', profileKey, 'for workflow:', event.workflowType);
+    
+    const cachedProfile = await cacheService.getRawJSON(profileKey);
     
     if (cachedProfile) {
       console.log('Cache hit - returning cached profile for:', companyName);
@@ -44,7 +56,13 @@ export const cacheCheckHandler = async (event: any): Promise<any> => {
         data: cachedProfile,
         cost: 0,
         companyName,
-        requester
+        requester,
+        // Preserve key fields for consistency
+        workflowType: event.workflowType,
+        requestId: event.requestId,
+        timestamp: event.timestamp,
+        vendorCompany: event.vendorCompany,
+        userPersona: event.userPersona
       };
     }
     
@@ -52,7 +70,15 @@ export const cacheCheckHandler = async (event: any): Promise<any> => {
     return { 
       hit: false, 
       companyName, 
-      requester 
+      requester,
+      // Preserve key fields for downstream handlers  
+      workflowType: event.workflowType,
+      requestId: event.requestId,
+      timestamp: event.timestamp,
+      vendorCompany: event.vendorCompany,
+      userPersona: event.userPersona,
+      interactionMode: event.interactionMode,
+      refresh: event.refresh
     };
 
   } catch (error) {

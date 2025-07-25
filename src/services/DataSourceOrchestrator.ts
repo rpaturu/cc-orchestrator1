@@ -14,6 +14,7 @@ import { DataCollectionEngine } from './orchestration/engines/DataCollectionEngi
 import { OrchestrationCore } from './orchestration/core/OrchestrationCore';
 
 // Import types
+import { CacheType } from '../types/cache-types';
 import {
   DataCollectionPlan,
   RawDataAvailability,
@@ -94,8 +95,36 @@ export class DataSourceOrchestrator extends OrchestrationCore {
         urgency,
       });
 
-      // Get vendor context first
-      const vendorContext = await this.getVendorContext(vendorCompany);
+      // Get vendor context first - fail fast if not available
+      let vendorContext;
+      try {
+        vendorContext = await this.getVendorContext(vendorCompany);
+      } catch (vendorContextError) {
+        if (vendorContextError instanceof Error && vendorContextError.message.startsWith('VENDOR_CONTEXT_REQUIRED')) {
+          // Vendor context is required but missing - provide clear guidance
+          this.logger.warn('Customer intelligence requires vendor context first', {
+            customerCompany,
+            vendorCompany,
+            guidance: vendorContextError.message
+          });
+          
+          // Return structured error response instead of throwing
+          return {
+            success: false,
+            customerCompany,
+            vendorCompany,
+            error: 'VENDOR_CONTEXT_REQUIRED',
+            message: vendorContextError.message,
+            recommendation: `Please run vendor context analysis for '${vendorCompany}' first. This will enable rich customer intelligence with specific product recommendations and competitive insights.`,
+            nextSteps: [
+              `Run: ./test-api → Option 4 (Vendor Context Analysis) for ${vendorCompany}`,
+              `Then run: ./test-api → Option 5 (Customer Intelligence) for ${customerCompany}`
+            ]
+          } as any; // CustomerIntelligenceResponse with error fields
+        }
+        // Re-throw other vendor context errors
+        throw vendorContextError;
+      }
 
       // Create context-aware collection plan
       const plan = await this.createContextAwareCollectionPlan(
@@ -252,42 +281,92 @@ export class DataSourceOrchestrator extends OrchestrationCore {
 
   /**
    * Get vendor context for strategic analysis
+   * Enhanced to use rich LLM-powered vendor context analysis
    */
   private async getVendorContext(vendorCompany: string): Promise<VendorContext> {
     try {
-      // Try to get existing vendor context from cache
-      const cacheKey = `vendor_context_${vendorCompany.toLowerCase().replace(/[^a-z0-9]/g, '_')}`;
-      const cached = await this.cacheService.get(cacheKey);
+      this.logger.info('Getting vendor context with rich analysis lookup', { vendorCompany });
 
-      if (cached && !this.isExpired(cached, 168)) { // 1 week cache
-        // Check if cached data is VendorContext or needs conversion
-        if (cached && typeof cached === 'object' && 'companyName' in cached && 'lastUpdated' in cached) {
-          return cached as unknown as VendorContext;
-        }
+      // PRIORITY 1: Try to get rich vendor context analysis (LLM-powered)
+      let vendorAnalysisKey = `vendor_context_analysis:${vendorCompany}:vendor_context`;
+      let richVendorContext = await this.cacheService.getRawJSON(vendorAnalysisKey);
+      
+      if (!richVendorContext) {
+        // Try with proper case (capitalize first letter)
+        const capitalizedVendor = vendorCompany.charAt(0).toUpperCase() + vendorCompany.slice(1).toLowerCase();
+        vendorAnalysisKey = `vendor_context_analysis:${capitalizedVendor}:vendor_context`;
+        richVendorContext = await this.cacheService.getRawJSON(vendorAnalysisKey);
+        
+        this.logger.info('Trying capitalized vendor analysis key', { 
+          originalKey: `vendor_context_analysis:${vendorCompany}:vendor_context`,
+          capitalizedKey: vendorAnalysisKey,
+          found: !!richVendorContext
+        });
       }
 
-      // Collect vendor data for context analysis
-      const vendorData = await this.getMultiSourceData(vendorCompany, 'vendor_context');
+      if (richVendorContext) {
+        this.logger.info('Found rich vendor context analysis', {
+          vendorCompany,
+          cacheKey: vendorAnalysisKey,
+          hasProducts: !!richVendorContext.products,
+          hasValueProps: !!richVendorContext.valuePropositions,
+          hasCompetitors: !!richVendorContext.competitors,
+          productsCount: richVendorContext.products?.length || 0,
+          valuePropsCount: richVendorContext.valuePropositions?.length || 0,
+          competitorsCount: richVendorContext.competitors?.length || 0
+        });
 
-      // Extract context from collected data
-      const vendorContext: VendorContext = {
-        companyName: vendorCompany,
-        industry: this.extractIndustry(vendorData),
-        products: this.extractProducts(vendorData),
-        targetMarkets: this.extractTargetMarkets(vendorData),
-        competitors: this.extractCompetitors(vendorData),
-        valuePropositions: this.extractValuePropositions(vendorData),
-        positioningStrategy: this.extractPositioningStrategy(vendorData),
-        pricingModel: this.extractPricingModel(vendorData),
-        lastUpdated: new Date().toISOString(),
-      };
+        // Convert rich vendor analysis to VendorContext format
+        return {
+          companyName: vendorCompany,
+          industry: richVendorContext.industry || 'Unknown',
+          products: richVendorContext.products || [],
+          targetMarkets: richVendorContext.targetMarkets || [],
+          competitors: richVendorContext.competitors || [],
+          valuePropositions: richVendorContext.valuePropositions || [],
+          positioningStrategy: richVendorContext.positioningStrategy || '',
+          pricingModel: richVendorContext.pricingModel || '',
+          lastUpdated: richVendorContext.last_updated || new Date().toISOString(),
+        };
+      }
 
-      // Cache the vendor context
-      await this.cacheService.setRawJSON(cacheKey, vendorContext, this.getCacheTypeForSource('serp_api' as SourceType));
+      // PRIORITY 2: Try vendor context reference
+      const vendorRefKey = `vendor_context_ref:${vendorCompany.toLowerCase().replace(/\s+/g, '_')}`;
+      const vendorRef = await this.cacheService.getRawJSON(vendorRefKey);
+      
+      if (vendorRef?.analysis) {
+        this.logger.info('Found vendor context reference', { vendorCompany, vendorRefKey });
+        const analysis = vendorRef.analysis;
+        
+        return {
+          companyName: vendorCompany,
+          industry: analysis.industry || 'Unknown',
+          products: analysis.products || [],
+          targetMarkets: analysis.targetMarkets || [],
+          competitors: analysis.competitors || [],
+          valuePropositions: analysis.valuePropositions || [],
+          positioningStrategy: analysis.positioningStrategy || '',
+          pricingModel: analysis.pricingModel || '',
+          lastUpdated: analysis.last_updated || new Date().toISOString(),
+        };
+      }
 
-      return vendorContext;
+      // FALLBACK: No rich vendor context found - Fail fast instead of slow auto-trigger
+      this.logger.warn('No rich vendor context found - customer intelligence requires vendor context analysis first', {
+        vendorCompany,
+        keysAttempted: [
+          `vendor_context_analysis:${vendorCompany}:vendor_context`,
+          `vendor_context_analysis:${vendorCompany.charAt(0).toUpperCase() + vendorCompany.slice(1).toLowerCase()}:vendor_context`,
+          vendorRefKey
+        ],
+        recommendation: `Please run vendor context analysis for ${vendorCompany} first to enable rich customer intelligence`
+      });
+
+      // Throw error to indicate vendor context is required
+      throw new Error(`VENDOR_CONTEXT_REQUIRED: Please run vendor context analysis for '${vendorCompany}' before customer intelligence analysis. This will enable specific product recommendations, competitive positioning, and actionable insights tailored to ${vendorCompany}'s offerings.`);
+      
     } catch (error) {
-      this.logger.warn('Failed to get vendor context', {
+      this.logger.error('Failed to get vendor context', {
         vendorCompany,
         error: error instanceof Error ? error.message : String(error),
       });
@@ -449,5 +528,126 @@ export class DataSourceOrchestrator extends OrchestrationCore {
    */
   async getHealthStatus(): Promise<OrchestrationHealth> {
     return this.checkOrchestrationHealth();
+  }
+
+  /**
+   * Perform quick vendor context analysis for auto-trigger scenarios
+   */
+  private async performQuickVendorAnalysis(vendorCompany: string, vendorData: any): Promise<VendorContext> {
+    try {
+      // Import AIAnalyzer dynamically to avoid circular dependencies
+      const { AIAnalyzer } = await import('./analysis/AIAnalyzer');
+      
+      // Initialize AI analyzer for quick vendor context analysis
+      const aiAnalyzer = new AIAnalyzer(
+        {
+          model: process.env.BEDROCK_MODEL!,
+          maxTokens: parseInt(process.env.BEDROCK_MAX_TOKENS!),
+          temperature: parseFloat(process.env.BEDROCK_TEMPERATURE!),
+          systemPrompt: 'You are a vendor intelligence analyst. Extract key vendor information quickly and accurately.'
+        },
+        this.logger,
+        process.env.AWS_REGION
+      );
+
+      // Build quick analysis prompt
+      const prompt = `
+Analyze ${vendorCompany} vendor data and extract key information for sales intelligence.
+
+Data Sources:
+${this.prepareDataForQuickAnalysis(vendorData)}
+
+Return ONLY valid JSON in this structure:
+{
+  "companyName": "${vendorCompany}",
+  "industry": "Primary industry", 
+  "products": ["Product 1", "Product 2"],
+  "targetMarkets": ["Market 1", "Market 2"],
+  "competitors": ["Competitor 1", "Competitor 2"],
+  "valuePropositions": ["Value prop 1", "Value prop 2"],
+  "positioningStrategy": "Brief positioning",
+  "pricingModel": "Pricing approach",
+  "lastUpdated": "${new Date().toISOString()}"
+}
+
+Focus on specific, actionable information. Return valid JSON only.
+`;
+
+      const response = await aiAnalyzer.parseUserInput(prompt);
+      
+      // Parse and validate response
+      let analysisResult;
+      try {
+        analysisResult = JSON.parse(response);
+      } catch (parseError) {
+        this.logger.warn('Quick vendor analysis JSON parsing failed, using fallback', { 
+          vendorCompany, 
+          error: String(parseError) 
+        });
+        
+        // Return structured fallback
+        analysisResult = {
+          companyName: vendorCompany,
+          industry: 'Technology',
+          products: [`${vendorCompany} Platform`, `${vendorCompany} Solutions`],
+          targetMarkets: ['Enterprise', 'Small Business'],
+          competitors: [],
+          valuePropositions: ['Scalable solutions', 'Easy integration'],
+          positioningStrategy: 'Leading provider in the market',
+          pricingModel: 'Subscription-based',
+          lastUpdated: new Date().toISOString()
+        };
+      }
+
+      // Cache the quick analysis for future use 
+      const quickAnalysisKey = `vendor_context_analysis:${vendorCompany}:vendor_context`;
+      await this.cacheService.setRawJSON(quickAnalysisKey, analysisResult, CacheType.VENDOR_CONTEXT_ANALYSIS);
+      
+      this.logger.info('Quick vendor analysis cached', { 
+        vendorCompany, 
+        cacheKey: quickAnalysisKey,
+        productsFound: analysisResult.products?.length || 0
+      });
+
+      return analysisResult;
+      
+    } catch (error) {
+      this.logger.error('Quick vendor analysis failed', {
+        vendorCompany,
+        error: error instanceof Error ? error.message : String(error)
+      });
+      
+      // Return minimal structured context on failure
+      return {
+        companyName: vendorCompany,
+        industry: 'Unknown',
+        products: [],
+        targetMarkets: [],
+        competitors: [],
+        valuePropositions: [],
+        positioningStrategy: '',
+        pricingModel: '',
+        lastUpdated: new Date().toISOString()
+      };
+    }
+  }
+
+  /**
+   * Prepare data for quick vendor analysis (simplified version)
+   */
+  private prepareDataForQuickAnalysis(data: any): string {
+    let content = '';
+    
+    if (data?.serp_api?.data) {
+      content += '=== SERP API Data ===\n';
+      const serpResults = data.serp_api.data.slice(0, 3); // Limit to top 3 results for quick analysis
+      serpResults.forEach((result: any, index: number) => {
+        content += `${index + 1}. ${result.title}\n`;
+        content += `   ${result.snippet}\n`;
+        content += `   Link: ${result.link}\n\n`;
+      });
+    }
+    
+    return content || 'Limited data available for analysis';
   }
 } 

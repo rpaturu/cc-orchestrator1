@@ -48,13 +48,34 @@ run_test() {
     # If this is an async endpoint, extract request ID and poll for results
     if [ "$is_async" = "true" ]; then
       request_id=$(echo "$output" | jq -r '.requestId // empty' 2>/dev/null)
+      initial_status=$(echo "$output" | jq -r '.status // empty' 2>/dev/null)
       
       if [ -n "$request_id" ] && [ "$request_id" != "null" ]; then
-        echo ""
-        echo -e "${BLUE}🔄 Async request detected. Polling for results...${NC}"
-        echo -e "${BLUE}Request ID: $request_id${NC}"
-        
-        poll_async_result "$request_id" "$test_name"
+        # Check if already completed (from cache)
+        if [ "$initial_status" = "completed" ]; then
+          echo ""
+          # Check if response contains enhanced analysis or just raw data
+          analysis_check=$(echo "$output" | jq -r '.data.analysis // empty' 2>/dev/null)
+          if [ -n "$analysis_check" ] && [ "$analysis_check" != "null" ] && [ "$analysis_check" != "empty" ]; then
+            echo -e "${GREEN}🎉 $test_name completed immediately (enhanced analysis from cache)!${NC}"
+          else
+            echo -e "${YELLOW}🎉 $test_name completed immediately (raw data from cache - may need refresh for enhanced analysis)!${NC}"
+          fi
+          echo -e "${BLUE}Final Result:${NC}"
+          echo "$output" | jq . 2>/dev/null || echo "$output"
+        else
+          echo ""
+          echo -e "${BLUE}🔄 Async request detected. Polling for results...${NC}"
+          echo -e "${BLUE}Request ID: $request_id${NC}"
+          
+          # Determine endpoint type based on test
+          local endpoint_type="requests"  # Default for Company Overview
+          if [[ "$test_name" == *"Vendor Context"* ]] || [[ "$test_name" == *"Customer Intelligence"* ]]; then
+            endpoint_type="workflows"  # Step Functions for Vendor/Customer
+          fi
+          
+          poll_async_result "$request_id" "$test_name" "$endpoint_type"
+        fi
       else
         echo -e "${YELLOW}⚠️  No request ID found in response - this might not be an async endpoint${NC}"
       fi
@@ -73,23 +94,54 @@ run_test() {
 poll_async_result() {
   local request_id="$1"
   local test_name="$2"
+  local endpoint_type="$3"  # "requests" or "workflows"
   local max_attempts=30  # 5 minutes max (10 seconds * 30)
   local attempt=1
+  
+  # Determine the correct status endpoint
+  local status_endpoint
+  if [ "$endpoint_type" = "workflows" ]; then
+    status_endpoint="$API_ENDPOINT/workflows/$request_id/status"
+  else
+    status_endpoint="$API_ENDPOINT/requests/$request_id/status"
+  fi
   
   while [ $attempt -le $max_attempts ]; do
     echo -e "${BLUE}Polling attempt $attempt/$max_attempts...${NC}"
     
     # Check request status
-    status_output=$(curl -s -X GET "$API_ENDPOINT/requests/$request_id" -H "X-API-Key: $API_KEY" 2>&1)
+    status_output=$(curl -s -X GET "$status_endpoint" -H "X-API-Key: $API_KEY" 2>&1)
     
     if [ $? -eq 0 ]; then
       status=$(echo "$status_output" | jq -r '.status // empty' 2>/dev/null)
+      current_step=$(echo "$status_output" | jq -r '.currentStep // empty' 2>/dev/null)
+      progress=$(echo "$status_output" | jq -r '.progress // 0' 2>/dev/null)
       
-      case "$status" in
-        "completed")
+      # Show meaningful status even if empty
+      if [ -z "$status" ] || [ "$status" = "null" ] || [ "$status" = "empty" ]; then
+        echo -e "${YELLOW}⏳ Status: processing (checking step functions...)${NC}"
+      else
+        case "$status" in
+                  "completed")
           echo -e "${GREEN}🎉 $test_name completed successfully!${NC}"
+          
+          # Get the actual result from the result endpoint
+          local result_endpoint
+          if [ "$endpoint_type" = "workflows" ]; then
+            result_endpoint="$API_ENDPOINT/workflows/$request_id/result"
+          else
+            result_endpoint="$API_ENDPOINT/requests/$request_id/result"
+          fi
+          
           echo -e "${GREEN}Final Result:${NC}"
-          echo "$status_output" | jq . 2>/dev/null || echo "$status_output"
+          result_output=$(curl -s -X GET "$result_endpoint" -H "X-API-Key: $API_KEY" 2>&1)
+          
+          if [ $? -eq 0 ]; then
+            echo "$result_output" | jq . 2>/dev/null || echo "$result_output"
+          else
+            echo -e "${YELLOW}⚠️  Could not fetch result, showing status instead:${NC}"
+            echo "$status_output" | jq . 2>/dev/null || echo "$status_output"
+          fi
           return 0
           ;;
         "failed")
@@ -98,13 +150,41 @@ poll_async_result() {
           return 1
           ;;
         "processing")
-          progress=$(echo "$status_output" | jq -r '.progress // "unknown"' 2>/dev/null)
-          echo -e "${YELLOW}⏳ Still processing... Progress: $progress%${NC}"
+          # Extract step-based progress if available
+          step_progress=$(echo "$status_output" | jq -r '.stepProgress // empty' 2>/dev/null)
+          step_description=$(echo "$status_output" | jq -r '.stepDescription // empty' 2>/dev/null)
+          
+          if [ -n "$step_progress" ] && [ "$step_progress" != "null" ] && [ "$step_progress" != "empty" ]; then
+            if [ -n "$step_description" ] && [ "$step_description" != "null" ] && [ "$step_description" != "empty" ]; then
+              echo -e "${YELLOW}⏳ $step_progress - $step_description${NC}"
+            else
+              echo -e "${YELLOW}⏳ $step_progress${NC}"
+            fi
+          elif [ -n "$current_step" ] && [ "$current_step" != "null" ] && [ "$current_step" != "empty" ]; then
+            echo -e "${YELLOW}⏳ Still processing... Step: $current_step (${progress}%)${NC}"
+          else
+            echo -e "${YELLOW}⏳ Still processing... Progress: ${progress}%${NC}"
+          fi
           ;;
         *)
-          echo -e "${YELLOW}⏳ Status: $status${NC}"
+          # Extract step-based progress for other statuses too
+          step_progress=$(echo "$status_output" | jq -r '.stepProgress // empty' 2>/dev/null)
+          step_description=$(echo "$status_output" | jq -r '.stepDescription // empty' 2>/dev/null)
+          
+          if [ -n "$step_progress" ] && [ "$step_progress" != "null" ] && [ "$step_progress" != "empty" ]; then
+            if [ -n "$step_description" ] && [ "$step_description" != "null" ] && [ "$step_description" != "empty" ]; then
+              echo -e "${YELLOW}⏳ $step_progress - $step_description (Status: $status)${NC}"
+            else
+              echo -e "${YELLOW}⏳ $step_progress (Status: $status)${NC}"
+            fi
+          elif [ -n "$current_step" ] && [ "$current_step" != "null" ] && [ "$current_step" != "empty" ]; then
+            echo -e "${YELLOW}⏳ Status: $status - Step: $current_step (${progress}%)${NC}"
+          else
+            echo -e "${YELLOW}⏳ Status: $status${NC}"
+          fi
           ;;
-      esac
+        esac
+      fi
     else
       echo -e "${RED}❌ Failed to check status: $status_output${NC}"
     fi
@@ -133,27 +213,28 @@ while true; do
   
   echo -e "${GREEN}=== Company Lookup APIs ===${NC}"
   echo "3)  Company Search by Name"
-  echo "4)  Domain Suggestions"
   echo ""
   
   echo -e "${GREEN}=== Context-Aware Intelligence ===${NC}"
-  echo "5)  Vendor Context Analysis"
-  echo "6)  Customer Intelligence (Context-Aware)"
+  echo "4)  Vendor Context Analysis"
+  echo "5)  Customer Intelligence (Context-Aware)"
   echo ""
   
   echo -e "${GREEN}=== Cache Management ===${NC}"
-  echo "7)  Cache Statistics"
-  echo "8)  Clear Cache"
+  echo "6)  Cache Statistics"
+  echo "7)  Clear All Cache"
+  echo "8)  View Cache by Type"
+  echo "9)  Clear Cache by Type"
   echo ""
   
   echo -e "${GREEN}=== Custom Test ===${NC}"
-  echo "9)  Custom curl command"
+  echo "10) Custom curl command"
   echo ""
   
   echo "0) Exit"
   echo ""
   
-  read -p "Enter your choice (0-9): " choice
+  read -p "Enter your choice (0-10): " choice
   
   case $choice in
     1)
@@ -164,17 +245,17 @@ while true; do
       
     2)
       read -p "Enter company name (default: Shopify): " company_name
-      read -p "Enter domain (optional): " domain
+      read -p "Enter domain (required, e.g. shopify.com): " domain
       company_name=${company_name:-Shopify}
       
-      json_data="{\"companyName\":\"$company_name\""
-      if [ -n "$domain" ]; then
-        json_data="$json_data,\"domain\":\"$domain\""
+      # Domain is required for the company overview endpoint
+      if [ -z "$domain" ]; then
+        echo -e "${RED}❌ Error: Domain is required for Company Overview endpoint${NC}"
+        continue
       fi
-      json_data="$json_data}"
       
       run_test "Company Overview - $company_name" \
-        "curl -s -X POST '$API_ENDPOINT/company/overview' -H 'X-API-Key: $API_KEY' -H 'Content-Type: application/json' -d '$json_data'" \
+        "curl -s -X POST '$API_ENDPOINT/companies/$domain/overview' -H 'X-API-Key: $API_KEY' -H 'Content-Type: application/json' -d '{}'" \
         "true"
       ;;
       
@@ -194,40 +275,59 @@ while true; do
       
       json_data="{\"companyName\":\"$company_name\"}"
       
-      run_test "Domain Suggestions - $company_name" \
-        "curl -s -X POST '$API_ENDPOINT/companies/domain-suggestions' -H 'X-API-Key: $API_KEY' -H 'Content-Type: application/json' -d '$json_data'" \
-        "false"
+      run_test "Vendor Context Analysis - $company_name" \
+        "curl -s -X POST '$API_ENDPOINT/vendor/context' -H 'X-API-Key: $API_KEY' -H 'Content-Type: application/json' -d '$json_data'" \
+        "true"
       ;;
       
     5)
-      read -p "Enter company name (default: Shopify): " company_name
-      company_name=${company_name:-Shopify}
+      read -p "Enter prospect company name (default: Tesla): " prospect_company
+      read -p "Enter your company name (optional): " vendor_company
+      echo "Select user persona:"
+      echo "  1) AE (Account Executive) - Default"
+      echo "  2) CSM (Customer Success Manager)"  
+      echo "  3) SE (Sales Engineer)"
+      echo "  4) Skip persona (will use 'unknown')"
+      read -p "Enter choice (1-4, default: 1): " persona_choice
       
-      json_data="{\"companyName\":\"$company_name\"}"
+      prospect_company=${prospect_company:-Tesla}
+      persona_choice=${persona_choice:-1}
       
-      run_test "Vendor Context Analysis - $company_name" \
-        "curl -s -X POST '$API_ENDPOINT/vendor/context' -H 'X-API-Key: $API_KEY' -H 'Content-Type: application/json' -d '$json_data'" \
-        "false"
+      json_data="{\"prospectCompany\":\"$prospect_company\""
+      if [ -n "$vendor_company" ]; then
+        json_data="$json_data,\"vendorCompany\":\"$vendor_company\""
+      fi
+      
+      # Add user persona based on selection
+      case $persona_choice in
+        1)
+          json_data="$json_data,\"userPersona\":{\"role\":\"AE\",\"name\":\"Sales Rep\",\"segment\":\"Enterprise\",\"region\":\"North America\"}"
+          ;;
+        2)
+          json_data="$json_data,\"userPersona\":{\"role\":\"CSM\",\"name\":\"Customer Success Rep\",\"segment\":\"Enterprise\",\"region\":\"North America\"}"
+          ;;
+        3)
+          json_data="$json_data,\"userPersona\":{\"role\":\"SE\",\"name\":\"Sales Engineer\",\"segment\":\"Enterprise\",\"region\":\"North America\"}"
+          ;;
+        4)
+          # Skip persona - will default to "unknown"
+          ;;
+      esac
+      
+      json_data="$json_data}"
+      
+      run_test "Customer Intelligence (Context-Aware) - $prospect_company" \
+        "curl -s -X POST '$API_ENDPOINT/customer/intelligence' -H 'X-API-Key: $API_KEY' -H 'Content-Type: application/json' -d '$json_data'" \
+        "true"
       ;;
       
     6)
-      read -p "Enter company name (default: Tesla): " company_name
-      company_name=${company_name:-Tesla}
-      
-      json_data="{\"companyName\":\"$company_name\"}"
-      
-      run_test "Customer Intelligence (Context-Aware) - $company_name" \
-        "curl -s -X POST '$API_ENDPOINT/customer/intelligence' -H 'X-API-Key: $API_KEY' -H 'Content-Type: application/json' -d '$json_data'" \
-        "false"
-      ;;
-      
-    7)
       run_test "Cache Statistics" \
         "curl -s -X GET '$API_ENDPOINT/cache/stats' -H 'X-API-Key: $API_KEY'" \
         "false"
       ;;
       
-    8)
+    7)
       echo -e "${YELLOW}⚠️  This will clear all cached data. Are you sure? (y/N)${NC}"
       read -p "" confirm
       if [[ $confirm =~ ^[Yy]$ ]]; then
@@ -240,7 +340,54 @@ while true; do
       fi
       ;;
       
+    8)
+      echo -e "${BLUE}Available cache types:${NC}"
+      echo "• company_overview      - Company overview analysis results"
+      echo "• company_search        - Company search results"
+      echo "• sales_intelligence_cache - General sales intelligence cache"
+      echo "• serp_api_organic_results - Google search results"
+      echo "• vendor_context_analysis - Vendor context analysis"
+      echo "• customer_intelligence_analysis - Customer intelligence"
+      echo ""
+      read -p "Enter cache type to view: " cache_type
+      if [ -n "$cache_type" ]; then
+        run_test "View Cache Type: $cache_type" \
+          "curl -s '$API_ENDPOINT/cache/list?type=$cache_type' -H 'X-API-Key: $API_KEY'" \
+          "false"
+      else
+        echo -e "${RED}No cache type entered${NC}"
+        sleep 1
+      fi
+      ;;
+      
     9)
+      echo -e "${BLUE}Available cache types:${NC}"
+      echo "• company_overview      - Company overview analysis results"
+      echo "• company_search        - Company search results"
+      echo "• sales_intelligence_cache - General sales intelligence cache"
+      echo "• serp_api_organic_results - Google search results"
+      echo "• vendor_context_analysis - Vendor context analysis"
+      echo "• customer_intelligence_analysis - Customer intelligence"
+      echo ""
+      read -p "Enter cache type to clear: " cache_type
+      if [ -n "$cache_type" ]; then
+        echo -e "${YELLOW}⚠️  Warning: This will permanently delete all cache entries of type: $cache_type${NC}"
+        read -p "Are you sure? (y/N): " confirm
+        if [[ $confirm =~ ^[Yy]$ ]]; then
+          run_test "Clear Cache Type: $cache_type" \
+            "curl -s -X DELETE '$API_ENDPOINT/cache/clear-type?type=$cache_type' -H 'X-API-Key: $API_KEY'" \
+            "false"
+        else
+          echo -e "${GREEN}Operation cancelled${NC}"
+          sleep 1
+        fi
+      else
+        echo -e "${RED}No cache type entered${NC}"
+        sleep 1
+      fi
+      ;;
+      
+    10)
       echo -e "${YELLOW}Enter your custom curl command (without curl):${NC}"
       read -p "> " custom_command
       if [ -n "$custom_command" ]; then
@@ -259,7 +406,7 @@ while true; do
       ;;
       
     *)
-      echo -e "${RED}Invalid option. Please choose 0-9.${NC}"
+      echo -e "${RED}Invalid option. Please choose 0-10.${NC}"
       sleep 1
       ;;
   esac

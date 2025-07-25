@@ -281,6 +281,13 @@ export class CacheService {
       case CacheType.COMPANY_DISCOVERY:
         return baseTTL * (isDevelopment ? 7 : 12); // 7 days dev, 12 hours prod
         
+      // LLM Analysis Types - medium TTL (useful for debugging/auditing)
+      case CacheType.LLM_ANALYSIS:
+      case CacheType.LLM_CUSTOMER_INTELLIGENCE:
+        return baseTTL * (isDevelopment ? 14 : 24); // 14 days dev, 24 hours prod
+      case CacheType.LLM_RAW_RESPONSE:
+        return baseTTL * (isDevelopment ? 7 : 12); // 7 days dev, 12 hours prod (debugging)
+        
       // Unknown/fallback - conservative TTL
       case CacheType.UNKNOWN:
       default:
@@ -830,9 +837,8 @@ export class CacheService {
    * Get cache type from explicit attribute or infer from key pattern
    */
   private getCacheType(item: any): string {
-      // Convert enum value to display name
-      const cacheType = item.cacheType as CacheType;
-      return CACHE_TYPE_DISPLAY_NAMES[cacheType] || item.cacheType;
+      // Return the raw cache type for filtering/API compatibility
+      return item.cacheType || 'unknown';
   }
 
   /**

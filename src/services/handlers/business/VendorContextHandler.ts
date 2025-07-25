@@ -5,6 +5,7 @@ import { Logger } from '../../core/Logger';
 import { CacheService } from '../../core/CacheService';
 import { ContentFilter } from '../../content/ContentFilter';
 import { AIAnalyzer } from '../../analysis/AIAnalyzer';
+import { CacheType } from '../../../types/cache-types';
 
 export interface VendorContextRequest {
   companyName: string;
@@ -52,13 +53,13 @@ export class VendorContextHandler extends BaseEndpointHandler {
     // Initialize AIAnalyzer for LLM-based extraction
     this.aiAnalyzer = new AIAnalyzer(
       {
-        model: process.env.BEDROCK_MODEL_ID || 'anthropic.claude-3-haiku-20240307-v1:0',
-        maxTokens: parseInt(process.env.BEDROCK_MAX_TOKENS || '4000'),
-        temperature: parseFloat(process.env.BEDROCK_TEMPERATURE || '0.1'),
+                  model: process.env.BEDROCK_MODEL!,
+                  maxTokens: parseInt(process.env.BEDROCK_MAX_TOKENS!),
+          temperature: parseFloat(process.env.BEDROCK_TEMPERATURE!),
         systemPrompt: 'You are a vendor intelligence analyst specializing in extracting structured company information.'
       },
       this.logger,
-      process.env.AWS_REGION || 'us-west-2'
+      process.env.AWS_REGION
     );
   }
 
@@ -126,9 +127,9 @@ export class VendorContextHandler extends BaseEndpointHandler {
         // Extract structured vendor context using LLM analysis
         vendorContext = await this.extractVendorContextWithLLM(vendorData, companyName);
 
-                 // Cache the extracted context
-         const cacheKey = `vendor_context:${companyName.toLowerCase().replace(/\s+/g, '_')}`;
-         await this.cache.setRawJSON(cacheKey, vendorContext, 'VENDOR_CONTEXT_ENRICHMENT' as any);
+                         // Cache the extracted context
+        const cacheKey = `vendor_context:${companyName.toLowerCase().replace(/\s+/g, '_')}`;
+        await this.cache.setRawJSON(cacheKey, vendorContext, CacheType.VENDOR_CONTEXT_ENRICHMENT);
 
         this.logger.info('Vendor context collected and cached', {
           requestId,

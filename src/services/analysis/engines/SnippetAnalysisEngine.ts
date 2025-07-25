@@ -1,6 +1,7 @@
 import { Logger } from '../../core/Logger';
 import { BedrockCore } from '../core/BedrockCore';
-import { 
+import { JsonExtractor } from '../../utilities/JsonExtractor';
+import {
   SnippetAnalysisRequest,
   ParsedSnippetAnalysis,
   AnalysisConfig
@@ -13,6 +14,9 @@ export class SnippetAnalysisEngine {
   constructor(config: AnalysisConfig, logger: Logger, region?: string) {
     this.logger = logger;
     this.bedrockCore = new BedrockCore(config, logger, region);
+    
+    // Set logger for JsonExtractor utility
+    JsonExtractor.setLogger(logger);
   }
 
   /**
@@ -135,13 +139,15 @@ Guidelines:
    */
   private parseSnippetAnalysisResponse(response: string): ParsedSnippetAnalysis {
     try {
-      // Try to extract JSON from the response
-      const jsonMatch = response.match(/\{[\s\S]*\}/);
-      if (!jsonMatch) {
+      // Use shared JsonExtractor utility
+      const parsed = JsonExtractor.extractAndParse(response, {
+        logErrors: true,
+        context: 'SnippetAnalysisEngine'
+      });
+      
+      if (!parsed) {
         throw new Error('No JSON found in response');
       }
-
-      const parsed = JSON.parse(jsonMatch[0]);
       
       // Validate and ensure all required fields exist
       return {
@@ -221,7 +227,7 @@ Assess coverage and provide response in JSON format:
       const response = await this.bedrockCore.invokeModel({
         systemPrompt,
         userPrompt,
-        maxTokens: 1000,
+        maxTokens: this.bedrockCore.maxTokens,  // ✅ Use configured maxTokens instead of hardcoded 1000
       });
 
       const jsonMatch = response.match(/\{[\s\S]*\}/);
@@ -245,4 +251,6 @@ Assess coverage and provide response in JSON format:
       recommendations: ['Gather more comprehensive data sources'],
     };
   }
+
+
 } 
