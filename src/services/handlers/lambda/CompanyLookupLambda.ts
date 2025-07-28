@@ -81,8 +81,8 @@ export const companyLookupHandler = async (
         body: JSON.stringify({
           message: 'Companies retrieved successfully',
           data: {
-            ...cachedResult,
-            cached: true,
+          ...cachedResult,
+          cached: true,
           },
           requestId: context.awsRequestId,
         }),
