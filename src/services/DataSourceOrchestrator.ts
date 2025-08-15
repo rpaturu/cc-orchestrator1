@@ -8,6 +8,7 @@
 import { CacheService } from './core/CacheService';
 import { Logger } from './core/Logger';
 import { SerpAPIService } from './SerpAPIService';
+import { BrightDataService } from './BrightDataService';
 
 // Import refactored components
 import { DataCollectionEngine } from './orchestration/engines/DataCollectionEngine';
@@ -32,14 +33,20 @@ import {
 
 import {
   CONSUMER_DATASET_REQUIREMENTS,
-  DatasetType
+  DatasetType,
+  getResearchAreaDatasets,
+  getResearchAreaSources
 } from '../types/dataset-requirements';
 
 /**
- * Main DataSourceOrchestrator - Orchestrates all collection engines
+ * Main DataSourceOrchestrator - Autonomous Multi-Source Intelligence Hub
  * 
- * This refactored service maintains backward compatibility while using
- * the new modular architecture underneath.
+ * SELF-CONTAINED: Determines and initializes all required data source services internally
+ * INTELLIGENT: Selects optimal sources based on research area, cost constraints, and quality requirements  
+ * ADAPTIVE: Maintains backward compatibility while providing advanced research-area-aware collection
+ * 
+ * External callers only need to provide: CacheService, Logger, and optional config
+ * Orchestrator handles all source selection, service initialization, and collection coordination
  */
 export class DataSourceOrchestrator extends OrchestrationCore {
   private dataCollectionEngine: DataCollectionEngine;
@@ -48,7 +55,8 @@ export class DataSourceOrchestrator extends OrchestrationCore {
   private readonly costBudgets: Record<ConsumerType, number> = {
     profile: 2.0,      // Basic profile lookup
     vendor_context: 5.0,  // Deep vendor analysis
-    customer_intelligence: 7.0, // Comprehensive prospect intelligence  
+    customer_intelligence: 7.0, // Comprehensive prospect intelligence
+    research: 3.0,     // Area-specific research (moderate cost)
     test: 1.0          // Minimal test cost
   };
 
@@ -57,24 +65,66 @@ export class DataSourceOrchestrator extends OrchestrationCore {
     profile: { ttlHours: 168, quality: 0.7 },    // 1 week, basic quality
     vendor_context: { ttlHours: 72, quality: 0.8 },  // 3 days, good quality
     customer_intelligence: { ttlHours: 24, quality: 0.85 }, // 1 day, high quality
+    research: { ttlHours: 48, quality: 0.8 },    // 2 days, good quality
     test: { ttlHours: 1, quality: 0.6 }          // 1 hour, minimal quality
   };
 
   constructor(
-    cacheService: CacheService,
     logger: Logger,
-    serpAPIService: SerpAPIService,
     config?: Partial<OrchestrationConfig>
   ) {
+    // Orchestrator autonomously determines and initializes ALL dependencies
+    // Completely self-contained - no external service dependencies
+    
+    logger.info('Initializing DataSourceOrchestrator with full autonomy');
+    
+    // Initialize cache service with optimal research configuration
+    const cacheService = new CacheService(
+      { 
+        ttlHours: 48,           // Good balance for research data
+        maxEntries: 1000,       // Reasonable cache size
+        compressionEnabled: false // Prioritize speed over storage
+      },
+      logger,
+      process.env.AWS_REGION
+    );
+    
+    // Initialize core data source services
+    const serpAPIService = new SerpAPIService(cacheService, logger);
+    
+    // Initialize BrightData service if API key is available
+    let brightDataService: BrightDataService | null = null;
+    if (process.env.BRIGHTDATA_API_KEY) {
+      brightDataService = new BrightDataService(
+        process.env.BRIGHTDATA_API_KEY,
+        logger
+      );
+      logger.info('BrightData service initialized');
+    } else {
+      logger.warn('BrightData API key not found - BrightData sources will be skipped');
+    }
+    
+    // Note: Future data source services will be initialized here as needed
+    // - ApolloService  
+    // - SnovService (already integrated in DataCollectionEngine)
+    // - HunterService
+    // - ZoomInfoService
+    
     super(cacheService, logger, serpAPIService, config);
     
-    // Initialize specialized engines
+    // Initialize data collection engine - it handles multi-source coordination
     this.dataCollectionEngine = new DataCollectionEngine(
       cacheService,
       logger,
       serpAPIService,
       config
     );
+    
+    logger.info('DataSourceOrchestrator fully initialized', {
+      availableServices: ['SerpAPI', 'Snov.io', 'DataCollectionEngine'],
+      supportedConsumerTypes: Object.keys(this.costBudgets),
+      costBudgets: this.costBudgets
+    });
   }
 
   // =====================================
@@ -181,34 +231,58 @@ export class DataSourceOrchestrator extends OrchestrationCore {
   }
 
   /**
-   * Get multi-source data for a company
+   * Get multi-source data for a company with optional research area context
    */
   async getMultiSourceData(
     companyName: string,
     consumerType: ConsumerType,
     maxCost?: number,
-    requiredSources?: SourceType[]
+    requiredSources?: SourceType[],
+    researchArea?: string
   ): Promise<MultiSourceData> {
+    // For research consumer type, use area-specific source selection if no sources specified
+    let effectiveSources = requiredSources;
+    if (consumerType === 'research' && researchArea && !requiredSources) {
+      effectiveSources = getResearchAreaSources(researchArea);
+      this.logger.info('Using area-specific sources for research', { 
+        researchArea, 
+        sources: effectiveSources 
+      });
+    }
+
     const plan = await this.createCollectionPlan(
       companyName,
       consumerType,
       maxCost || this.costBudgets[consumerType],
-      requiredSources
+      effectiveSources,
+      researchArea
     );
 
     return this.dataCollectionEngine.executeParallelCollection(plan);
   }
 
   /**
-   * Create a data collection plan
+   * Create a data collection plan with optional research area context
    */
   async createCollectionPlan(
     companyName: string,
     consumerType: ConsumerType,
     maxCost: number,
-    requiredSources?: SourceType[]
+    requiredSources?: SourceType[],
+    researchArea?: string
   ): Promise<DataCollectionPlan> {
-    const requiredDatasets = CONSUMER_DATASET_REQUIREMENTS[consumerType] || [];
+    // Get dataset requirements - use research area specific for research consumer type
+    let requiredDatasets: DatasetType[] = [];
+    if (consumerType === 'research' && researchArea) {
+      requiredDatasets = getResearchAreaDatasets(researchArea);
+      this.logger.info('Using area-specific datasets for research', { 
+        researchArea, 
+        datasets: requiredDatasets 
+      });
+    } else {
+      requiredDatasets = CONSUMER_DATASET_REQUIREMENTS[consumerType] || [];
+    }
+
     const availableSources: SourceType[] = requiredSources || ['serp_api' as SourceType, 'bright_data' as SourceType, 'apollo' as SourceType];
 
     // Calculate estimated costs and select sources within budget
@@ -239,6 +313,7 @@ export class DataSourceOrchestrator extends OrchestrationCore {
         profile: 0,
         vendor_context: 0,
         customer_intelligence: 0,
+        research: 0,
         test: 0,
       },
     };

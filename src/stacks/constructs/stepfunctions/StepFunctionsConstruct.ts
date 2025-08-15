@@ -40,6 +40,8 @@ export class StepFunctionsConstruct extends Construct {
       BEDROCK_MAX_TOKENS: scope.node.tryGetContext('bedrockMaxTokens')!,
       BEDROCK_TEMPERATURE: scope.node.tryGetContext('bedrockTemperature')!,
       SERPAPI_API_KEY: scope.node.tryGetContext('serpApiKey') || '',
+      SNOV_API_KEY: scope.node.tryGetContext('snovApiKey') || '',
+      SNOV_API_SECRET: scope.node.tryGetContext('snovApiSecret') || '',
       LOG_LEVEL: scope.node.tryGetContext('logLevel') || 'INFO',
       ALLOWED_ORIGINS: props.allowedOriginsString,
       NODE_ENV: props.nodeEnv,

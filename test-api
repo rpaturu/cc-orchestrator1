@@ -47,7 +47,8 @@ run_test() {
     
     # If this is an async endpoint, extract request ID and poll for results
     if [ "$is_async" = "true" ]; then
-      request_id=$(echo "$output" | jq -r '.requestId // empty' 2>/dev/null)
+      # Try to get researchSessionId first (for research streaming), then requestId
+      request_id=$(echo "$output" | jq -r '.researchSessionId // .requestId // empty' 2>/dev/null)
       initial_status=$(echo "$output" | jq -r '.status // empty' 2>/dev/null)
       
       if [ -n "$request_id" ] && [ "$request_id" != "null" ]; then
@@ -72,6 +73,8 @@ run_test() {
           local endpoint_type="requests"  # Default for Company Overview
           if [[ "$test_name" == *"Vendor Context"* ]] || [[ "$test_name" == *"Customer Intelligence"* ]]; then
             endpoint_type="workflows"  # Step Functions for Vendor/Customer
+          elif [[ "$test_name" == *"Snov"* ]] || [[ "$test_name" == *"Data Collection"* ]]; then
+            endpoint_type="research"  # Research Streaming for Snov.io
           fi
           
           poll_async_result "$request_id" "$test_name" "$endpoint_type"
@@ -94,7 +97,7 @@ run_test() {
 poll_async_result() {
   local request_id="$1"
   local test_name="$2"
-  local endpoint_type="$3"  # "requests" or "workflows"
+  local endpoint_type="$3"  # "requests", "workflows", or "research"
   local max_attempts=30  # 5 minutes max (10 seconds * 30)
   local attempt=1
   
@@ -102,6 +105,8 @@ poll_async_result() {
   local status_endpoint
   if [ "$endpoint_type" = "workflows" ]; then
     status_endpoint="$API_ENDPOINT/workflows/$request_id/status"
+  elif [ "$endpoint_type" = "research" ]; then
+    status_endpoint="$API_ENDPOINT/api/research/stream/$request_id/status"
   else
     status_endpoint="$API_ENDPOINT/requests/$request_id/status"
   fi
@@ -129,6 +134,8 @@ poll_async_result() {
           local result_endpoint
           if [ "$endpoint_type" = "workflows" ]; then
             result_endpoint="$API_ENDPOINT/workflows/$request_id/result"
+          elif [ "$endpoint_type" = "research" ]; then
+            result_endpoint="$API_ENDPOINT/api/research/stream/$request_id/result"
           else
             result_endpoint="$API_ENDPOINT/requests/$request_id/result"
           fi
@@ -220,21 +227,28 @@ while true; do
   echo "5)  Customer Intelligence (Context-Aware)"
   echo ""
   
+  echo -e "${GREEN}=== Research Streaming & Data Sources ===${NC}"
+  echo "6)  Research Streaming - SSE"
+  echo "7)  Snov.io Email Finder"
+  echo "8)  Snov.io Email Verification"
+  echo "9)  Snov.io Domain Search"
+  echo ""
+  
   echo -e "${GREEN}=== Cache Management ===${NC}"
-  echo "6)  Cache Statistics"
-  echo "7)  Clear All Cache"
-  echo "8)  View Cache by Type"
-  echo "9)  Clear Cache by Type"
+  echo "10) Cache Statistics"
+  echo "11) Clear All Cache"
+  echo "12) View Cache by Type"
+  echo "13) Clear Cache by Type"
   echo ""
   
   echo -e "${GREEN}=== Custom Test ===${NC}"
-  echo "10) Custom curl command"
+  echo "14) Custom curl command"
   echo ""
   
   echo "0) Exit"
   echo ""
   
-  read -p "Enter your choice (0-10): " choice
+  read -p "Enter your choice (0-14): " choice
   
   case $choice in
     1)
@@ -322,12 +336,91 @@ while true; do
       ;;
       
     6)
+      read -p "Enter area ID (default: decision_makers): " area_id
+      read -p "Enter company ID (default: shopify.com): " company_id
+      area_id=${area_id:-decision_makers}
+      company_id=${company_id:-shopify.com}
+      
+      # Step 1: Initiate research stream
+      echo -e "${BLUE}Step 1: Initiating research stream...${NC}"
+      initiate_response=$(curl -s -X POST "$API_ENDPOINT/api/research/stream?areaId=$area_id&companyId=$company_id" -H "X-API-Key: $API_KEY")
+      echo "$initiate_response" | jq . 2>/dev/null || echo "$initiate_response"
+      
+      research_session_id=$(echo "$initiate_response" | jq -r '.researchSessionId // empty' 2>/dev/null)
+      
+      if [ -n "$research_session_id" ] && [ "$research_session_id" != "null" ]; then
+        echo -e "${GREEN}Research session created: $research_session_id${NC}"
+        echo ""
+        
+        # Step 2: Get streaming events
+        echo -e "${BLUE}Step 2: Getting streaming events...${NC}"
+        events_response=$(curl -s -X GET "$API_ENDPOINT/api/research/stream/$research_session_id/events" -H "X-API-Key: $API_KEY")
+        echo "$events_response" | jq . 2>/dev/null || echo "$events_response"
+        echo ""
+        
+        # Step 3: Get status
+        echo -e "${BLUE}Step 3: Getting research status...${NC}"
+        status_response=$(curl -s -X GET "$API_ENDPOINT/api/research/stream/$research_session_id/status" -H "X-API-Key: $API_KEY")
+        echo "$status_response" | jq . 2>/dev/null || echo "$status_response"
+        echo ""
+        
+        # Step 4: Get results (which may include Snov.io data)
+        echo -e "${BLUE}Step 4: Getting research results...${NC}"
+        results_response=$(curl -s -X GET "$API_ENDPOINT/api/research/stream/$research_session_id/result" -H "X-API-Key: $API_KEY")
+        echo "$results_response" | jq . 2>/dev/null || echo "$results_response"
+      else
+        echo -e "${RED}Failed to create research session${NC}"
+      fi
+      
+      echo ""
+      echo -e "${CYAN}Press Enter to continue...${NC}"
+      read
+      ;;
+      
+    7)
+      read -p "Enter domain (default: shopify.com): " domain
+      domain=${domain:-shopify.com}
+      
+      echo -e "${BLUE}Testing Snov.io Email Finder directly...${NC}"
+      echo -e "${YELLOW}Note: This calls the real Snov.io Email Finder API${NC}"
+      
+      # Test real Snov.io Email Finder API
+      run_test "Snov.io Email Finder API - $domain" \
+        "curl -s -X POST '$API_ENDPOINT/api/research/stream?areaId=snov_email_finder&companyId=$domain' -H 'X-API-Key: $API_KEY'" \
+        "true"
+      ;;
+      
+    8)
+      read -p "Enter domain (default: shopify.com): " domain
+      domain=${domain:-shopify.com}
+      
+      echo -e "${BLUE}Testing Snov.io Email Verification...${NC}"
+      echo -e "${YELLOW}Note: This calls the real Snov.io Email Verifier API${NC}"
+      
+      run_test "Snov.io Email Verifier API - $domain" \
+        "curl -s -X POST '$API_ENDPOINT/api/research/stream?areaId=snov_email_verifier&companyId=$domain' -H 'X-API-Key: $API_KEY'" \
+        "true"
+      ;;
+      
+    9)
+      read -p "Enter domain (default: shopify.com): " domain
+      domain=${domain:-shopify.com}
+      
+      echo -e "${BLUE}Testing Snov.io Domain Search...${NC}"
+      echo -e "${YELLOW}Note: This calls the real Snov.io Domain Search API${NC}"
+      
+      run_test "Snov.io Domain Search API - $domain" \
+        "curl -s -X POST '$API_ENDPOINT/api/research/stream?areaId=snov_domain_search&companyId=$domain' -H 'X-API-Key: $API_KEY'" \
+        "true"
+      ;;
+      
+    10)
       run_test "Cache Statistics" \
         "curl -s -X GET '$API_ENDPOINT/cache/stats' -H 'X-API-Key: $API_KEY'" \
         "false"
       ;;
       
-    7)
+    11)
       echo -e "${YELLOW}⚠️  This will clear all cached data. Are you sure? (y/N)${NC}"
       read -p "" confirm
       if [[ $confirm =~ ^[Yy]$ ]]; then
@@ -340,7 +433,7 @@ while true; do
       fi
       ;;
       
-    8)
+    12)
       echo -e "${BLUE}Available cache types:${NC}"
       echo "• company_overview      - Company overview analysis results"
       echo "• company_search        - Company search results"
@@ -348,6 +441,9 @@ while true; do
       echo "• serp_api_organic_results - Google search results"
       echo "• vendor_context_analysis - Vendor context analysis"
       echo "• customer_intelligence_analysis - Customer intelligence"
+      echo "• snov_contacts_raw     - Snov.io contact data"
+      echo "• snov_verification_raw - Snov.io email verification data"
+      echo "• async_request_tracking - Research session tracking"
       echo ""
       read -p "Enter cache type to view: " cache_type
       if [ -n "$cache_type" ]; then
@@ -360,7 +456,7 @@ while true; do
       fi
       ;;
       
-    9)
+    13)
       echo -e "${BLUE}Available cache types:${NC}"
       echo "• company_overview      - Company overview analysis results"
       echo "• company_search        - Company search results"
@@ -368,6 +464,9 @@ while true; do
       echo "• serp_api_organic_results - Google search results"
       echo "• vendor_context_analysis - Vendor context analysis"
       echo "• customer_intelligence_analysis - Customer intelligence"
+      echo "• snov_contacts_raw     - Snov.io contact data"
+      echo "• snov_verification_raw - Snov.io email verification data"
+      echo "• async_request_tracking - Research session tracking"
       echo ""
       read -p "Enter cache type to clear: " cache_type
       if [ -n "$cache_type" ]; then
@@ -387,7 +486,7 @@ while true; do
       fi
       ;;
       
-    10)
+    14)
       echo -e "${YELLOW}Enter your custom curl command (without curl):${NC}"
       read -p "> " custom_command
       if [ -n "$custom_command" ]; then
@@ -406,7 +505,7 @@ while true; do
       ;;
       
     *)
-      echo -e "${RED}Invalid option. Please choose 0-10.${NC}"
+      echo -e "${RED}Invalid option. Please choose 0-14.${NC}"
       sleep 1
       ;;
   esac

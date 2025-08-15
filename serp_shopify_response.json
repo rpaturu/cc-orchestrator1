@@ -1,0 +1,465 @@
+{
+  "search_metadata": {
+    "id": "689c06252328e18b82321f86",
+    "status": "Success",
+    "json_endpoint": "https://serpapi.com/searches/0020419cf9af1fb5/689c06252328e18b82321f86.json",
+    "created_at": "2025-08-13 03:27:33 UTC",
+    "processed_at": "2025-08-13 03:27:33 UTC",
+    "google_url": "https://www.google.com/search?q=shopify+company+location+size&oq=shopify+company+location+size&hl=en&gl=us&sourceid=chrome&ie=UTF-8",
+    "raw_html_file": "https://serpapi.com/searches/0020419cf9af1fb5/689c06252328e18b82321f86.html",
+    "total_time_taken": 0.89
+  },
+  "search_parameters": {
+    "engine": "google",
+    "q": "shopify company location size",
+    "google_domain": "google.com",
+    "hl": "en",
+    "gl": "us",
+    "device": "desktop"
+  },
+  "search_information": {
+    "query_displayed": "shopify company location size",
+    "total_results": 46400000,
+    "time_taken_displayed": 0.33,
+    "organic_results_state": "Results for exact spelling"
+  },
+  "related_questions": [
+    {
+      "question": "How big is Shopify's company?",
+      "type": "featured_snippet",
+      "snippet": "Shopify",
+      "table": [
+        [
+          "Company type",
+          "Public"
+        ],
+        [
+          "Total equity",
+          "US$11.6 billion (2024)"
+        ],
+        [
+          "Number of employees",
+          "8,300 (2023)"
+        ],
+        [
+          "Website",
+          "shopify.com"
+        ],
+        [
+          "Footnotes / references"
+        ]
+      ],
+      "formatted": [
+        {
+          "company_type": "Total equity",
+          "public": "US$11.6 billion (2024)"
+        },
+        {
+          "company_type": "Number of employees",
+          "public": "8,300 (2023)"
+        },
+        {
+          "company_type": "Website",
+          "public": "shopify.com"
+        },
+        {
+          "company_type": "Footnotes / references"
+        }
+      ],
+      "title": "Shopify - Wikipedia",
+      "link": "https://en.wikipedia.org/wiki/Shopify",
+      "displayed_link": "https://en.wikipedia.org › wiki › Shopify",
+      "next_page_token": "eyJvbnMiOiIxMDA0MSIsImZjIjoiRXFFQkNtSkJUR3QwWDNaSFlqVTBOM3BuT0hwelZ6UXRUV0pMTTFVM1RYcEpaRWM0UXpoMVlsWnNlV0ZpTVRZMGFqY3hTSE4wWTNrMU9HVXpWazF0Tm5sVGRta3lXRmR6TkRSMFFUaE9SaTFIUmxoclMxTTBiME51WlhSVVdYZDJSblJIZDBSWFVSSVhTbEZoWTJGTVIyOUhUbUY2Y0hSUlVEQnlOMk4zUVdNYUlrRkdUVUZIUjNKbWJHWXliRkJwWldWbVdtSnFjVmxrT0V0c00xcG1TRFJhVVdjIiwiZmN2IjoiMyIsImVpIjoiSlFhY2FMR29HTmF6cHRRUDByN2N3QWMiLCJxYyI6IkNoMXphRzl3YVdaNUlHTnZiWEJoYm5rZ2JHOWpZWFJwYjI0Z2MybDZaUkFBZlpiT0pqOCIsInF1ZXN0aW9uIjoiSG93IGJpZyBpcyBTaG9waWZ5J3MgY29tcGFueT8iLCJsayI6IkdocG9iM2NnWW1sbklHbHpJSE5vYjNCcFpua2dZMjl0Y0dGdWVRIiwiYnMiOiJjM1dPdlFyQ01CU0ZjYzNrSUJLQ3dsMmtkWEhJQzlSSjNSd2M2dUlRN2EwSnRFMU5VcVZ2NmVQb1pvUEVIOUQxbnUtYy01RTVHYV8wQmZicUNNckNSdXBhNVcxazRhRExXbFJ0UXE4elBtSk12aG43WkFKQkZtU1NTalRvTXljeGJJUWNDbjBRRHJOdWFjQVpvX1pYckhSRnRpVDJKcVVfU2hUWnFSSEdvYkdRYVh5WmdSUm5UT2g5eDZjc2t2OXgtNEdUSllsVEtSeUlUdEliaHBkZ21xSmpjMjNDZkVKdmEwN1pNTlNfeVg3dkFRIiwiaWQiOiJmY19KUWFjYUxHb0dOYXpwdFFQMHI3Y3dBY18xIn0=",
+      "serpapi_link": "https://serpapi.com/search.json?device=desktop&engine=google_related_questions&google_domain=google.com&next_page_token=eyJvbnMiOiIxMDA0MSIsImZjIjoiRXFFQkNtSkJUR3QwWDNaSFlqVTBOM3BuT0hwelZ6UXRUV0pMTTFVM1RYcEpaRWM0UXpoMVlsWnNlV0ZpTVRZMGFqY3hTSE4wWTNrMU9HVXpWazF0Tm5sVGRta3lXRmR6TkRSMFFUaE9SaTFIUmxoclMxTTBiME51WlhSVVdYZDJSblJIZDBSWFVSSVhTbEZoWTJGTVIyOUhUbUY2Y0hSUlVEQnlOMk4zUVdNYUlrRkdUVUZIUjNKbWJHWXliRkJwWldWbVdtSnFjVmxrT0V0c00xcG1TRFJhVVdjIiwiZmN2IjoiMyIsImVpIjoiSlFhY2FMR29HTmF6cHRRUDByN2N3QWMiLCJxYyI6IkNoMXphRzl3YVdaNUlHTnZiWEJoYm5rZ2JHOWpZWFJwYjI0Z2MybDZaUkFBZlpiT0pqOCIsInF1ZXN0aW9uIjoiSG93IGJpZyBpcyBTaG9waWZ5J3MgY29tcGFueT8iLCJsayI6IkdocG9iM2NnWW1sbklHbHpJSE5vYjNCcFpua2dZMjl0Y0dGdWVRIiwiYnMiOiJjM1dPdlFyQ01CU0ZjYzNrSUJLQ3dsMmtkWEhJQzlSSjNSd2M2dUlRN2EwSnRFMU5VcVZ2NmVQb1pvUEVIOUQxbnUtYy01RTVHYV8wQmZicUNNckNSdXBhNVcxazRhRExXbFJ0UXE4elBtSk12aG43WkFKQkZtU1NTalRvTXljeGJJUWNDbjBRRHJOdWFjQVpvX1pYckhSRnRpVDJKcVVfU2hUWnFSSEdvYkdRYVh5WmdSUm5UT2g5eDZjc2t2OXgtNEdUSllsVEtSeUlUdEliaHBkZ21xSmpjMjNDZkVKdmEwN1pNTlNfeVg3dkFRIiwiaWQiOiJmY19KUWFjYUxHb0dOYXpwdFFQMHI3Y3dBY18xIn0%3D"
+    },
+    {
+      "question": "Where is the Shopify company located?",
+      "type": "ai_overview",
+      "text_blocks": [
+        {
+          "type": "paragraph",
+          "snippet": "Shopify's headquarters is located in Ottawa, Canada, specifically at 151 O'Connor Street, Ground floor, Ottawa, ON, K2P 2L8. In addition to its headquarters, Shopify also has offices in several other locations, including New York, Dublin, Vilnius, and Singapore, according to Craft.co. While the company is headquartered in Canada, it has a growing presence in the United States, including a New York office that was recently added to its U.S. regulatory filings.",
+          "snippet_highlighted_words": [
+            "Ottawa, Canada, specifically at 151 O'Connor Street, Ground floor, Ottawa, ON, K2P 2L8"
+          ],
+          "reference_indexes": [
+            0,
+            1,
+            2,
+            3
+          ]
+        }
+      ],
+      "references": [
+        {
+          "title": "Investor FAQs - Shopify",
+          "link": "https://shopifyinvestors.com/resources/default.aspx#:~:text=Where%20is%20Shopify's%20corporate%20headquarters,Ottawa%2C%20ON%2C%20K2P%202L8.",
+          "snippet": "Where is Shopify's corporate headquarters? Shopify's principal office is located at 151 O'Connor Street, Ground floor, Ottawa, ON,",
+          "source": "Shopify",
+          "index": 0
+        },
+        {
+          "title": "Shopify adds New York headquarters to U.S. regulatory filing for first time",
+          "link": "https://financialpost.com/technology/shopify-new-york-headquarters-us-regulatory-filing#:~:text=News-,Share%20this%20Story%20:%20Shopify%20adds%20New%20York%20headquarters%20to%20U.S.,U.S.%20Securities%20and%20Exchange%20Commission.",
+          "snippet": "Feb 27, 2025 — Share this Story : Shopify adds New York headquarters to U.S. regulatory filing for first time. Shopify adds New York ...",
+          "source": "Financial Post",
+          "index": 1
+        },
+        {
+          "title": "Shopify Headquarters and Office Locations - Craft.co",
+          "link": "https://craft.co/shopify/locations#:~:text=Shopify%20is%20headquartered%20in%20Ottawa,and%20has%205%20office%20locations.",
+          "snippet": "Shopify is headquartered in Ottawa, 151 O'Connor Street, Ground floor, Canada, and has 5 office locations.",
+          "source": "Craft.co",
+          "index": 2
+        },
+        {
+          "title": "Shopify Company Profile - Office Locations, Competitors, Revenue, ...",
+          "link": "https://craft.co/shopify",
+          "snippet": "* Ottawa, ON HQ. Canada. 151 O'Connor Street, Ground floor. * New York, NY. United States. 131 Greene St. * Dublin, D. Ireland. 2...",
+          "source": "Craft.co",
+          "index": 3
+        }
+      ],
+      "next_page_token": "eyJvbnMiOiIxMDA0MSIsImZjIjoiRXFFQkNtSkJUR3QwWDNaSFlqVTBOM3BuT0hwelZ6UXRUV0pMTTFVM1RYcEpaRWM0UXpoMVlsWnNlV0ZpTVRZMGFqY3hTSE4wWTNrMU9HVXpWazF0Tm5sVGRta3lXRmR6TkRSMFFUaE9SaTFIUmxoclMxTTBiME51WlhSVVdYZDJSblJIZDBSWFVSSVhTbEZoWTJGTVIyOUhUbUY2Y0hSUlVEQnlOMk4zUVdNYUlrRkdUVUZIUjNKbWJHWXliRkJwWldWbVdtSnFjVmxrT0V0c00xcG1TRFJhVVdjIiwiZmN2IjoiMyIsImVpIjoiSlFhY2FMR29HTmF6cHRRUDByN2N3QWMiLCJxYyI6IkNoMXphRzl3YVdaNUlHTnZiWEJoYm5rZ2JHOWpZWFJwYjI0Z2MybDZaUkFBZlpiT0pqOCIsInF1ZXN0aW9uIjoiV2hlcmUgaXMgdGhlIFNob3BpZnkgY29tcGFueSBsb2NhdGVkPyIsImxrIjoiR2hoemFHOXdhV1o1SUdOdmJYQmhibmtnYkc5allYUnBiMjQiLCJicyI6ImMzV092UXJDTUJTRmNjM2tJQktDd2wya2RYSElDOVJKM1J3YzZ1SVE3YTBKdEUxTlVxVnY2ZVBvWm9QRUg5RDFudS1jLTVFNUdhXzBCZmJxQ01yQ1J1cGE1VzFrNGFETFdsUnRRcTh6UG1KTXZobjdaQUpCRm1TU1NqVG9NeWN4YklRY0NuMFFEck51YWNBWm9fWlhySFJGdGlUMkpxVV9TaFRacVJIR29iR1FhWHlaZ1JSblRPaDl4NmNza3Y5eC00R1RKWWxUS1J5SVR0SWJocGRnbXFKamMyM0NmRUp2YTA3Wk1OU195WDd2QVEiLCJpZCI6ImZjX0pRYWNhTEdvR05henB0UVAwcjdjd0FjXzEifQ==",
+      "serpapi_link": "https://serpapi.com/search.json?device=desktop&engine=google_related_questions&google_domain=google.com&next_page_token=eyJvbnMiOiIxMDA0MSIsImZjIjoiRXFFQkNtSkJUR3QwWDNaSFlqVTBOM3BuT0hwelZ6UXRUV0pMTTFVM1RYcEpaRWM0UXpoMVlsWnNlV0ZpTVRZMGFqY3hTSE4wWTNrMU9HVXpWazF0Tm5sVGRta3lXRmR6TkRSMFFUaE9SaTFIUmxoclMxTTBiME51WlhSVVdYZDJSblJIZDBSWFVSSVhTbEZoWTJGTVIyOUhUbUY2Y0hSUlVEQnlOMk4zUVdNYUlrRkdUVUZIUjNKbWJHWXliRkJwWldWbVdtSnFjVmxrT0V0c00xcG1TRFJhVVdjIiwiZmN2IjoiMyIsImVpIjoiSlFhY2FMR29HTmF6cHRRUDByN2N3QWMiLCJxYyI6IkNoMXphRzl3YVdaNUlHTnZiWEJoYm5rZ2JHOWpZWFJwYjI0Z2MybDZaUkFBZlpiT0pqOCIsInF1ZXN0aW9uIjoiV2hlcmUgaXMgdGhlIFNob3BpZnkgY29tcGFueSBsb2NhdGVkPyIsImxrIjoiR2hoemFHOXdhV1o1SUdOdmJYQmhibmtnYkc5allYUnBiMjQiLCJicyI6ImMzV092UXJDTUJTRmNjM2tJQktDd2wya2RYSElDOVJKM1J3YzZ1SVE3YTBKdEUxTlVxVnY2ZVBvWm9QRUg5RDFudS1jLTVFNUdhXzBCZmJxQ01yQ1J1cGE1VzFrNGFETFdsUnRRcTh6UG1KTXZobjdaQUpCRm1TU1NqVG9NeWN4YklRY0NuMFFEck51YWNBWm9fWlhySFJGdGlUMkpxVV9TaFRacVJIR29iR1FhWHlaZ1JSblRPaDl4NmNza3Y5eC00R1RKWWxUS1J5SVR0SWJocGRnbXFKamMyM0NmRUp2YTA3Wk1OU195WDd2QVEiLCJpZCI6ImZjX0pRYWNhTEdvR05henB0UVAwcjdjd0FjXzEifQ%3D%3D"
+    },
+    {
+      "question": "How many headquarters does Shopify have?",
+      "type": "featured_snippet",
+      "snippet": "Shopify is headquartered in Ottawa, 151 O'Connor Street, Ground floor, Canada, and has 5 office locations.",
+      "title": "Shopify Headquarters and Office Locations - Craft.co",
+      "link": "https://craft.co/shopify/locations#:~:text=Shopify%20is%20headquartered%20in%20Ottawa,and%20has%205%20office%20locations.",
+      "displayed_link": "https://craft.co › shopify › locations",
+      "source_logo": "https://serpapi.com/searches/689c06252328e18b82321f86/images/35c5d785084e2d2eeb5cbc77f61a4bfc326d408fecaad506580ccb2b0eadd155.png",
+      "next_page_token": "eyJvbnMiOiIxMDA0MSIsImZjIjoiRXFFQkNtSkJUR3QwWDNaSFlqVTBOM3BuT0hwelZ6UXRUV0pMTTFVM1RYcEpaRWM0UXpoMVlsWnNlV0ZpTVRZMGFqY3hTSE4wWTNrMU9HVXpWazF0Tm5sVGRta3lXRmR6TkRSMFFUaE9SaTFIUmxoclMxTTBiME51WlhSVVdYZDJSblJIZDBSWFVSSVhTbEZoWTJGTVIyOUhUbUY2Y0hSUlVEQnlOMk4zUVdNYUlrRkdUVUZIUjNKbWJHWXliRkJwWldWbVdtSnFjVmxrT0V0c00xcG1TRFJhVVdjIiwiZmN2IjoiMyIsImVpIjoiSlFhY2FMR29HTmF6cHRRUDByN2N3QWMiLCJxYyI6IkNoMXphRzl3YVdaNUlHTnZiWEJoYm5rZ2JHOWpZWFJwYjI0Z2MybDZaUkFBZlpiT0pqOCIsInF1ZXN0aW9uIjoiSG93IG1hbnkgaGVhZHF1YXJ0ZXJzIGRvZXMgU2hvcGlmeSBoYXZlPyIsImxrIjoiR2lkb2IzY2diV0Z1ZVNCb1pXRmtjWFZoY25SbGNuTWdaRzlsY3lCemFHOXdhV1o1SUdoaGRtVSIsImJzIjoiYzNXT3ZRckNNQlNGY2Mza0lCS0N3bDJrZFhISUM5UkozUndjNnVJUTdhMEp0RTFOVXFWdjZlUG9ab1BFSDlEMW51LWMtNUU1R2FfMEJmYnFDTXJDUnVwYTVXMWs0YURMV2xSdFFxOHpQbUpNdmhuN1pBSkJGbVNTU2pUb015Y3hiSVFjQ24wUURyTnVhY0Fab19aWHJIUkZ0aVQySnFVX1NoVFpxUkhHb2JHUWFYeVpnUlJuVE9oOXg2Y3Nrdjl4LTRHVEpZbFRLUnlJVHRJYmhwZGdtcUpqYzIzQ2ZFSnZhMDdaTU5TX3lYN3ZBUSIsImlkIjoiZmNfSlFhY2FMR29HTmF6cHRRUDByN2N3QWNfMSJ9",
+      "serpapi_link": "https://serpapi.com/search.json?device=desktop&engine=google_related_questions&google_domain=google.com&next_page_token=eyJvbnMiOiIxMDA0MSIsImZjIjoiRXFFQkNtSkJUR3QwWDNaSFlqVTBOM3BuT0hwelZ6UXRUV0pMTTFVM1RYcEpaRWM0UXpoMVlsWnNlV0ZpTVRZMGFqY3hTSE4wWTNrMU9HVXpWazF0Tm5sVGRta3lXRmR6TkRSMFFUaE9SaTFIUmxoclMxTTBiME51WlhSVVdYZDJSblJIZDBSWFVSSVhTbEZoWTJGTVIyOUhUbUY2Y0hSUlVEQnlOMk4zUVdNYUlrRkdUVUZIUjNKbWJHWXliRkJwWldWbVdtSnFjVmxrT0V0c00xcG1TRFJhVVdjIiwiZmN2IjoiMyIsImVpIjoiSlFhY2FMR29HTmF6cHRRUDByN2N3QWMiLCJxYyI6IkNoMXphRzl3YVdaNUlHTnZiWEJoYm5rZ2JHOWpZWFJwYjI0Z2MybDZaUkFBZlpiT0pqOCIsInF1ZXN0aW9uIjoiSG93IG1hbnkgaGVhZHF1YXJ0ZXJzIGRvZXMgU2hvcGlmeSBoYXZlPyIsImxrIjoiR2lkb2IzY2diV0Z1ZVNCb1pXRmtjWFZoY25SbGNuTWdaRzlsY3lCemFHOXdhV1o1SUdoaGRtVSIsImJzIjoiYzNXT3ZRckNNQlNGY2Mza0lCS0N3bDJrZFhISUM5UkozUndjNnVJUTdhMEp0RTFOVXFWdjZlUG9ab1BFSDlEMW51LWMtNUU1R2FfMEJmYnFDTXJDUnVwYTVXMWs0YURMV2xSdFFxOHpQbUpNdmhuN1pBSkJGbVNTU2pUb015Y3hiSVFjQ24wUURyTnVhY0Fab19aWHJIUkZ0aVQySnFVX1NoVFpxUkhHb2JHUWFYeVpnUlJuVE9oOXg2Y3Nrdjl4LTRHVEpZbFRLUnlJVHRJYmhwZGdtcUpqYzIzQ2ZFSnZhMDdaTU5TX3lYN3ZBUSIsImlkIjoiZmNfSlFhY2FMR29HTmF6cHRRUDByN2N3QWNfMSJ9"
+    },
+    {
+      "question": "What are the location rules for Shopify?",
+      "type": "featured_snippet",
+      "title": "Steps:",
+      "link": "https://help.shopify.com/en/manual/fulfillment/setup/order-routing/location-metafields",
+      "list": [
+        "From your Shopify admin, go to Settings > Shipping and delivery .",
+        "In the Order routing section, click the › icon.",
+        "Click Add rule.",
+        "Click Use location metafield.",
+        "From the Metafield drop-down menu, select a location metafield that you want to use for your order routing rule.",
+        "Select the metafield values.",
+        "Click Done."
+      ],
+      "displayed_link": "https://help.shopify.com › manual › fulfillment › setup",
+      "source_logo": "https://serpapi.com/searches/689c06252328e18b82321f86/images/35c5d785084e2d2eeb5cbc77f61a4bfcb884edaeebe0471e0cbc1a2e5570827b.png",
+      "next_page_token": "eyJvbnMiOiIxMDA0MSIsImZjIjoiRXFFQkNtSkJUR3QwWDNaSFlqVTBOM3BuT0hwelZ6UXRUV0pMTTFVM1RYcEpaRWM0UXpoMVlsWnNlV0ZpTVRZMGFqY3hTSE4wWTNrMU9HVXpWazF0Tm5sVGRta3lXRmR6TkRSMFFUaE9SaTFIUmxoclMxTTBiME51WlhSVVdYZDJSblJIZDBSWFVSSVhTbEZoWTJGTVIyOUhUbUY2Y0hSUlVEQnlOMk4zUVdNYUlrRkdUVUZIUjNKbWJHWXliRkJwWldWbVdtSnFjVmxrT0V0c00xcG1TRFJhVVdjIiwiZmN2IjoiMyIsImVpIjoiSlFhY2FMR29HTmF6cHRRUDByN2N3QWMiLCJxYyI6IkNoMXphRzl3YVdaNUlHTnZiWEJoYm5rZ2JHOWpZWFJwYjI0Z2MybDZaUkFBZlpiT0pqOCIsInF1ZXN0aW9uIjoiV2hhdCBhcmUgdGhlIGxvY2F0aW9uIHJ1bGVzIGZvciBTaG9waWZ5PyIsImxrIjoiR2haemFHOXdhV1o1SUd4dlkyRjBhVzl1SUhKMWJHVnoiLCJicyI6ImMzV092UXJDTUJTRmNjM2tJQktDd2wya2RYSElDOVJKM1J3YzZ1SVE3YTBKdEUxTlVxVnY2ZVBvWm9QRUg5RDFudS1jLTVFNUdhXzBCZmJxQ01yQ1J1cGE1VzFrNGFETFdsUnRRcTh6UG1KTXZobjdaQUpCRm1TU1NqVG9NeWN4YklRY0NuMFFEck51YWNBWm9fWlhySFJGdGlUMkpxVV9TaFRacVJIR29iR1FhWHlaZ1JSblRPaDl4NmNza3Y5eC00R1RKWWxUS1J5SVR0SWJocGRnbXFKamMyM0NmRUp2YTA3Wk1OU195WDd2QVEiLCJpZCI6ImZjX0pRYWNhTEdvR05henB0UVAwcjdjd0FjXzEifQ==",
+      "serpapi_link": "https://serpapi.com/search.json?device=desktop&engine=google_related_questions&google_domain=google.com&next_page_token=eyJvbnMiOiIxMDA0MSIsImZjIjoiRXFFQkNtSkJUR3QwWDNaSFlqVTBOM3BuT0hwelZ6UXRUV0pMTTFVM1RYcEpaRWM0UXpoMVlsWnNlV0ZpTVRZMGFqY3hTSE4wWTNrMU9HVXpWazF0Tm5sVGRta3lXRmR6TkRSMFFUaE9SaTFIUmxoclMxTTBiME51WlhSVVdYZDJSblJIZDBSWFVSSVhTbEZoWTJGTVIyOUhUbUY2Y0hSUlVEQnlOMk4zUVdNYUlrRkdUVUZIUjNKbWJHWXliRkJwWldWbVdtSnFjVmxrT0V0c00xcG1TRFJhVVdjIiwiZmN2IjoiMyIsImVpIjoiSlFhY2FMR29HTmF6cHRRUDByN2N3QWMiLCJxYyI6IkNoMXphRzl3YVdaNUlHTnZiWEJoYm5rZ2JHOWpZWFJwYjI0Z2MybDZaUkFBZlpiT0pqOCIsInF1ZXN0aW9uIjoiV2hhdCBhcmUgdGhlIGxvY2F0aW9uIHJ1bGVzIGZvciBTaG9waWZ5PyIsImxrIjoiR2haemFHOXdhV1o1SUd4dlkyRjBhVzl1SUhKMWJHVnoiLCJicyI6ImMzV092UXJDTUJTRmNjM2tJQktDd2wya2RYSElDOVJKM1J3YzZ1SVE3YTBKdEUxTlVxVnY2ZVBvWm9QRUg5RDFudS1jLTVFNUdhXzBCZmJxQ01yQ1J1cGE1VzFrNGFETFdsUnRRcTh6UG1KTXZobjdaQUpCRm1TU1NqVG9NeWN4YklRY0NuMFFEck51YWNBWm9fWlhySFJGdGlUMkpxVV9TaFRacVJIR29iR1FhWHlaZ1JSblRPaDl4NmNza3Y5eC00R1RKWWxUS1J5SVR0SWJocGRnbXFKamMyM0NmRUp2YTA3Wk1OU195WDd2QVEiLCJpZCI6ImZjX0pRYWNhTEdvR05henB0UVAwcjdjd0FjXzEifQ%3D%3D"
+    }
+  ],
+  "ai_overview": {
+    "page_token": "4Zou33icxZTdcrI4GIBP90aWk34KKv51hvkmCQj4n2pb7YmDiBEBoYSK9GzvZa9qb2FvYkOsllr7TXf2YBkGkjfvX_I-ef_403d33l-__b1JkojeimKapmUShsR3ynYYiBbNdra4Dn0a25ufG19xdgLxlRcqZHulJthUkQTHVbrYsq2-HupD6zVK8FiKm3YKbIGbK4ulRZ0t837YUnEhso_3e01lkzItO7vynUzIbBxZGNjlqlStl0eiFTAF8J8fckVmApOJ7818rJ0Vcf7FX7jR0NEQAfguRAWFgcZcmbjH5Z0La3TKQvMIaBntxaCwCAuDSdHKYBII7kEKiPcx2MfgJE_szc9l5E97IkfPl-Liw5y9HzzKTVDpdE4DHmaTD2XTdc9OTGADKI_lLkLXjlwzEZqDhmccrhYkj-Mh9fFQyVexuCKs9pK4jNmvIsY0JwFN21JomDu__xj6q4PqBdl02TpYY0z7Ga4b5Ke9ZHrNmtSoVer1H5w4m56Ro0XkmrunO38wvdMWUrlfhpUzb4gfJOZZ6sfMNkzYAcW6Xzvi00Hw7V3omsczYCo9d6NyVaTKgGigdzQLkZECGHu9grrJ33feMC-L-RZhO--wBRPnIAOkAQI1Ntc0hNmMAC9XhCZkEj13Yj4WPLM9pkDdgwOc89nmWBId81icN5YaPu3sfEPMN-ZIjgF4gboGYAeDRzVKyXnTxETgjAD7oXs2HfOw5Gg5ZVtVU24A2U1kufKU8NE7ApiwMcTcWhuAkAmnzAx94I3jm_6qJPy5_3IFgSt4acPt86zhDfuoS6Cj297DfudNa_Wk1E2v4hUGy3_R0uz_D0De8OY5gP4ZQPwrADWUA2h-BBAVALQ7kDc8DmDnAkB0AlDzPL1lLBaDAoCwAOCkCOCs0PC0Uy88A4i-DSAuAuieAZx8BeCx4RUBnJTg_QnAiAlfPwH4zYY3-2bD4yQ6x9_H7veyJZ-6YGkVTLp-xyPT_qtLqlRTK80U0mDlgktM10FyG8Uh-bFwV7ew2k2ylfCs0E0YuevshgEcWbvsxg9tK3HD3Q11Xx0h8ONQkSx5GRoDTR3QRoaW89fE9w2yqEWtpTMaWMm2qdslOW6sQashPVTWD2j2bOnuAzTqvWr6ZI28iq06rSq7BbFLkBSH85d-qSNXB4dquxNls0kvlrphFE68uIf2WjtrP8jjpN3uwclchsa8Nwl1r9optbpW0O-yhsDzosrQetqTp7v9aOQJgbWijlIRgthWWPVkDwzZTRCobS0culfWrea6btVWLXtdk632WghIkkWKXPkHs3aZIQ",
+    "serpapi_link": "https://serpapi.com/search.json?engine=google_ai_overview&page_token=4Zou33icxZTdcrI4GIBP90aWk34KKv51hvkmCQj4n2pb7YmDiBEBoYSK9GzvZa9qb2FvYkOsllr7TXf2YBkGkjfvX_I-ef_403d33l-__b1JkojeimKapmUShsR3ynYYiBbNdra4Dn0a25ufG19xdgLxlRcqZHulJthUkQTHVbrYsq2-HupD6zVK8FiKm3YKbIGbK4ulRZ0t837YUnEhso_3e01lkzItO7vynUzIbBxZGNjlqlStl0eiFTAF8J8fckVmApOJ7818rJ0Vcf7FX7jR0NEQAfguRAWFgcZcmbjH5Z0La3TKQvMIaBntxaCwCAuDSdHKYBII7kEKiPcx2MfgJE_szc9l5E97IkfPl-Liw5y9HzzKTVDpdE4DHmaTD2XTdc9OTGADKI_lLkLXjlwzEZqDhmccrhYkj-Mh9fFQyVexuCKs9pK4jNmvIsY0JwFN21JomDu__xj6q4PqBdl02TpYY0z7Ga4b5Ke9ZHrNmtSoVer1H5w4m56Ro0XkmrunO38wvdMWUrlfhpUzb4gfJOZZ6sfMNkzYAcW6Xzvi00Hw7V3omsczYCo9d6NyVaTKgGigdzQLkZECGHu9grrJ33feMC-L-RZhO--wBRPnIAOkAQI1Ntc0hNmMAC9XhCZkEj13Yj4WPLM9pkDdgwOc89nmWBId81icN5YaPu3sfEPMN-ZIjgF4gboGYAeDRzVKyXnTxETgjAD7oXs2HfOw5Gg5ZVtVU24A2U1kufKU8NE7ApiwMcTcWhuAkAmnzAx94I3jm_6qJPy5_3IFgSt4acPt86zhDfuoS6Cj297DfudNa_Wk1E2v4hUGy3_R0uz_D0De8OY5gP4ZQPwrADWUA2h-BBAVALQ7kDc8DmDnAkB0AlDzPL1lLBaDAoCwAOCkCOCs0PC0Uy88A4i-DSAuAuieAZx8BeCx4RUBnJTg_QnAiAlfPwH4zYY3-2bD4yQ6x9_H7veyJZ-6YGkVTLp-xyPT_qtLqlRTK80U0mDlgktM10FyG8Uh-bFwV7ew2k2ylfCs0E0YuevshgEcWbvsxg9tK3HD3Q11Xx0h8ONQkSx5GRoDTR3QRoaW89fE9w2yqEWtpTMaWMm2qdslOW6sQashPVTWD2j2bOnuAzTqvWr6ZI28iq06rSq7BbFLkBSH85d-qSNXB4dquxNls0kvlrphFE68uIf2WjtrP8jjpN3uwclchsa8Nwl1r9optbpW0O-yhsDzosrQetqTp7v9aOQJgbWijlIRgthWWPVkDwzZTRCobS0culfWrea6btVWLXtdk632WghIkkWKXPkHs3aZIQ"
+  },
+  "organic_results": [
+    {
+      "position": 1,
+      "title": "Shopify",
+      "link": "https://en.wikipedia.org/wiki/Shopify",
+      "redirect_link": "https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://en.wikipedia.org/wiki/Shopify&ved=2ahUKEwjxzqDm64aPAxXWmYkEHVIfF3gQFnoECBkQAQ",
+      "displayed_link": "https://en.wikipedia.org › wiki › Shopify",
+      "favicon": "https://serpapi.com/searches/689c06252328e18b82321f86/images/b3d443ceddba55ba513c2af6ffaaa0a7a44441fbef909d6a7de25bfa6be50606.png",
+      "snippet": "The company has over 5 million customers and processed $292.3 billion in transactions in 2024, of which 57% was in the United States. Major customers include ...",
+      "snippet_highlighted_words": [
+        "company"
+      ],
+      "sitelinks": {
+        "inline": [
+          {
+            "title": "Shopify Rebellion",
+            "link": "https://en.wikipedia.org/wiki/Shopify_Rebellion"
+          },
+          {
+            "title": "Tobias Lütke",
+            "link": "https://en.wikipedia.org/wiki/Tobias_L%C3%BCtke"
+          },
+          {
+            "title": "Harley Finkelstein",
+            "link": "https://en.wikipedia.org/wiki/Harley_Finkelstein"
+          },
+          {
+            "title": "Shop Pay",
+            "link": "https://en.wikipedia.org/wiki/Shop_Pay"
+          }
+        ]
+      },
+      "source": "Wikipedia"
+    },
+    {
+      "position": 2,
+      "title": "Shopify Limits",
+      "link": "https://matrixify.app/documentation/shopify-limits/",
+      "redirect_link": "https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://matrixify.app/documentation/shopify-limits/&ved=2ahUKEwjxzqDm64aPAxXWmYkEHVIfF3gQFnoECCMQAQ",
+      "displayed_link": "https://matrixify.app › documentation › shopify-limits",
+      "favicon": "https://serpapi.com/searches/689c06252328e18b82321f86/images/b3d443ceddba55ba513c2af6ffaaa0a70754e5b82ed217b8245b8df71013abc0.png",
+      "snippet": "Locations. Limit: 10,000 Locations per company. Description: Single company can have maximum 500 locations. Shopify manual reference. Linked Customers.",
+      "snippet_highlighted_words": [
+        "Locations",
+        "Locations",
+        "company",
+        "company",
+        "locations",
+        "Shopify"
+      ],
+      "source": "Matrixify App"
+    },
+    {
+      "position": 3,
+      "title": "About us",
+      "link": "https://www.shopify.com/news/about-us",
+      "redirect_link": "https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://www.shopify.com/news/about-us&ved=2ahUKEwjxzqDm64aPAxXWmYkEHVIfF3gQFnoECC0QAQ",
+      "displayed_link": "https://www.shopify.com › news › about-us",
+      "favicon": "https://serpapi.com/searches/689c06252328e18b82321f86/images/b3d443ceddba55ba513c2af6ffaaa0a73cfd707e382ff72b2d7a39794ab40718.png",
+      "snippet": "Shopify platform released. 2006 ; Millions of merchants in. ~175 Countries ; # employees (as of 12/31/24). ~8,100 ; # apps in our app store. 16,000+ ; # merchants.",
+      "snippet_highlighted_words": [
+        "175 Countries"
+      ],
+      "source": "Shopify"
+    },
+    {
+      "position": 4,
+      "title": "Locations",
+      "link": "https://help.shopify.com/en/manual/fulfillment/setup/locations-management",
+      "redirect_link": "https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://help.shopify.com/en/manual/fulfillment/setup/locations-management&ved=2ahUKEwjxzqDm64aPAxXWmYkEHVIfF3gQFnoECDMQAQ",
+      "displayed_link": "https://help.shopify.com › setup › locations-management",
+      "favicon": "https://serpapi.com/searches/689c06252328e18b82321f86/images/b3d443ceddba55ba513c2af6ffaaa0a7729cf1262a832f65c8072e0dee2cffb8.png",
+      "snippet": "From your Shopify admin, go to Settings > Locations . In the All locations section, click Add location. In the Location details section, add your location name ...",
+      "snippet_highlighted_words": [
+        "Shopify",
+        "Locations",
+        "locations",
+        "location",
+        "Location",
+        "location"
+      ],
+      "missing": [
+        "size"
+      ],
+      "must_include": {
+        "word": "size",
+        "link": "https://www.google.com/search?sca_esv=f87f5a3d8cf34a9f&hl=en&gl=us&q=shopify+company+location+%22size%22&sa=X&ved=2ahUKEwjxzqDm64aPAxXWmYkEHVIfF3gQ5t4CegQITBAB"
+      },
+      "source": "Shopify Help Center"
+    },
+    {
+      "position": 5,
+      "title": "Shopify",
+      "link": "https://ca.linkedin.com/company/shopify",
+      "redirect_link": "https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://ca.linkedin.com/company/shopify&ved=2ahUKEwjxzqDm64aPAxXWmYkEHVIfF3gQFnoECC8QAQ",
+      "displayed_link": "1M+ followers",
+      "favicon": "https://serpapi.com/searches/689c06252328e18b82321f86/images/b3d443ceddba55ba513c2af6ffaaa0a774630ae154c1614584b59d64f34f17e9.png",
+      "snippet": "Website: https://www.shopify.com. External link for Shopify ; Industry: Software Development ; Company size: 10,001+ employees ; Headquarters ...",
+      "snippet_highlighted_words": [
+        "10,001+ employees"
+      ],
+      "source": "LinkedIn · Shopify"
+    },
+    {
+      "position": 6,
+      "title": "Creating reports for B2B sales",
+      "link": "https://help.shopify.com/en/manual/b2b/reports-and-automations/reports",
+      "redirect_link": "https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://help.shopify.com/en/manual/b2b/reports-and-automations/reports&ved=2ahUKEwjxzqDm64aPAxXWmYkEHVIfF3gQFnoECDIQAQ",
+      "displayed_link": "https://help.shopify.com › reports-and-automations › rep...",
+      "favicon": "https://serpapi.com/searches/689c06252328e18b82321f86/images/b3d443ceddba55ba513c2af6ffaaa0a75ab0003f6ce5e1cdadf765e04b19e172.png",
+      "snippet": "In the Dimensions menu, click ⊕ to add the following dimensions in order: Company name; Company location name. In the Filters menu, configure the following ...",
+      "snippet_highlighted_words": [
+        "Dimensions",
+        "dimensions",
+        "Company",
+        "Company location"
+      ],
+      "missing": [
+        "size"
+      ],
+      "must_include": {
+        "word": "size",
+        "link": "https://www.google.com/search?sca_esv=f87f5a3d8cf34a9f&hl=en&gl=us&q=shopify+company+location+%22size%22&sa=X&ved=2ahUKEwjxzqDm64aPAxXWmYkEHVIfF3gQ5t4CegQIQxAB"
+      },
+      "source": "Shopify Help Center"
+    },
+    {
+      "position": 7,
+      "title": "The Most Accurate Shopify Stats Online",
+      "link": "https://www.chargeflow.io/blog/shopify-statistics",
+      "redirect_link": "https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://www.chargeflow.io/blog/shopify-statistics&ved=2ahUKEwjxzqDm64aPAxXWmYkEHVIfF3gQFnoECDAQAQ",
+      "displayed_link": "https://www.chargeflow.io › blog › shopify-statistics",
+      "favicon": "https://serpapi.com/searches/689c06252328e18b82321f86/images/b3d443ceddba55ba513c2af6ffaaa0a7e2d2a850368f7fa5973eb22fbaae1262.png",
+      "date": "Feb 13, 2025",
+      "snippet": "Shopify is the fourth-largest eCommerce platform worldwide and the number one digital marketplace in the US. Shopify commands ~10.32% of global eCommerce ...",
+      "snippet_highlighted_words": [
+        "Shopify is the fourth-largest eCommerce platform worldwide"
+      ],
+      "source": "Chargeflow"
+    },
+    {
+      "position": 8,
+      "title": "Shopify | Company Overview & News",
+      "link": "https://www.forbes.com/companies/shopify/",
+      "redirect_link": "https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://www.forbes.com/companies/shopify/&ved=2ahUKEwjxzqDm64aPAxXWmYkEHVIfF3gQFnoECDEQAQ",
+      "displayed_link": "https://www.forbes.com › companies › shopify",
+      "favicon": "https://serpapi.com/searches/689c06252328e18b82321f86/images/b3d443ceddba55ba513c2af6ffaaa0a743126046ecb78fc51db9bcc7bb1f558c.png",
+      "snippet": "Founded: 2004 ; Headquarters: Ottawa, Ontario ; Country/Territory: Canada ; Chief Executive Officer: Tobias Lütke ; Employees: 8,300 ...",
+      "snippet_highlighted_words": [
+        "Headquarters: Ottawa, Ontario"
+      ],
+      "source": "Forbes"
+    },
+    {
+      "position": 9,
+      "title": "Shopify Opens Its First Brick-and-Mortar Entrepreneur Space",
+      "link": "https://www.shopify.com/news/shopify-opens-its-first-brick-and-mortar-entrepreneur-space",
+      "redirect_link": "https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://www.shopify.com/news/shopify-opens-its-first-brick-and-mortar-entrepreneur-space&ved=2ahUKEwjxzqDm64aPAxXWmYkEHVIfF3gQFnoECC4QAQ",
+      "displayed_link": "https://www.shopify.com › news › shopify-opens-its-fir...",
+      "favicon": "https://serpapi.com/searches/689c06252328e18b82321f86/images/b3d443ceddba55ba513c2af6ffaaa0a707e6d4990a6d060408595d871e45f85f.png",
+      "date": "Oct 11, 2018",
+      "snippet": "LA is the ideal place for this initial in-person location because the area plays host to over 400 top-performing merchants who have each ...",
+      "snippet_highlighted_words": [
+        "LA is the ideal place for this initial in-person location"
+      ],
+      "source": "Shopify"
+    },
+    {
+      "position": 10,
+      "title": "Investor FAQs - Shopify",
+      "link": "https://shopifyinvestors.com/resources/default.aspx",
+      "redirect_link": "https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://shopifyinvestors.com/resources/default.aspx&ved=2ahUKEwjxzqDm64aPAxXWmYkEHVIfF3gQFnoECCwQAQ",
+      "displayed_link": "https://shopifyinvestors.com › resources",
+      "favicon": "https://serpapi.com/searches/689c06252328e18b82321f86/images/b3d443ceddba55ba513c2af6ffaaa0a7fbb3531bd4a5a5ca1983e3be04c20aaf.png",
+      "snippet": "Shopify's principal office is located at 151 O'Connor Street, Ground floor, Ottawa, ON, K2P 2L8. Who are the members of Shopify's Board of Directors?",
+      "snippet_highlighted_words": [
+        "Shopify's",
+        "Shopify's"
+      ],
+      "source": "shopifyinvestors.com"
+    }
+  ],
+  "related_searches": [
+    {
+      "block_position": 1,
+      "items": [
+        {
+          "name": "Shopify",
+          "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUtl32jcftvc8oduOiZgfMYQs1WraIEeYR8gRh&s=0",
+          "link": "https://www.google.com/search?sca_esv=f87f5a3d8cf34a9f&hl=en&gl=us&q=Shopify&stick=H4sIAAAAAAAAAOMwVOLSz9U3MMorSSq3-MXIsIGF4RULDxeSIJxbVJVVZWTwioWbixPENa7KyjOBS5qmmZvHV8C55sVmySU5r1h4ubj10_UNjYyKLQ3jTeHSGcaFeUlAk_m5eEHShknmFcVJxlmVCKuLTNKN0hAK0rLyjIoqLJMWsbIHZ-QXZKZV3mKTZNi9qOMni-t-w42Wxhs3iT3ezv7L_W9t2oyVizjEAlLzC3JSFRJzivMVilMTi5IzFNLyi1ZwMAIAEtffl_IAAAA&sa=X&ved=2ahUKEwjxzqDm64aPAxXWmYkEHVIfF3gQs9oBKAB6BAg0EAo",
+          "serpapi_link": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=Shopify&stick=H4sIAAAAAAAAAOMwVOLSz9U3MMorSSq3-MXIsIGF4RULDxeSIJxbVJVVZWTwioWbixPENa7KyjOBS5qmmZvHV8C55sVmySU5r1h4ubj10_UNjYyKLQ3jTeHSGcaFeUlAk_m5eEHShknmFcVJxlmVCKuLTNKN0hAK0rLyjIoqLJMWsbIHZ-QXZKZV3mKTZNi9qOMni-t-w42Wxhs3iT3ezv7L_W9t2oyVizjEAlLzC3JSFRJzivMVilMTi5IzFNLyi1ZwMAIAEtffl_IAAAA"
+        },
+        {
+          "name": "Etsy",
+          "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQA0NUsTP0M2t2xaHL7vIRxI7bqZFw7XMIMWzBA&s=0",
+          "link": "https://www.google.com/search?sca_esv=f87f5a3d8cf34a9f&hl=en&gl=us&q=Etsy&stick=H4sIAAAAAAAAAOMwVOLSz9U3KKrKqjIy-MXIsIGF4RULDxdY0CivJKncAs6FqHnFws3FCeIaV2XlmcAlTdPMzeMr4FzzYrPkkpxXLLxc3Prp-oZGRsWWhvGmcOkM48K8JKDJ_Fy8IGnDJPOK4iTjrEqE1UUm6UZpCAVpWXlGRRWWSYtYWVxLiitvsUky7F7U8ZPFdb_hRkvjjZvEHm9n_-X-tzZtxspFHGIBqfkFOakKiTnF-QrFqYlFyRkKaflFKzgYAfUoGXPvAAAA&sa=X&ved=2ahUKEwjxzqDm64aPAxXWmYkEHVIfF3gQs9oBKAB6BAg0EA8",
+          "serpapi_link": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=Etsy&stick=H4sIAAAAAAAAAOMwVOLSz9U3KKrKqjIy-MXIsIGF4RULDxdY0CivJKncAs6FqHnFws3FCeIaV2XlmcAlTdPMzeMr4FzzYrPkkpxXLLxc3Prp-oZGRsWWhvGmcOkM48K8JKDJ_Fy8IGnDJPOK4iTjrEqE1UUm6UZpCAVpWXlGRRWWSYtYWVxLiitvsUky7F7U8ZPFdb_hRkvjjZvEHm9n_-X-tzZtxspFHGIBqfkFOakKiTnF-QrFqYlFyRkKaflFKzgYAfUoGXPvAAAA"
+        },
+        {
+          "name": "GoDaddy",
+          "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREdTlzpGSyHP10JHATTbYGGlUSIeSLB4zLKY2Y&s=0",
+          "link": "https://www.google.com/search?sca_esv=f87f5a3d8cf34a9f&hl=en&gl=us&q=GoDaddy&stick=H4sIAAAAAAAAAOMwVOLUz9U3MK7KyjP5xciwgYXhFQsPFxdIzCivJKncAs4tqsqqMjJ4xcLNhdABlzRNMzePr4BzzYvNkktyXrHwcnHrp-sbGhkVWxrGm8KlM4wL85KAJvNz8YKkDZPMK4qTjLMqEVYXmaQbpSEUpGXlGRVVWCYtYmV3z3dJTEmpvMUmybB7UcdPFtf9hhstjTduEnu8nf2X-9_atBkrF3GIBaTmF-SkKiTmFOcrFKcmFiVnKKTlF63gYAQAqS3rBfEAAAA&sa=X&ved=2ahUKEwjxzqDm64aPAxXWmYkEHVIfF3gQs9oBKAB6BAg0EBQ",
+          "serpapi_link": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=GoDaddy&stick=H4sIAAAAAAAAAOMwVOLUz9U3MK7KyjP5xciwgYXhFQsPFxdIzCivJKncAs4tqsqqMjJ4xcLNhdABlzRNMzePr4BzzYvNkktyXrHwcnHrp-sbGhkVWxrGm8KlM4wL85KAJvNz8YKkDZPMK4qTjLMqEVYXmaQbpSEUpGXlGRVVWCYtYmV3z3dJTEmpvMUmybB7UcdPFtf9hhstjTduEnu8nf2X-9_atBkrF3GIBaTmF-SkKiTmFOcrFKcmFiVnKKTlF63gYAQAqS3rBfEAAAA"
+        },
+        {
+          "name": "Wix.com",
+          "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbyuEE7TF0qWa27oNnXTd4h-DNTYFgUUmUxHaA&s=0",
+          "link": "https://www.google.com/search?sca_esv=f87f5a3d8cf34a9f&hl=en&gl=us&q=Wix.com&stick=H4sIAAAAAAAAAOMwVOLSz9U3ME0zN4-v-MXIsIGF4RULDxdY0CivJKncAs4tqsqqMjJ4xcLNxQniGldl5ZnAJSEGwLnmxWbJJTmvWHi5uPXT9Q2NjIotDeNN4dIZxoV5SUCT-bl4QdKGSeYVxUnGWZUIq4tM0o3SEArSsvKMiioskxaxsodnVugl5-feYpNk2L2o4yeL637DjZbGGzeJPd7O_sv9b23ajJWLOMQCUvMLclIVEnOK8xWKUxOLkjMU0vKLVnAwAgB0e_jl8gAAAA&sa=X&ved=2ahUKEwjxzqDm64aPAxXWmYkEHVIfF3gQs9oBKAB6BAg0EBk",
+          "serpapi_link": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=Wix.com&stick=H4sIAAAAAAAAAOMwVOLSz9U3ME0zN4-v-MXIsIGF4RULDxdY0CivJKncAs4tqsqqMjJ4xcLNxQniGldl5ZnAJSEGwLnmxWbJJTmvWHi5uPXT9Q2NjIotDeNN4dIZxoV5SUCT-bl4QdKGSeYVxUnGWZUIq4tM0o3SEArSsvKMiioskxaxsodnVugl5-feYpNk2L2o4yeL637DjZbGGzeJPd7O_sv9b23ajJWLOMQCUvMLclIVEnOK8xWKUxOLkjMU0vKLVnAwAgB0e_jl8gAAAA"
+        },
+        {
+          "name": "Alibaba Group",
+          "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLphipmsxmqrUGUd2PPgneESDanULTAvzNoChi&s=0",
+          "link": "https://www.google.com/search?sca_esv=f87f5a3d8cf34a9f&hl=en&gl=us&q=Alibaba+Group&stick=H4sIAAAAAAAAAOMwVOLSz9U3MC82Sy7J-cXIsIGF4RULDxdY0CivJKncAs4tqsqqMjJ4xcLNxQniGldl5ZnAJU3TzM3jK-BciHmvWHi5uPXT9Q2NjIotDeNN4dIZxoV5SUCT-bl4QdKGSeYVxUnGWZUIq4tM0o3SEArSsvKMiioskxax8jrmZCYlJiUquBfllxbcYpNk2L2o4yeL637DjZbGGzeJPd7O_sv9b23ajJWLOMQCUvMLclIVEnOK8xWKUxOLkjMU0vKLVnAwAgBQz4Q--AAAAA&sa=X&ved=2ahUKEwjxzqDm64aPAxXWmYkEHVIfF3gQs9oBKAB6BAg0EB4",
+          "serpapi_link": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=Alibaba+Group&stick=H4sIAAAAAAAAAOMwVOLSz9U3MC82Sy7J-cXIsIGF4RULDxdY0CivJKncAs4tqsqqMjJ4xcLNxQniGldl5ZnAJU3TzM3jK-BciHmvWHi5uPXT9Q2NjIotDeNN4dIZxoV5SUCT-bl4QdKGSeYVxUnGWZUIq4tM0o3SEArSsvKMiioskxax8jrmZCYlJiUquBfllxbcYpNk2L2o4yeL637DjZbGGzeJPd7O_sv9b23ajJWLOMQCUvMLclIVEnOK8xWKUxOLkjMU0vKLVnAwAgBQz4Q--AAAAA"
+        },
+        {
+          "name": "PayPal",
+          "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0oK4zNmbx7NDuoR9xxqqlC_rrjG24XXF-XMta&s=0",
+          "link": "https://www.google.com/search?sca_esv=f87f5a3d8cf34a9f&hl=en&gl=us&q=PayPal&stick=H4sIAAAAAAAAAOMwVOLWT9c3NDIqtjSMN_3FyLCBheEVCw8Xl36uvoFRXklSuQWcW1SVVWVk8IqFm4sTxDWuysozgUuappmbx1fAuebFZsklOa9YeLmQzYdLZxgX5iUBTebn4gVJGyaZVxQnGWdVIqwuMkk3SkMoSMvKMyqqsExaxMoWkFgZkJhzi02SYfeijp8srvsNN1oab9wk9ng7-y_3v7VpM1Yu4hALSM0vyElVSMwpzlcoTk0sSs5QSMsvWsHBCADgyYKs8gAAAA&sa=X&ved=2ahUKEwjxzqDm64aPAxXWmYkEHVIfF3gQs9oBKAB6BAg0ECM",
+          "serpapi_link": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=PayPal&stick=H4sIAAAAAAAAAOMwVOLWT9c3NDIqtjSMN_3FyLCBheEVCw8Xl36uvoFRXklSuQWcW1SVVWVk8IqFm4sTxDWuysozgUuappmbx1fAuebFZsklOa9YeLmQzYdLZxgX5iUBTebn4gVJGyaZVxQnGWdVIqwuMkk3SkMoSMvKMyqqsExaxMoWkFgZkJhzi02SYfeijp8srvsNN1oab9wk9ng7-y_3v7VpM1Yu4hALSM0vyElVSMwpzlcoTk0sSs5QSMsvWsHBCADgyYKs8gAAAA"
+        }
+      ]
+    },
+    {
+      "block_position": 1,
+      "query": "Shopify company location size map",
+      "link": "https://www.google.com/search?sca_esv=f87f5a3d8cf34a9f&hl=en&gl=us&q=Shopify+company+location+size+map&sa=X&ved=2ahUKEwjxzqDm64aPAxXWmYkEHVIfF3gQ1QJ6BAhREAE",
+      "serpapi_link": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=Shopify+company+location+size+map"
+    },
+    {
+      "block_position": 1,
+      "query": "Shopify login",
+      "link": "https://www.google.com/search?sca_esv=f87f5a3d8cf34a9f&hl=en&gl=us&q=Shopify+login&sa=X&ved=2ahUKEwjxzqDm64aPAxXWmYkEHVIfF3gQ1QJ6BAhNEAE",
+      "serpapi_link": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=Shopify+login"
+    },
+    {
+      "block_position": 1,
+      "query": "Shopify office locations",
+      "link": "https://www.google.com/search?sca_esv=f87f5a3d8cf34a9f&hl=en&gl=us&q=Shopify+office+locations&sa=X&ved=2ahUKEwjxzqDm64aPAxXWmYkEHVIfF3gQ1QJ6BAhKEAE",
+      "serpapi_link": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=Shopify+office+locations"
+    },
+    {
+      "block_position": 1,
+      "query": "Shopify headquarters",
+      "link": "https://www.google.com/search?sca_esv=f87f5a3d8cf34a9f&hl=en&gl=us&q=Shopify+headquarters&sa=X&ved=2ahUKEwjxzqDm64aPAxXWmYkEHVIfF3gQ1QJ6BAhQEAE",
+      "serpapi_link": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=Shopify+headquarters"
+    },
+    {
+      "block_position": 1,
+      "query": "Shopify store",
+      "link": "https://www.google.com/search?sca_esv=f87f5a3d8cf34a9f&hl=en&gl=us&q=Shopify+store&sa=X&ved=2ahUKEwjxzqDm64aPAxXWmYkEHVIfF3gQ1QJ6BAhHEAE",
+      "serpapi_link": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=Shopify+store"
+    },
+    {
+      "block_position": 1,
+      "query": "Shopify leadership team",
+      "link": "https://www.google.com/search?sca_esv=f87f5a3d8cf34a9f&hl=en&gl=us&q=Shopify+leadership+team&sa=X&ved=2ahUKEwjxzqDm64aPAxXWmYkEHVIfF3gQ1QJ6BAhJEAE",
+      "serpapi_link": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=Shopify+leadership+team"
+    },
+    {
+      "block_position": 1,
+      "query": "Shopify App Store",
+      "link": "https://www.google.com/search?sca_esv=f87f5a3d8cf34a9f&hl=en&gl=us&q=Shopify+App+Store&sa=X&ved=2ahUKEwjxzqDm64aPAxXWmYkEHVIfF3gQ1QJ6BAhSEAE",
+      "serpapi_link": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=Shopify+App+Store"
+    },
+    {
+      "block_position": 1,
+      "query": "Shopify Marketplace",
+      "link": "https://www.google.com/search?sca_esv=f87f5a3d8cf34a9f&hl=en&gl=us&q=Shopify+Marketplace&sa=X&ved=2ahUKEwjxzqDm64aPAxXWmYkEHVIfF3gQ1QJ6BAhGEAE",
+      "serpapi_link": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=Shopify+Marketplace"
+    }
+  ],
+  "pagination": {
+    "current": 1,
+    "next": "https://www.google.com/search?q=shopify+company+location+size&sca_esv=f87f5a3d8cf34a9f&hl=en&gl=us&ei=JQacaLGoGNazptQP0r7cwAc&start=10&sa=N&sstk=Ac65TH4JiE2zOzkfEoyJqznpfETQa64SzuVI6CIHvvUe1N4jaeiZ187BaFSI0-6Q6O-Y_sUCXo8Pd-HwgpE_gUJ-nfvwkACnwGNlCw&ved=2ahUKEwjxzqDm64aPAxXWmYkEHVIfF3gQ8NMDegQICRAW",
+    "other_pages": {
+      "2": "https://www.google.com/search?q=shopify+company+location+size&sca_esv=f87f5a3d8cf34a9f&hl=en&gl=us&ei=JQacaLGoGNazptQP0r7cwAc&start=10&sa=N&sstk=Ac65TH4JiE2zOzkfEoyJqznpfETQa64SzuVI6CIHvvUe1N4jaeiZ187BaFSI0-6Q6O-Y_sUCXo8Pd-HwgpE_gUJ-nfvwkACnwGNlCw&ved=2ahUKEwjxzqDm64aPAxXWmYkEHVIfF3gQ8tMDegQICRAE",
+      "3": "https://www.google.com/search?q=shopify+company+location+size&sca_esv=f87f5a3d8cf34a9f&hl=en&gl=us&ei=JQacaLGoGNazptQP0r7cwAc&start=20&sa=N&sstk=Ac65TH4JiE2zOzkfEoyJqznpfETQa64SzuVI6CIHvvUe1N4jaeiZ187BaFSI0-6Q6O-Y_sUCXo8Pd-HwgpE_gUJ-nfvwkACnwGNlCw&ved=2ahUKEwjxzqDm64aPAxXWmYkEHVIfF3gQ8tMDegQICRAG",
+      "4": "https://www.google.com/search?q=shopify+company+location+size&sca_esv=f87f5a3d8cf34a9f&hl=en&gl=us&ei=JQacaLGoGNazptQP0r7cwAc&start=30&sa=N&sstk=Ac65TH4JiE2zOzkfEoyJqznpfETQa64SzuVI6CIHvvUe1N4jaeiZ187BaFSI0-6Q6O-Y_sUCXo8Pd-HwgpE_gUJ-nfvwkACnwGNlCw&ved=2ahUKEwjxzqDm64aPAxXWmYkEHVIfF3gQ8tMDegQICRAI",
+      "5": "https://www.google.com/search?q=shopify+company+location+size&sca_esv=f87f5a3d8cf34a9f&hl=en&gl=us&ei=JQacaLGoGNazptQP0r7cwAc&start=40&sa=N&sstk=Ac65TH4JiE2zOzkfEoyJqznpfETQa64SzuVI6CIHvvUe1N4jaeiZ187BaFSI0-6Q6O-Y_sUCXo8Pd-HwgpE_gUJ-nfvwkACnwGNlCw&ved=2ahUKEwjxzqDm64aPAxXWmYkEHVIfF3gQ8tMDegQICRAK",
+      "6": "https://www.google.com/search?q=shopify+company+location+size&sca_esv=f87f5a3d8cf34a9f&hl=en&gl=us&ei=JQacaLGoGNazptQP0r7cwAc&start=50&sa=N&sstk=Ac65TH4JiE2zOzkfEoyJqznpfETQa64SzuVI6CIHvvUe1N4jaeiZ187BaFSI0-6Q6O-Y_sUCXo8Pd-HwgpE_gUJ-nfvwkACnwGNlCw&ved=2ahUKEwjxzqDm64aPAxXWmYkEHVIfF3gQ8tMDegQICRAM",
+      "7": "https://www.google.com/search?q=shopify+company+location+size&sca_esv=f87f5a3d8cf34a9f&hl=en&gl=us&ei=JQacaLGoGNazptQP0r7cwAc&start=60&sa=N&sstk=Ac65TH4JiE2zOzkfEoyJqznpfETQa64SzuVI6CIHvvUe1N4jaeiZ187BaFSI0-6Q6O-Y_sUCXo8Pd-HwgpE_gUJ-nfvwkACnwGNlCw&ved=2ahUKEwjxzqDm64aPAxXWmYkEHVIfF3gQ8tMDegQICRAO",
+      "8": "https://www.google.com/search?q=shopify+company+location+size&sca_esv=f87f5a3d8cf34a9f&hl=en&gl=us&ei=JQacaLGoGNazptQP0r7cwAc&start=70&sa=N&sstk=Ac65TH4JiE2zOzkfEoyJqznpfETQa64SzuVI6CIHvvUe1N4jaeiZ187BaFSI0-6Q6O-Y_sUCXo8Pd-HwgpE_gUJ-nfvwkACnwGNlCw&ved=2ahUKEwjxzqDm64aPAxXWmYkEHVIfF3gQ8tMDegQICRAQ",
+      "9": "https://www.google.com/search?q=shopify+company+location+size&sca_esv=f87f5a3d8cf34a9f&hl=en&gl=us&ei=JQacaLGoGNazptQP0r7cwAc&start=80&sa=N&sstk=Ac65TH4JiE2zOzkfEoyJqznpfETQa64SzuVI6CIHvvUe1N4jaeiZ187BaFSI0-6Q6O-Y_sUCXo8Pd-HwgpE_gUJ-nfvwkACnwGNlCw&ved=2ahUKEwjxzqDm64aPAxXWmYkEHVIfF3gQ8tMDegQICRAS",
+      "10": "https://www.google.com/search?q=shopify+company+location+size&sca_esv=f87f5a3d8cf34a9f&hl=en&gl=us&ei=JQacaLGoGNazptQP0r7cwAc&start=90&sa=N&sstk=Ac65TH4JiE2zOzkfEoyJqznpfETQa64SzuVI6CIHvvUe1N4jaeiZ187BaFSI0-6Q6O-Y_sUCXo8Pd-HwgpE_gUJ-nfvwkACnwGNlCw&ved=2ahUKEwjxzqDm64aPAxXWmYkEHVIfF3gQ8tMDegQICRAU"
+    }
+  },
+  "serpapi_pagination": {
+    "current": 1,
+    "next_link": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=shopify+company+location+size&start=10",
+    "next": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=shopify+company+location+size&start=10",
+    "other_pages": {
+      "2": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=shopify+company+location+size&start=10",
+      "3": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=shopify+company+location+size&start=20",
+      "4": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=shopify+company+location+size&start=30",
+      "5": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=shopify+company+location+size&start=40",
+      "6": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=shopify+company+location+size&start=50",
+      "7": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=shopify+company+location+size&start=60",
+      "8": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=shopify+company+location+size&start=70",
+      "9": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=shopify+company+location+size&start=80",
+      "10": "https://serpapi.com/search.json?device=desktop&engine=google&gl=us&google_domain=google.com&hl=en&q=shopify+company+location+size&start=90"
+    }
+  }
+}

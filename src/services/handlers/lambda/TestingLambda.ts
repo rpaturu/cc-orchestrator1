@@ -1,87 +1,13 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
-import { CacheService } from '../../core/CacheService';
-import { Logger } from '../../core/Logger';
-import { SerpAPIService } from '../../SerpAPIService';
 import { getCorsHeaders } from '../../../index';
 
 /**
- * Multi-Source Data Collection Test Handler
- * POST /test/multisource
+ * Testing Lambda for Vendor Enrichment Step Functions Workflow
+ * 
+ * This lambda tests the existing Customer Intelligence Step Functions workflow
+ * for vendor context enrichment. Research streaming testing is handled by
+ * ResearchStreamingLambda via ./test-api option 6.
  */
-export const multiSourceTestHandler = async (
-  event: APIGatewayProxyEvent,
-  context: Context
-): Promise<APIGatewayProxyResult> => {
-  try {
-    console.log('Multi-Source Test Lambda invoked', { requestId: context.awsRequestId });
-
-    // Initialize required services
-    const logger = new Logger();
-    const cacheService = new CacheService(
-      { ttlHours: 24, maxEntries: 1000, compressionEnabled: false },
-      logger
-    );
-
-    const origin = event.headers.Origin || event.headers.origin;
-    const corsHeaders = getCorsHeaders(origin);
-
-    if (!event.body) {
-      return {
-        statusCode: 400,
-        headers: corsHeaders,
-        body: JSON.stringify({
-          error: 'Request body is required',
-          requestId: context.awsRequestId,
-        }),
-      };
-    }
-
-    const request = JSON.parse(event.body);
-    const { companyName } = request;
-
-    if (!companyName) {
-      return {
-        statusCode: 400,
-        headers: corsHeaders,
-        body: JSON.stringify({
-          error: 'Company name is required',
-          requestId: context.awsRequestId,
-        }),
-      };
-    }
-
-    // Initialize SerpAPIService and call multi-source collection
-    const serpAPIService = new SerpAPIService(cacheService, logger);
-    const result = await serpAPIService.getMultiSourceCompanyData(companyName);
-
-    return {
-      statusCode: 200,
-      headers: corsHeaders,
-      body: JSON.stringify({
-        companyName,
-        multiSourceData: result,
-        requestId: context.awsRequestId,
-        timestamp: new Date().toISOString()
-      }),
-    };
-
-  } catch (error) {
-    console.error('Multi-Source Test Lambda error:', error);
-
-    const origin = event.headers.Origin || event.headers.origin;
-    const corsHeaders = getCorsHeaders(origin);
-    
-    return {
-      statusCode: 500,
-      headers: corsHeaders,
-      body: JSON.stringify({
-        error: 'Internal server error',
-        message: error instanceof Error ? error.message : 'Unknown error',
-        requestId: context.awsRequestId,
-      }),
-    };
-  }
-};
 
 /**
  * Enhanced Vendor Enrichment Handler - Integrates with Step Functions workflow

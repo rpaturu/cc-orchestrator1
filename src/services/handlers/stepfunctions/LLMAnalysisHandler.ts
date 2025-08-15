@@ -605,6 +605,8 @@ EXTRACTION GUIDELINES:
 8. **Business Context**: Understand challenges, growth signals, and market pressures
 9. **Technology**: Identify tech stack, platforms, and technical capabilities
 10. **Partnerships**: Find integration partners, channel partners, and strategic alliances
+11. **Financial Data**: Extract revenue, growth rates, stock symbols, and market cap if mentioned
+12. **Data Quality**: Assess completeness, freshness, and reliability of the information
 
 PRIORITIZE SPECIFIC, ACTIONABLE INFORMATION over generic descriptions.
 
@@ -646,7 +648,18 @@ Return ONLY valid JSON in this exact structure:
   ],
   "partnerships": [
     "Key partnerships mentioned (e.g., 'Facebook for social selling', 'Google for ads integration', 'Stripe for payments')"
-  ]
+  ],
+  "revenue": "Annual revenue if mentioned (e.g., '$2.4 billion', '$100M-500M range')",
+  "revenueGrowth": "Revenue growth rate if mentioned (e.g., '25% YoY', 'Growing 15% annually')",
+  "stockSymbol": "Stock ticker symbol if public company (e.g., 'OKTA', 'MSFT')",
+  "marketCap": "Market capitalization if mentioned (e.g., '$12.5 billion')",
+  "last_updated": "${new Date().toISOString()}",
+  "data_quality": {
+    "completeness": 0.85,
+    "freshness": 0.90,
+    "reliability": 0.80,
+    "overall": 0.85
+  }
 }
 
 CRITICAL: If information is not found in the data, use empty arrays [] or "Not specified" rather than making assumptions. Be specific and evidence-based.

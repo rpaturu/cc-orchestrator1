@@ -29,6 +29,7 @@ export class SalesIntelligenceStack extends cdk.Stack {
       cacheTable: infrastructure.cacheTable,
       requestsTable: infrastructure.requestsTable,
       profilesTable: infrastructure.profilesTable,
+      researchHistoryTable: infrastructure.researchHistoryTable,
       apiKeysSecret: infrastructure.apiKeysSecret,
       allowedOriginsString,
       nodeEnv,
@@ -213,6 +214,14 @@ export class SalesIntelligenceStack extends cdk.Stack {
       })
     );
 
+    coreLambda.functions.companyLookupFunction.addToRolePolicy(
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        actions: ['bedrock:InvokeModel'],
+        resources: ['*'],
+      })
+    );
+
     // Step Functions
     stepFunctions.resources.llmAnalysisFunction.addToRolePolicy(
       new iam.PolicyStatement({
@@ -244,5 +253,11 @@ export class SalesIntelligenceStack extends cdk.Stack {
         ],
       })
     );
+
+    // Grant DynamoDB permissions to research streaming function
+    infrastructure.cacheTable.grantReadWriteData(coreLambda.functions.researchStreamingFunction);
+    
+    // Grant DynamoDB permissions to research history function
+    infrastructure.researchHistoryTable.grantReadWriteData(coreLambda.functions.researchHistoryFunction);
   }
 } 

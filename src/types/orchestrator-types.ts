@@ -15,6 +15,7 @@ export interface DataCollectionPlan {
     profile: number;
     vendor_context: number;
     customer_intelligence: number;
+    research: number;
     test: number;
   };
 }
@@ -78,7 +79,7 @@ export interface CollectionMetrics {
 }
 
 // Consumer and Source Type Definitions
-export type ConsumerType = 'profile' | 'vendor_context' | 'customer_intelligence' | 'test';
+export type ConsumerType = 'profile' | 'vendor_context' | 'customer_intelligence' | 'research' | 'test';
 
 export type SourceType = 
   | 'serp_organic' 
@@ -87,13 +88,56 @@ export type SourceType =
   | 'serp_linkedin' 
   | 'serp_youtube' 
   | 'serp_api'
-  | 'brightdata' 
-  | 'bright_data'
+  // Enhanced SerpAPI sources
+  | 'serp_google_finance'
+  | 'serp_google_trends'
+  | 'serp_google_images'
+  | 'serp_google_videos'
+  | 'serp_google_local'
+  | 'serp_google_maps'
+  | 'serp_google_shopping'
+  | 'serp_google_patents'
+  | 'serp_bing_search'
+  | 'serp_duckduckgo'
+  // Enhanced Snov.io APIs
+  | 'snov_email_finder'
+  | 'snov_email_verifier'
+  | 'snov_domain_search'
+  | 'snov_data_enrichment'
+  | 'snov_linkedin_enrichment'
+  | 'snov_bulk_email_finder'
+  | 'snov_bulk_email_verifier'
+  // Bright Data specific datasets
+  | 'brightdata_gd_l1vikfnt1wgvvqz95w_linkedin_company_info'
+  | 'brightdata_gd_l1vilg5a1decoahvgq_slintel_6sense_company_info'
+  | 'brightdata_gd_l1vilsfd1xpsndbtpr_ventureradar_company_info'
+  | 'brightdata_gd_m0ci4a4ivx3j5l6nx_zoominfo_companies'
+  | 'brightdata_gd_l1vijqt9jfj7olije_crunchbase_companies'
+  | 'brightdata_gd_m4ijiqfp2n9oe3oluj_pitchbook_companies'
+  | 'brightdata_gd_l1vilaxi10wutoage7_owler_companies'
+  | 'brightdata_gd_m3fl0mwzmfpfn4cw4_companies_enriched'
+  | 'brightdata_gd_l1viktl72bvl7bjuj0_linkedin_people_profiles'
+  | 'brightdata_gd_m5zhkpdgryvlxn8zg_pitchbook_people_profiles'
+  | 'brightdata_gd_m2a6waqv18439a8thq_b2b_contacts_companies'
+  | 'brightdata_gd_m18zt6ec11wfqohyrs_employees_business_enriched'
+  | 'brightdata_gd_l7j0bx501ockwldaqf_glassdoor_companies_overview'
+  | 'brightdata_gd_l7j1po0921hbu0ri1z_glassdoor_companies_reviews'
+  | 'brightdata_gd_lpfbbndm1xnopbrcr0_glassdoor_job_listings'
+  | 'brightdata_gd_l88xp4k01qnhvyqlvw_g2_software_product_overview'
+  | 'brightdata_gd_l88xvdka1uao86xvlb_g2_software_product_reviews'
+  | 'brightdata_gd_lztojazw1389985ops_trustradius_product_reviews'
+  | 'brightdata_gd_lm5zmhwd2sni130p_trustpilot_business_reviews'
+  | 'brightdata_gd_l4dx9j9sscpvs7no2_indeed_job_listings'
+  | 'brightdata_gd_l7qekxkv2i7ve6hx1s_indeed_companies_info'
+  | 'brightdata_gd_m487ihp32jtc4ujg45_linkedin_profiles_jobs_listings'
+  | 'brightdata_gd_lpfll7v5hcqtkxl6l_linkedin_job_listings'
+  | 'brightdata_gd_l1vijqt9jfj7olije_crunchbase_companies'
+  | 'brightdata_gd_l88xvdka1uao86xvlb_g2_software_reviews'
+  | 'brightdata_gd_lnsxoxzi1omrwnka5r_google_news'
   | 'snov_contacts'
   | 'apollo_contacts'
   | 'apollo'
   | 'zoominfo'
-  | 'clearbit'
   | 'hunter'
   | 'company_db';
 

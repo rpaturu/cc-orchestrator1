@@ -17,6 +17,59 @@ const cacheConfig = {
 };
 
 /**
+ * Main cache handler that routes to different cache operations based on HTTP method
+ */
+export const cacheHandler = async (
+  event: APIGatewayProxyEvent,
+  context: Context
+): Promise<APIGatewayProxyResult> => {
+  try {
+    console.log('Cache Handler invoked', { 
+      method: event.httpMethod, 
+      path: event.path,
+      requestId: context.awsRequestId 
+    });
+
+    const origin = event.headers.Origin || event.headers.origin;
+    const corsHeaders = getCorsHeaders(origin);
+
+    // Route based on HTTP method
+    switch (event.httpMethod) {
+      case 'DELETE':
+        return await cacheClearHandler(event, context);
+      case 'GET':
+        return await cacheStatsHandler(event, context);
+      default:
+        return {
+          statusCode: 405,
+          headers: corsHeaders,
+          body: JSON.stringify({
+            error: 'Method not allowed',
+            message: `HTTP method ${event.httpMethod} is not supported`,
+            requestId: context.awsRequestId,
+          }),
+        };
+    }
+
+  } catch (error) {
+    console.error('Cache Handler error:', error);
+
+    const origin = event.headers.Origin || event.headers.origin;
+    const corsHeaders = getCorsHeaders(origin);
+    
+    return {
+      statusCode: 500,
+      headers: corsHeaders,
+      body: JSON.stringify({
+        error: 'Internal server error',
+        message: error instanceof Error ? error.message : 'Unknown error',
+        requestId: context.awsRequestId,
+      }),
+    };
+  }
+};
+
+/**
  * Lambda handler for clearing entire cache (dev purposes)
  */
 export const cacheClearHandler = async (

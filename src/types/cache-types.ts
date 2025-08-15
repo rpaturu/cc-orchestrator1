@@ -58,6 +58,97 @@ export enum CacheType {
   CUSTOMER_INTELLIGENCE_ANALYSIS = 'customer_intelligence_analysis',
   CUSTOMER_INTELLIGENCE_ENRICHMENT = 'customer_intelligence_enrichment',
   
+  // Decision Makers Research Cache Types
+  DECISION_MAKERS_RAW_DATA = 'decision_makers_raw_data',
+  DECISION_MAKERS_NORMALIZED = 'decision_makers_normalized',
+  DECISION_MAKERS_ANALYSIS = 'decision_makers_analysis',
+  DECISION_MAKERS_ENRICHED = 'decision_makers_enriched',
+  DECISION_MAKERS_SNOV_CONTACTS = 'decision_makers_snov_contacts',
+  DECISION_MAKERS_SERP_LINKEDIN = 'decision_makers_serp_linkedin',
+  DECISION_MAKERS_BRIGHTDATA_CONTACTS = 'decision_makers_brightdata_contacts',
+
+  // Tech Stack Research Cache Types
+  TECH_STACK_RAW_DATA = 'tech_stack_raw_data',
+  TECH_STACK_NORMALIZED = 'tech_stack_normalized',
+  TECH_STACK_ANALYSIS = 'tech_stack_analysis',
+  TECH_STACK_ENRICHED = 'tech_stack_enriched',
+  TECH_STACK_SERP_ORGANIC = 'tech_stack_serp_organic',
+  TECH_STACK_BRIGHTDATA_BUILTWITH = 'tech_stack_brightdata_builtwith',
+  TECH_STACK_BRIGHTDATA_STACKSHARE = 'tech_stack_brightdata_stackshare',
+
+  // Competitive Positioning Research Cache Types
+  COMPETITIVE_RAW_DATA = 'competitive_raw_data',
+  COMPETITIVE_NORMALIZED = 'competitive_normalized', 
+  COMPETITIVE_ANALYSIS = 'competitive_analysis',
+  COMPETITIVE_ENRICHED = 'competitive_enriched',
+  COMPETITIVE_SERP_NEWS = 'competitive_serp_news',
+  COMPETITIVE_SERP_ORGANIC = 'competitive_serp_organic',
+  COMPETITIVE_BRIGHTDATA_CRUNCHBASE = 'competitive_brightdata_crunchbase',
+
+  // Buying Signals Research Cache Types
+  BUYING_SIGNALS_RAW_DATA = 'buying_signals_raw_data',
+  BUYING_SIGNALS_NORMALIZED = 'buying_signals_normalized',
+  BUYING_SIGNALS_ANALYSIS = 'buying_signals_analysis', 
+  BUYING_SIGNALS_ENRICHED = 'buying_signals_enriched',
+  BUYING_SIGNALS_SERP_NEWS = 'buying_signals_serp_news',
+  BUYING_SIGNALS_BRIGHTDATA_NEWS = 'buying_signals_brightdata_news',
+
+  // Growth Signals Research Cache Types  
+  GROWTH_SIGNALS_RAW_DATA = 'growth_signals_raw_data',
+  GROWTH_SIGNALS_NORMALIZED = 'growth_signals_normalized',
+  GROWTH_SIGNALS_ANALYSIS = 'growth_signals_analysis',
+  GROWTH_SIGNALS_ENRICHED = 'growth_signals_enriched',
+  GROWTH_SIGNALS_SERP_JOBS = 'growth_signals_serp_jobs',
+  GROWTH_SIGNALS_BRIGHTDATA_GLASSDOOR = 'growth_signals_brightdata_glassdoor',
+
+  // Digital Footprint Research Cache Types
+  DIGITAL_FOOTPRINT_RAW_DATA = 'digital_footprint_raw_data',
+  DIGITAL_FOOTPRINT_NORMALIZED = 'digital_footprint_normalized',
+  DIGITAL_FOOTPRINT_ANALYSIS = 'digital_footprint_analysis',
+  DIGITAL_FOOTPRINT_ENRICHED = 'digital_footprint_enriched',
+  DIGITAL_FOOTPRINT_SERP_ORGANIC = 'digital_footprint_serp_organic',
+  DIGITAL_FOOTPRINT_BRIGHTDATA_SOCIAL = 'digital_footprint_brightdata_social',
+
+  // Recent Activities Research Cache Types
+  RECENT_ACTIVITIES_RAW_DATA = 'recent_activities_raw_data', 
+  RECENT_ACTIVITIES_NORMALIZED = 'recent_activities_normalized',
+  RECENT_ACTIVITIES_ANALYSIS = 'recent_activities_analysis',
+  RECENT_ACTIVITIES_ENRICHED = 'recent_activities_enriched',
+  RECENT_ACTIVITIES_SERP_NEWS = 'recent_activities_serp_news',
+  RECENT_ACTIVITIES_SERP_YOUTUBE = 'recent_activities_serp_youtube',
+
+  // Integration Needs Research Cache Types
+  INTEGRATION_NEEDS_RAW_DATA = 'integration_needs_raw_data',
+  INTEGRATION_NEEDS_NORMALIZED = 'integration_needs_normalized', 
+  INTEGRATION_NEEDS_ANALYSIS = 'integration_needs_analysis',
+  INTEGRATION_NEEDS_ENRICHED = 'integration_needs_enriched',
+  INTEGRATION_NEEDS_SERP_ORGANIC = 'integration_needs_serp_organic',
+  INTEGRATION_NEEDS_BRIGHTDATA_STACKSHARE = 'integration_needs_brightdata_stackshare',
+
+  // Compliance Requirements Research Cache Types
+  COMPLIANCE_RAW_DATA = 'compliance_raw_data',
+  COMPLIANCE_NORMALIZED = 'compliance_normalized',
+  COMPLIANCE_ANALYSIS = 'compliance_analysis', 
+  COMPLIANCE_ENRICHED = 'compliance_enriched',
+  COMPLIANCE_SERP_ORGANIC = 'compliance_serp_organic',
+  COMPLIANCE_BRIGHTDATA_REGULATORY = 'compliance_brightdata_regulatory',
+
+  // Business Challenges Research Cache Types
+  BUSINESS_CHALLENGES_RAW_DATA = 'business_challenges_raw_data',
+  BUSINESS_CHALLENGES_NORMALIZED = 'business_challenges_normalized',
+  BUSINESS_CHALLENGES_ANALYSIS = 'business_challenges_analysis',
+  BUSINESS_CHALLENGES_ENRICHED = 'business_challenges_enriched', 
+  BUSINESS_CHALLENGES_SERP_NEWS = 'business_challenges_serp_news',
+  BUSINESS_CHALLENGES_SERP_ORGANIC = 'business_challenges_serp_organic',
+
+  // Budget Indicators Research Cache Types
+  BUDGET_INDICATORS_RAW_DATA = 'budget_indicators_raw_data',
+  BUDGET_INDICATORS_NORMALIZED = 'budget_indicators_normalized',
+  BUDGET_INDICATORS_ANALYSIS = 'budget_indicators_analysis',
+  BUDGET_INDICATORS_ENRICHED = 'budget_indicators_enriched',
+  BUDGET_INDICATORS_SERP_FINANCE = 'budget_indicators_serp_finance',
+  BUDGET_INDICATORS_BRIGHTDATA_FINANCIAL = 'budget_indicators_brightdata_financial',
+  
   // LLM Analysis Cache Types (NEW)
   LLM_ANALYSIS = 'llm_analysis',
   LLM_CUSTOMER_INTELLIGENCE = 'llm_customer_intelligence',
@@ -145,6 +236,97 @@ export const CACHE_TYPE_DISPLAY_NAMES: Record<CacheType, string> = {
   [CacheType.CUSTOMER_INTELLIGENCE_PARSED]: 'Customer Intelligence Parsed',
   [CacheType.CUSTOMER_INTELLIGENCE_ANALYSIS]: 'Customer Intelligence Analysis',
   [CacheType.CUSTOMER_INTELLIGENCE_ENRICHMENT]: 'Customer Intelligence Enrichment',
+  
+  // Decision Makers Research Types
+  [CacheType.DECISION_MAKERS_RAW_DATA]: 'Decision Makers Raw Data',
+  [CacheType.DECISION_MAKERS_NORMALIZED]: 'Decision Makers Normalized',
+  [CacheType.DECISION_MAKERS_ANALYSIS]: 'Decision Makers Analysis',
+  [CacheType.DECISION_MAKERS_ENRICHED]: 'Decision Makers Enriched',
+  [CacheType.DECISION_MAKERS_SNOV_CONTACTS]: 'Decision Makers Snov Contacts',
+  [CacheType.DECISION_MAKERS_SERP_LINKEDIN]: 'Decision Makers SerpAPI LinkedIn',
+  [CacheType.DECISION_MAKERS_BRIGHTDATA_CONTACTS]: 'Decision Makers BrightData Contacts',
+
+  // Tech Stack Research Types
+  [CacheType.TECH_STACK_RAW_DATA]: 'Tech Stack Raw Data',
+  [CacheType.TECH_STACK_NORMALIZED]: 'Tech Stack Normalized',
+  [CacheType.TECH_STACK_ANALYSIS]: 'Tech Stack Analysis',
+  [CacheType.TECH_STACK_ENRICHED]: 'Tech Stack Enriched',
+  [CacheType.TECH_STACK_SERP_ORGANIC]: 'Tech Stack SerpAPI Organic',
+  [CacheType.TECH_STACK_BRIGHTDATA_BUILTWITH]: 'Tech Stack BrightData BuiltWith',
+  [CacheType.TECH_STACK_BRIGHTDATA_STACKSHARE]: 'Tech Stack BrightData StackShare',
+
+  // Competitive Positioning Research Types
+  [CacheType.COMPETITIVE_RAW_DATA]: 'Competitive Raw Data',
+  [CacheType.COMPETITIVE_NORMALIZED]: 'Competitive Normalized',
+  [CacheType.COMPETITIVE_ANALYSIS]: 'Competitive Analysis',
+  [CacheType.COMPETITIVE_ENRICHED]: 'Competitive Enriched',
+  [CacheType.COMPETITIVE_SERP_NEWS]: 'Competitive SerpAPI News',
+  [CacheType.COMPETITIVE_SERP_ORGANIC]: 'Competitive SerpAPI Organic',
+  [CacheType.COMPETITIVE_BRIGHTDATA_CRUNCHBASE]: 'Competitive BrightData Crunchbase',
+
+  // Buying Signals Research Types
+  [CacheType.BUYING_SIGNALS_RAW_DATA]: 'Buying Signals Raw Data',
+  [CacheType.BUYING_SIGNALS_NORMALIZED]: 'Buying Signals Normalized',
+  [CacheType.BUYING_SIGNALS_ANALYSIS]: 'Buying Signals Analysis',
+  [CacheType.BUYING_SIGNALS_ENRICHED]: 'Buying Signals Enriched',
+  [CacheType.BUYING_SIGNALS_SERP_NEWS]: 'Buying Signals SerpAPI News',
+  [CacheType.BUYING_SIGNALS_BRIGHTDATA_NEWS]: 'Buying Signals BrightData News',
+
+  // Growth Signals Research Types  
+  [CacheType.GROWTH_SIGNALS_RAW_DATA]: 'Growth Signals Raw Data',
+  [CacheType.GROWTH_SIGNALS_NORMALIZED]: 'Growth Signals Normalized',
+  [CacheType.GROWTH_SIGNALS_ANALYSIS]: 'Growth Signals Analysis',
+  [CacheType.GROWTH_SIGNALS_ENRICHED]: 'Growth Signals Enriched',
+  [CacheType.GROWTH_SIGNALS_SERP_JOBS]: 'Growth Signals SerpAPI Jobs',
+  [CacheType.GROWTH_SIGNALS_BRIGHTDATA_GLASSDOOR]: 'Growth Signals BrightData Glassdoor',
+
+  // Digital Footprint Research Types
+  [CacheType.DIGITAL_FOOTPRINT_RAW_DATA]: 'Digital Footprint Raw Data',
+  [CacheType.DIGITAL_FOOTPRINT_NORMALIZED]: 'Digital Footprint Normalized',
+  [CacheType.DIGITAL_FOOTPRINT_ANALYSIS]: 'Digital Footprint Analysis',
+  [CacheType.DIGITAL_FOOTPRINT_ENRICHED]: 'Digital Footprint Enriched',
+  [CacheType.DIGITAL_FOOTPRINT_SERP_ORGANIC]: 'Digital Footprint SerpAPI Organic',
+  [CacheType.DIGITAL_FOOTPRINT_BRIGHTDATA_SOCIAL]: 'Digital Footprint BrightData Social',
+
+  // Recent Activities Research Types
+  [CacheType.RECENT_ACTIVITIES_RAW_DATA]: 'Recent Activities Raw Data',
+  [CacheType.RECENT_ACTIVITIES_NORMALIZED]: 'Recent Activities Normalized',
+  [CacheType.RECENT_ACTIVITIES_ANALYSIS]: 'Recent Activities Analysis',
+  [CacheType.RECENT_ACTIVITIES_ENRICHED]: 'Recent Activities Enriched',
+  [CacheType.RECENT_ACTIVITIES_SERP_NEWS]: 'Recent Activities SerpAPI News',
+  [CacheType.RECENT_ACTIVITIES_SERP_YOUTUBE]: 'Recent Activities SerpAPI YouTube',
+
+  // Integration Needs Research Types
+  [CacheType.INTEGRATION_NEEDS_RAW_DATA]: 'Integration Needs Raw Data',
+  [CacheType.INTEGRATION_NEEDS_NORMALIZED]: 'Integration Needs Normalized',
+  [CacheType.INTEGRATION_NEEDS_ANALYSIS]: 'Integration Needs Analysis',
+  [CacheType.INTEGRATION_NEEDS_ENRICHED]: 'Integration Needs Enriched',
+  [CacheType.INTEGRATION_NEEDS_SERP_ORGANIC]: 'Integration Needs SerpAPI Organic',
+  [CacheType.INTEGRATION_NEEDS_BRIGHTDATA_STACKSHARE]: 'Integration Needs BrightData StackShare',
+
+  // Compliance Requirements Research Types
+  [CacheType.COMPLIANCE_RAW_DATA]: 'Compliance Raw Data',
+  [CacheType.COMPLIANCE_NORMALIZED]: 'Compliance Normalized',
+  [CacheType.COMPLIANCE_ANALYSIS]: 'Compliance Analysis',
+  [CacheType.COMPLIANCE_ENRICHED]: 'Compliance Enriched',
+  [CacheType.COMPLIANCE_SERP_ORGANIC]: 'Compliance SerpAPI Organic',
+  [CacheType.COMPLIANCE_BRIGHTDATA_REGULATORY]: 'Compliance BrightData Regulatory',
+
+  // Business Challenges Research Types
+  [CacheType.BUSINESS_CHALLENGES_RAW_DATA]: 'Business Challenges Raw Data',
+  [CacheType.BUSINESS_CHALLENGES_NORMALIZED]: 'Business Challenges Normalized',
+  [CacheType.BUSINESS_CHALLENGES_ANALYSIS]: 'Business Challenges Analysis',
+  [CacheType.BUSINESS_CHALLENGES_ENRICHED]: 'Business Challenges Enriched',
+  [CacheType.BUSINESS_CHALLENGES_SERP_NEWS]: 'Business Challenges SerpAPI News',
+  [CacheType.BUSINESS_CHALLENGES_SERP_ORGANIC]: 'Business Challenges SerpAPI Organic',
+
+  // Budget Indicators Research Types
+  [CacheType.BUDGET_INDICATORS_RAW_DATA]: 'Budget Indicators Raw Data',
+  [CacheType.BUDGET_INDICATORS_NORMALIZED]: 'Budget Indicators Normalized',
+  [CacheType.BUDGET_INDICATORS_ANALYSIS]: 'Budget Indicators Analysis',
+  [CacheType.BUDGET_INDICATORS_ENRICHED]: 'Budget Indicators Enriched',
+  [CacheType.BUDGET_INDICATORS_SERP_FINANCE]: 'Budget Indicators SerpAPI Finance',
+  [CacheType.BUDGET_INDICATORS_BRIGHTDATA_FINANCIAL]: 'Budget Indicators BrightData Financial',
 
   // LLM Analysis Types
   [CacheType.LLM_ANALYSIS]: 'LLM Analysis',
@@ -232,6 +414,97 @@ export const CACHE_TYPE_GROUPS = {
     CacheType.CUSTOMER_INTELLIGENCE_PARSED,
     CacheType.CUSTOMER_INTELLIGENCE_ANALYSIS,
     CacheType.CUSTOMER_INTELLIGENCE_ENRICHMENT
+  ],
+  decision_makers_research: [
+    CacheType.DECISION_MAKERS_RAW_DATA,
+    CacheType.DECISION_MAKERS_NORMALIZED,
+    CacheType.DECISION_MAKERS_ANALYSIS,
+    CacheType.DECISION_MAKERS_ENRICHED,
+    CacheType.DECISION_MAKERS_SNOV_CONTACTS,
+    CacheType.DECISION_MAKERS_SERP_LINKEDIN,
+    CacheType.DECISION_MAKERS_BRIGHTDATA_CONTACTS
+  ],
+  tech_stack_research: [
+    CacheType.TECH_STACK_RAW_DATA,
+    CacheType.TECH_STACK_NORMALIZED,
+    CacheType.TECH_STACK_ANALYSIS,
+    CacheType.TECH_STACK_ENRICHED,
+    CacheType.TECH_STACK_SERP_ORGANIC,
+    CacheType.TECH_STACK_BRIGHTDATA_BUILTWITH,
+    CacheType.TECH_STACK_BRIGHTDATA_STACKSHARE
+  ],
+  competitive_research: [
+    CacheType.COMPETITIVE_RAW_DATA,
+    CacheType.COMPETITIVE_NORMALIZED,
+    CacheType.COMPETITIVE_ANALYSIS,
+    CacheType.COMPETITIVE_ENRICHED,
+    CacheType.COMPETITIVE_SERP_NEWS,
+    CacheType.COMPETITIVE_SERP_ORGANIC,
+    CacheType.COMPETITIVE_BRIGHTDATA_CRUNCHBASE
+  ],
+  buying_signals_research: [
+    CacheType.BUYING_SIGNALS_RAW_DATA,
+    CacheType.BUYING_SIGNALS_NORMALIZED,
+    CacheType.BUYING_SIGNALS_ANALYSIS,
+    CacheType.BUYING_SIGNALS_ENRICHED,
+    CacheType.BUYING_SIGNALS_SERP_NEWS,
+    CacheType.BUYING_SIGNALS_BRIGHTDATA_NEWS
+  ],
+  growth_signals_research: [
+    CacheType.GROWTH_SIGNALS_RAW_DATA,
+    CacheType.GROWTH_SIGNALS_NORMALIZED,
+    CacheType.GROWTH_SIGNALS_ANALYSIS,
+    CacheType.GROWTH_SIGNALS_ENRICHED,
+    CacheType.GROWTH_SIGNALS_SERP_JOBS,
+    CacheType.GROWTH_SIGNALS_BRIGHTDATA_GLASSDOOR
+  ],
+  digital_footprint_research: [
+    CacheType.DIGITAL_FOOTPRINT_RAW_DATA,
+    CacheType.DIGITAL_FOOTPRINT_NORMALIZED,
+    CacheType.DIGITAL_FOOTPRINT_ANALYSIS,
+    CacheType.DIGITAL_FOOTPRINT_ENRICHED,
+    CacheType.DIGITAL_FOOTPRINT_SERP_ORGANIC,
+    CacheType.DIGITAL_FOOTPRINT_BRIGHTDATA_SOCIAL
+  ],
+  recent_activities_research: [
+    CacheType.RECENT_ACTIVITIES_RAW_DATA,
+    CacheType.RECENT_ACTIVITIES_NORMALIZED,
+    CacheType.RECENT_ACTIVITIES_ANALYSIS,
+    CacheType.RECENT_ACTIVITIES_ENRICHED,
+    CacheType.RECENT_ACTIVITIES_SERP_NEWS,
+    CacheType.RECENT_ACTIVITIES_SERP_YOUTUBE
+  ],
+  integration_needs_research: [
+    CacheType.INTEGRATION_NEEDS_RAW_DATA,
+    CacheType.INTEGRATION_NEEDS_NORMALIZED,
+    CacheType.INTEGRATION_NEEDS_ANALYSIS,
+    CacheType.INTEGRATION_NEEDS_ENRICHED,
+    CacheType.INTEGRATION_NEEDS_SERP_ORGANIC,
+    CacheType.INTEGRATION_NEEDS_BRIGHTDATA_STACKSHARE
+  ],
+  compliance_research: [
+    CacheType.COMPLIANCE_RAW_DATA,
+    CacheType.COMPLIANCE_NORMALIZED,
+    CacheType.COMPLIANCE_ANALYSIS,
+    CacheType.COMPLIANCE_ENRICHED,
+    CacheType.COMPLIANCE_SERP_ORGANIC,
+    CacheType.COMPLIANCE_BRIGHTDATA_REGULATORY
+  ],
+  business_challenges_research: [
+    CacheType.BUSINESS_CHALLENGES_RAW_DATA,
+    CacheType.BUSINESS_CHALLENGES_NORMALIZED,
+    CacheType.BUSINESS_CHALLENGES_ANALYSIS,
+    CacheType.BUSINESS_CHALLENGES_ENRICHED,
+    CacheType.BUSINESS_CHALLENGES_SERP_NEWS,
+    CacheType.BUSINESS_CHALLENGES_SERP_ORGANIC
+  ],
+  budget_indicators_research: [
+    CacheType.BUDGET_INDICATORS_RAW_DATA,
+    CacheType.BUDGET_INDICATORS_NORMALIZED,
+    CacheType.BUDGET_INDICATORS_ANALYSIS,
+    CacheType.BUDGET_INDICATORS_ENRICHED,
+    CacheType.BUDGET_INDICATORS_SERP_FINANCE,
+    CacheType.BUDGET_INDICATORS_BRIGHTDATA_FINANCIAL
   ],
   llm_analysis: [
     CacheType.LLM_ANALYSIS,
@@ -344,6 +617,92 @@ export function getCacheEntryType(cacheType: CacheType): 'raw' | 'processed' | '
   }
   
   return 'processed';
+}
+
+/**
+ * Get the appropriate cache type for a research area and processing stage
+ */
+export function getResearchCacheType(
+  areaId: string, 
+  stage: 'raw_data' | 'normalized' | 'analysis' | 'enriched',
+  source?: string
+): CacheType {
+  // Handle Snov.io specific areas
+  if (areaId.startsWith('snov_')) {
+    // For Snov.io areas, map to decision_makers cache types
+    switch (stage) {
+      case 'raw_data': return CacheType.DECISION_MAKERS_RAW_DATA;
+      case 'normalized': return CacheType.DECISION_MAKERS_NORMALIZED;
+      case 'analysis': return CacheType.DECISION_MAKERS_ANALYSIS;
+      case 'enriched': return CacheType.DECISION_MAKERS_ENRICHED;
+    }
+  }
+
+  // Map area IDs to their specific cache type prefixes
+  const areaMapping: Record<string, string> = {
+    'decision_makers': 'DECISION_MAKERS',
+    'tech_stack': 'TECH_STACK',
+    'competitive_positioning': 'COMPETITIVE',
+    'buying_signals': 'BUYING_SIGNALS',
+    'growth_signals': 'GROWTH_SIGNALS',
+    'digital_footprint': 'DIGITAL_FOOTPRINT',
+    'recent_activities': 'RECENT_ACTIVITIES',
+    'integration_needs': 'INTEGRATION_NEEDS',
+    'compliance_requirements': 'COMPLIANCE',
+    'business_challenges': 'BUSINESS_CHALLENGES',
+    'budget_indicators': 'BUDGET_INDICATORS'
+  };
+
+  const prefix = areaMapping[areaId];
+  if (!prefix) {
+    // Fallback to decision makers for unknown areas
+    return CacheType.DECISION_MAKERS_RAW_DATA;
+  }
+
+  // Build the cache type name
+  const stageSuffix = stage.toUpperCase().replace('_DATA', '_DATA');
+  const cacheTypeName = `${prefix}_${stageSuffix}` as keyof typeof CacheType;
+  
+  return CacheType[cacheTypeName] || CacheType.DECISION_MAKERS_RAW_DATA;
+}
+
+/**
+ * Get source-specific cache type for a research area
+ */
+export function getResearchSourceCacheType(areaId: string, sourceType: string): CacheType {
+  // Handle Snov.io sources
+  if (sourceType.startsWith('snov_')) {
+    return CacheType.DECISION_MAKERS_SNOV_CONTACTS;
+  }
+
+  // Map area + source combinations to specific cache types
+  const areaSourceMapping: Record<string, Record<string, CacheType>> = {
+    'decision_makers': {
+      'serp_linkedin': CacheType.DECISION_MAKERS_SERP_LINKEDIN,
+      'brightdata_contacts': CacheType.DECISION_MAKERS_BRIGHTDATA_CONTACTS
+    },
+    'tech_stack': {
+      'serp_organic': CacheType.TECH_STACK_SERP_ORGANIC,
+      'brightdata_builtwith': CacheType.TECH_STACK_BRIGHTDATA_BUILTWITH,
+      'brightdata_stackshare': CacheType.TECH_STACK_BRIGHTDATA_STACKSHARE
+    },
+    'competitive_positioning': {
+      'serp_news': CacheType.COMPETITIVE_SERP_NEWS,
+      'serp_organic': CacheType.COMPETITIVE_SERP_ORGANIC,
+      'brightdata_crunchbase': CacheType.COMPETITIVE_BRIGHTDATA_CRUNCHBASE
+    },
+    'buying_signals': {
+      'serp_news': CacheType.BUYING_SIGNALS_SERP_NEWS,
+      'brightdata_news': CacheType.BUYING_SIGNALS_BRIGHTDATA_NEWS
+    },
+    'growth_signals': {
+      'serp_jobs': CacheType.GROWTH_SIGNALS_SERP_JOBS,
+      'brightdata_glassdoor': CacheType.GROWTH_SIGNALS_BRIGHTDATA_GLASSDOOR
+    }
+    // Add more mappings as needed
+  };
+
+  return areaSourceMapping[areaId]?.[sourceType] || CacheType.DECISION_MAKERS_RAW_DATA;
 }
 
 /**

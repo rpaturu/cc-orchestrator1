@@ -6,12 +6,9 @@
  */
 
 import { DataSourceOrchestrator } from '../../DataSourceOrchestrator';
-import { CacheService } from '../../core/CacheService';
 import { Logger } from '../../core/Logger';
-import { SerpAPIService } from '../../SerpAPIService';
 import { CONSUMER_DATASET_REQUIREMENTS, DatasetType } from '../../../types/dataset-requirements';
 import { ConsumerType, MultiSourceData } from '../../../types/orchestrator-types';
-import { CacheType } from '../../../types/cache-types';
 
 // Define Step Function types locally since they're not exported from main types
 interface StepFunctionEvent {
@@ -82,14 +79,8 @@ export const smartDataCollectionHandler = async (
     });
 
     // Initialize services
-    const cacheService = new CacheService(
-      { ttlHours: 24, maxEntries: 1000, compressionEnabled: false },
-      logger, 
-      process.env.AWS_REGION
-    );
-    
-    const serpAPIService = new SerpAPIService(cacheService, logger);
-    const orchestrator = new DataSourceOrchestrator(cacheService, logger, serpAPIService);
+    // DataSourceOrchestrator handles all service initialization internally
+    const orchestrator = new DataSourceOrchestrator(logger);
     
     let result: any;
     let datasetsCollected: DatasetType[] = [];
@@ -179,34 +170,13 @@ export const smartDataCollectionHandler = async (
         count: requiredDatasets.length 
       });
       
-      // Check for cached vendor context first (before expensive data collection)
-      const vendorCacheKey = `vendor_context_data:${companyName.toLowerCase().replace(/\s+/g, '_')}`;
-      const cachedVendorData = await cacheService.getRawJSON(vendorCacheKey);
+      // Collect vendor context data (orchestrator handles caching internally)
+      result = await orchestrator.getMultiSourceData(
+        companyName,
+        'vendor_context' as ConsumerType
+      );
       
-      if (cachedVendorData && !event.refresh) {
-        logger.info('Vendor context data found in cache', { companyName, cacheKey: vendorCacheKey });
-        result = cachedVendorData;
-        datasetsCollected = requiredDatasets;
-        
-        // Mark as cache hit
-        (result as any).fromCache = true;
-        (result as any).cacheHits = requiredDatasets.length;
-        (result as any).newApiCalls = 0;
-        (result as any).totalNewCost = 0;
-        (result as any).totalCacheSavings = 1.50; // Estimated vendor context cost
-      } else {
-        // Collect vendor context data
-        result = await orchestrator.getMultiSourceData(
-          companyName,
-          'vendor_context' as ConsumerType
-        );
-        
-        datasetsCollected = requiredDatasets;
-        
-        // Cache the vendor context data for reuse
-        await cacheService.setRawJSON(vendorCacheKey, result, CacheType.VENDOR_CONTEXT_RAW_DATA);
-        logger.info('Vendor context data cached for reuse', { companyName, cacheKey: vendorCacheKey });
-      }
+      datasetsCollected = requiredDatasets;
       
       // Add workflow metadata for LLM processing
       (result as any).userPersona = userPersona;  // ✅ Add missing userPersona

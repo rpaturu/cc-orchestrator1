@@ -24,7 +24,26 @@ export interface VendorContextResponse {
     valuePropositions?: string[];
     positioningStrategy?: string;
     pricingModel?: string;
+    // Financial Information
+    revenue?: string;
+    revenueGrowth?: string;
+    stockSymbol?: string;
+    marketCap?: string;
+    companySize?: string;
+    marketPresence?: string;
+    recentNews?: string[];
+    keyExecutives?: string[];
+    businessChallenges?: string[];
+    growthIndicators?: string[];
+    techStack?: string[];
+    partnerships?: string[];
     lastUpdated: string;
+    dataQuality?: {
+      completeness: number;
+      freshness: number;
+      reliability: number;
+      overall: number;
+    };
   };
   metadata: {
     requestId: string;
@@ -214,7 +233,7 @@ export class VendorContextHandler extends BaseEndpointHandler {
       const dataContent = this.prepareDataForAnalysis(vendorData);
       
       const prompt = `
-        Analyze the following vendor data for ${companyName} and extract structured vendor context.
+        Analyze the following vendor data for ${companyName} and extract comprehensive vendor context including financial information.
         
         Data Sources:
         ${dataContent}
@@ -230,9 +249,28 @@ export class VendorContextHandler extends BaseEndpointHandler {
           "valuePropositions": ["List of key value propositions"],
           "positioningStrategy": "Brief positioning strategy",
           "pricingModel": "Primary pricing model",
-          "lastUpdated": "${new Date().toISOString()}"
+          "revenue": "Annual revenue if mentioned (e.g., '$2.4 billion', '$100M-500M range')",
+          "revenueGrowth": "Revenue growth rate if mentioned (e.g., '25% YoY', 'Growing 15% annually')",
+          "stockSymbol": "Stock ticker symbol if public company (e.g., 'OKTA', 'MSFT')",
+          "marketCap": "Market capitalization if mentioned (e.g., '$12.5 billion')",
+          "companySize": "Employee count or company size description",
+          "marketPresence": "Geographic presence and market reach",
+          "recentNews": ["Recent significant company news or announcements"],
+          "keyExecutives": ["Key leadership team members mentioned"],
+          "businessChallenges": ["Business challenges or market pressures mentioned"],
+          "growthIndicators": ["Growth signals like expansion, new products, hiring"],
+          "techStack": ["Technology platforms and tools used"],
+          "partnerships": ["Strategic partnerships or integrations mentioned"],
+          "lastUpdated": "${new Date().toISOString()}",
+          "dataQuality": {
+            "completeness": 0.85,
+            "freshness": 0.90,
+            "reliability": 0.80,
+            "overall": 0.85
+          }
         }
         
+        For any field where information is not available in the data sources, use null or an empty array.
         Return only valid JSON without any explanations.
       `;
 
@@ -245,17 +283,35 @@ export class VendorContextHandler extends BaseEndpointHandler {
         error: String(error) 
       });
       
-      // Fallback to basic structure
+      // Fallback to basic structure with all new fields
       return {
         companyName,
-        industry: undefined,
+        industry: null,
         products: [],
         targetMarkets: [],
         competitors: [],
         valuePropositions: [],
         positioningStrategy: 'Industry-leading solutions',
         pricingModel: 'Contact for pricing',
-        lastUpdated: new Date().toISOString()
+        revenue: null,
+        revenueGrowth: null,
+        stockSymbol: null,
+        marketCap: null,
+        companySize: null,
+        marketPresence: null,
+        recentNews: [],
+        keyExecutives: [],
+        businessChallenges: [],
+        growthIndicators: [],
+        techStack: [],
+        partnerships: [],
+        lastUpdated: new Date().toISOString(),
+        dataQuality: {
+          completeness: 0.20,
+          freshness: 0.10,
+          reliability: 0.30,
+          overall: 0.20
+        }
       };
     }
   }
@@ -270,7 +326,7 @@ export class VendorContextHandler extends BaseEndpointHandler {
     
     // Add top organic search results
     if (vendorData.organic?.results) {
-      const topResults = vendorData.organic.results.slice(0, 3);
+      const topResults = vendorData.organic.results.slice(0, 5); // Increased for more context
       content.push(`Search Results: ${JSON.stringify(topResults.map((r: any) => ({
         title: r.title,
         snippet: r.snippet,
@@ -278,9 +334,32 @@ export class VendorContextHandler extends BaseEndpointHandler {
       })))}`);
     }
     
+    // Add news results (important for financial information)
+    if (vendorData.news?.results) {
+      const newsResults = vendorData.news.results.slice(0, 3);
+      content.push(`Recent News: ${JSON.stringify(newsResults.map((n: any) => ({
+        title: n.title,
+        snippet: n.snippet,
+        date: n.date,
+        source: n.source
+      })))}`);
+    }
+    
     // Add related questions
     if (vendorData.organic?.related_questions) {
       content.push(`Related Questions: ${JSON.stringify(vendorData.organic.related_questions)}`);
+    }
+    
+    // Add any financial/stock data if available
+    if (vendorData.financial) {
+      content.push(`Financial Data: ${JSON.stringify(vendorData.financial)}`);
+    }
+    
+    // Add job postings for growth indicators
+    if (vendorData.jobs?.results) {
+      const jobCount = vendorData.jobs.results.length;
+      const jobTitles = vendorData.jobs.results.slice(0, 5).map((j: any) => j.title);
+      content.push(`Job Postings (${jobCount} total): ${JSON.stringify(jobTitles)}`);
     }
     
     return content.join('\n\n');

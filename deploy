@@ -61,9 +61,19 @@ GOOGLE_SEARCH_ENGINE_ID=${GOOGLE_SEARCH_ENGINE_ID:-}
 # Set defaults for SerpAPI (empty string if not provided)
 SERPAPI_API_KEY=${SERPAPI_API_KEY:-}
 
+# Set defaults for Snov.io API (empty strings if not provided)
+SNOV_API_KEY=${SNOV_API_KEY:-}
+SNOV_API_SECRET=${SNOV_API_SECRET:-}
+
+# Set defaults for BrightData API (empty string if not provided)
+BRIGHTDATA_API_KEY=${BRIGHTDATA_API_KEY:-}
+
 CDK_CONTEXT_PARAMS="$CDK_CONTEXT_PARAMS -c googleSearchApiKey=$GOOGLE_SEARCH_API_KEY"
 CDK_CONTEXT_PARAMS="$CDK_CONTEXT_PARAMS -c googleSearchEngineId=$GOOGLE_SEARCH_ENGINE_ID"
 CDK_CONTEXT_PARAMS="$CDK_CONTEXT_PARAMS -c serpApiKey=$SERPAPI_API_KEY"
+CDK_CONTEXT_PARAMS="$CDK_CONTEXT_PARAMS -c snovApiKey=$SNOV_API_KEY"
+CDK_CONTEXT_PARAMS="$CDK_CONTEXT_PARAMS -c snovApiSecret=$SNOV_API_SECRET"
+CDK_CONTEXT_PARAMS="$CDK_CONTEXT_PARAMS -c brightDataApiKey=$BRIGHTDATA_API_KEY"
 CDK_CONTEXT_PARAMS="$CDK_CONTEXT_PARAMS -c nodeEnv=$DEPLOYMENT_ENV"
 
 if [ ! -z "$GOOGLE_SEARCH_API_KEY" ]; then
@@ -90,6 +100,28 @@ if [ ! -z "$SERPAPI_API_KEY" ]; then
   fi
 else
   echo "Warning: SERPAPI_API_KEY not set in .env.local - company domain extraction will use fallback methods"
+fi
+
+if [ ! -z "$BRIGHTDATA_API_KEY" ]; then
+  if [ "$SHOW_KEYS" = true ]; then
+    echo "Using BrightData API Key: $BRIGHTDATA_API_KEY"
+  else
+    echo "Using BrightData API Key: [HIDDEN]"
+  fi
+else
+  echo "Warning: BRIGHTDATA_API_KEY not set in .env.local - BrightData sources will be skipped"
+fi
+
+if [ ! -z "$SNOV_API_KEY" ] && [ ! -z "$SNOV_API_SECRET" ]; then
+  if [ "$SHOW_KEYS" = true ]; then
+    echo "Using Snov.io API Key: $SNOV_API_KEY"
+    echo "Using Snov.io API Secret: $SNOV_API_SECRET"
+  else
+    echo "Using Snov.io API Key: [HIDDEN]"
+    echo "Using Snov.io API Secret: [HIDDEN]"
+  fi
+else
+  echo "Warning: SNOV_API_KEY and/or SNOV_API_SECRET not set in .env.local - email intelligence features will be disabled"
 fi
 
 # Bedrock configuration (uses AWS credentials, no API key needed)
@@ -221,6 +253,10 @@ GOOGLE_SEARCH_ENGINE_ID=$GOOGLE_SEARCH_ENGINE_ID
 # SerpAPI
 SERPAPI_API_KEY=$SERPAPI_API_KEY
 
+# Snov.io API
+SNOV_API_KEY=$SNOV_API_KEY
+SNOV_API_SECRET=$SNOV_API_SECRET
+
 # AWS Bedrock Configuration
 BEDROCK_MODEL=$BEDROCK_MODEL
 BEDROCK_MAX_TOKENS=$BEDROCK_MAX_TOKENS
@@ -259,7 +295,9 @@ else
 {
   "googleSearchApiKey": "$GOOGLE_SEARCH_API_KEY",
   "googleSearchEngineId": "$GOOGLE_SEARCH_ENGINE_ID",
-  "serpApiKey": "$SERPAPI_API_KEY"
+  "serpApiKey": "$SERPAPI_API_KEY",
+  "snovApiKey": "$SNOV_API_KEY",
+  "snovApiSecret": "$SNOV_API_SECRET"
 }
 EOF
 )
@@ -298,6 +336,11 @@ echo ""
 echo "📊 API Endpoint: $API_ENDPOINT"
 echo "🔑 API Key: ✅ Generated and saved to .env file"
 echo "🔍 Search: Using Google Search API with intelligent caching"
+if [ ! -z "$SNOV_API_KEY" ] && [ ! -z "$SNOV_API_SECRET" ]; then
+  echo "📧 Email Intelligence: ✅ Snov.io integration enabled"
+else
+  echo "📧 Email Intelligence: ⚠️  Snov.io credentials not configured"
+fi
 echo "💾 Cache TTL: $([ "$DEPLOYMENT_ENV" = "development" ] && echo "30 days (development)" || echo "24 hours (production)")"
 echo "🌐 Environment: $DEPLOYMENT_ENV"
 echo ""
@@ -317,5 +360,10 @@ echo ""
 echo "# Test company overview (async)"
 echo "curl -X GET \"\$API_ENDPOINT/company/shopify.com/overview\" -H \"X-API-Key: \$API_KEY\" | jq"
 echo ""
+if [ ! -z "$SNOV_API_KEY" ] && [ ! -z "$SNOV_API_SECRET" ]; then
+  echo "# Test research streaming with Snov.io (email intelligence)"
+  echo "curl -X POST \"\$API_ENDPOINT/api/research/stream?areaId=decision_makers&companyId=shopify.com\" -H \"X-API-Key: \$API_KEY\" | jq"
+  echo ""
+fi
 echo "📖 For complete API documentation and examples, see: docs/api-endpoints.md"
 echo "" 
