@@ -11,6 +11,7 @@ export class CoreInfrastructureConstruct extends Construct {
   public readonly cacheTable: dynamodb.Table;
   public readonly requestsTable: dynamodb.Table;
   public readonly profilesTable: dynamodb.Table;
+  public readonly researchHistoryTable: dynamodb.Table;
   public readonly apiKeysSecret: secretsmanager.Secret;
 
   constructor(scope: Construct, id: string, props: CoreInfrastructureProps) {
@@ -60,6 +61,23 @@ export class CoreInfrastructureConstruct extends Construct {
     this.profilesTable.addGlobalSecondaryIndex({
       indexName: 'EmailIndex',
       partitionKey: { name: 'email', type: dynamodb.AttributeType.STRING },
+      projectionType: dynamodb.ProjectionType.ALL,
+    });
+
+    // Research History Table (company-based structure)
+    this.researchHistoryTable = new dynamodb.Table(this, 'ResearchHistoryTable', {
+      tableName: 'sales-intelligence-research-history',
+      partitionKey: { name: 'userId', type: dynamodb.AttributeType.STRING },
+      sortKey: { name: 'company', type: dynamodb.AttributeType.STRING },
+      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+      removalPolicy: cdk.RemovalPolicy.DESTROY, // For development - change to RETAIN for production
+    });
+
+    // Add GSI for date-based queries
+    this.researchHistoryTable.addGlobalSecondaryIndex({
+      indexName: 'DateIndex',
+      partitionKey: { name: 'userId', type: dynamodb.AttributeType.STRING },
+      sortKey: { name: 'lastUpdated', type: dynamodb.AttributeType.STRING },
       projectionType: dynamodb.ProjectionType.ALL,
     });
 

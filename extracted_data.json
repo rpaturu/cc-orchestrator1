@@ -1,0 +1,212 @@
+{
+  "companyName": "Tesla",
+  "vendorCompany": "Shopify",
+  "requester": "customer_intelligence",
+  "workflowType": "customer_intelligence",
+  "rawData": {
+    "serp_api": {
+      "data": [
+        {
+          "position": 1,
+          "title": "Tesla: Electric Cars, Solar & Clean Energy",
+          "link": "https://www.tesla.com/",
+          "redirect_link": "https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://www.tesla.com/&ved=2ahUKEwi06IiwwtWOAxXtHEQIHS7rO_AQFnoECC0QAQ",
+          "displayed_link": "https://www.tesla.com",
+          "favicon": "https://serpapi.com/searches/68822a080676dce00aa7e562/images/befe75e632252bf61f71648bbbc5d05aedfed032e4e984e8229ff1781e7bc609.png",
+          "snippet": "Tesla is accelerating the world's transition to sustainable energy with electric cars, solar and integrated renewable energy solutions for homes and ...",
+          "snippet_highlighted_words": ["Tesla"],
+          "sitelinks": {
+            "expanded": [
+              {
+                "title": "Model Y",
+                "link": "https://www.tesla.com/modely",
+                "snippet": "Learn about Model Y, a midsize electric SUV with award ..."
+              },
+              {
+                "title": "Investor Relations",
+                "link": "https://ir.tesla.com/",
+                "snippet": "Tesla's mission is to accelerate the world's transition to sustainable ..."
+              },
+              {
+                "title": "Model 3",
+                "link": "https://www.tesla.com/model3",
+                "snippet": "Learn about Model 3, a midsize electric sedan designed for ..."
+              },
+              {
+                "title": "Cybertruck",
+                "link": "https://www.tesla.com/cybertruck",
+                "snippet": "Learn about Cybertruck, a revolutionary electric truck built ..."
+              },
+              {
+                "title": "Inventory",
+                "link": "https://www.tesla.com/inventory/new/my",
+                "snippet": "Find new and used Tesla cars. Every new Tesla has a variety ..."
+              }
+            ]
+          },
+          "source": "Tesla"
+        },
+        {
+          "position": 2,
+          "title": "Tesla, Inc.",
+          "link": "https://en.wikipedia.org/wiki/Tesla,_Inc.",
+          "redirect_link": "https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://en.wikipedia.org/wiki/Tesla,_Inc.&ved=2ahUKEwi06IiwwtWOAxXtHEQIHS7rO_AQFnoECFcQAQ",
+          "displayed_link": "https://en.wikipedia.org › wiki › Tesla,_Inc",
+          "favicon": "https://serpapi.com/searches/68822a080676dce00aa7e562/images/befe75e632252bf61f71648bbbc5d05a5de5b5db8b5e685819f8a5eeb3779306.png",
+          "snippet": "an American multinational automotive and clean energy company. Headquartered in Austin, Texas, it designs, manufactures and sells battery electric vehicles ( ...",
+          "snippet_highlighted_words": ["an American multinational automotive and clean energy company"],
+          "source": "Wikipedia"
+        },
+        {
+          "position": 3,
+          "title": "Tesla shares drop 6% in premarket trading after auto sales ...",
+          "link": "https://www.cnbc.com/2025/07/24/tesla-tsla-shares-today.html",
+          "redirect_link": "https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://www.cnbc.com/2025/07/24/tesla-tsla-shares-today.html&ved=2ahUKEwi06IiwwtWOAxXtHEQIHS7rO_AQFnoECFgQAQ",
+          "displayed_link": "https://www.cnbc.com › tesla-tsla-shares-today",
+          "favicon": "https://serpapi.com/searches/68822a080676dce00aa7e562/images/befe75e632252bf61f71648bbbc5d05a8e52e74e57d639202b5f213d9b498246.png",
+          "date": "3 hours ago",
+          "snippet": "Tesla shares fell on Thursday after the company reported second-quarter automotive sales that dipped again. Musk said Tesla \"probably could ...",
+          "snippet_highlighted_words": ["Tesla shares fell on Thursday"],
+          "source": "CNBC"
+        }
+      ],
+      "source": "serp_api",
+      "companyName": "Tesla",
+      "timestamp": "2025-07-24T12:41:47.595Z",
+      "collectedBy": "DataCollectionEngine"
+    }
+  },
+  "analysis": {
+    "customer": {
+      "name": "Tesla",
+      "industry": "Automotive & Technology",
+      "size": "127,855 employees",
+      "headquarters": "Austin, Texas",
+      "founded": "2003",
+      "description": "Tesla is an electric vehicle and clean energy company that designs, manufactures, and sells electric cars, battery energy storage systems, solar panels, and related products and services."
+    },
+    "news_signals": [
+      {
+        "date": "2024-01",
+        "headline": "Tesla Opens Direct-to-Consumer Sales Platform in Multiple States",
+        "source": "Reuters",
+        "insight": "Expanding direct sales channels indicates need for robust e-commerce infrastructure",
+        "signal_type": "expansion"
+      },
+      {
+        "date": "2023-12",
+        "headline": "Tesla Launches New Merchandise and Lifestyle Products",
+        "source": "Bloomberg",
+        "insight": "Growing D2C merchandise business needs scalable commerce platform",
+        "signal_type": "product"
+      }
+    ],
+    "tech_stack": {
+      "frontend": ["React", "Angular", "Vue.js"],
+      "backend": ["Python", "Java", "Node.js"],
+      "infrastructure": ["AWS", "Google Cloud"],
+      "analytics": ["Amplitude", "Google Analytics"],
+      "collaboration": ["Slack", "Microsoft Teams"],
+      "security": ["Okta", "CloudFlare"],
+      "observations": [
+        "Modern tech stack compatible with Shopify Plus API architecture",
+        "Heavy investment in custom solutions indicates need for flexible platform",
+        "Enterprise-grade security requirements align with Shopify Plus capabilities"
+      ]
+    },
+    "target_contacts": [
+      {
+        "name": "Head of Digital Retail",
+        "title": "VP Digital Commerce",
+        "role": "Decision Maker",
+        "persona_fit": "Owns D2C strategy and e-commerce infrastructure",
+        "signal": "Recently posted about scaling direct sales channels"
+      },
+      {
+        "name": "Global Merchandise Director",
+        "title": "Director of Merchandise Operations",
+        "role": "Champion",
+        "persona_fit": "Manages growing merchandise business",
+        "signal": "Actively seeking solutions for international expansion"
+      }
+    ],
+    "recommended_products": [
+      {
+        "product": "Shopify Plus",
+        "reason": "Enterprise-grade platform needed for high-volume merchandise sales and global expansion",
+        "outcome": "Streamlined global commerce operations with unified platform",
+        "dataset_source": "tech_stack, business_challenges",
+        "vendor_alignment": "Enterprise scalability and global commerce capabilities"
+      },
+      {
+        "product": "Shopify Markets",
+        "reason": "International expansion of merchandise business requires cross-border capabilities",
+        "outcome": "Simplified global market entry and currency management",
+        "dataset_source": "growth_signals",
+        "vendor_alignment": "Cross-border commerce expertise and infrastructure"
+      }
+    ],
+    "competitor_context": {
+      "known_usage": ["Custom in-house solutions", "Legacy enterprise platforms"],
+      "pain_points": [
+        "Complex international expansion requirements",
+        "High maintenance costs of custom solutions",
+        "Limited scalability for merchandise business"
+      ],
+      "positioning_advantage": "Shopify Plus offers enterprise scalability with lower TCO than custom solutions while providing built-in global commerce capabilities",
+      "objection_handling": [
+        "Enterprise-grade security and compliance certifications",
+        "API-first architecture for custom integration needs",
+        "Proven scalability with other major automotive brands"
+      ],
+      "competitive_intel": "Current custom solution requires significant internal resources and lacks modern commerce features available out-of-box with Shopify Plus"
+    },
+    "talking_points": [
+      "How are you managing the complexity of global merchandise sales expansion?",
+      "What challenges are you facing with your current custom e-commerce infrastructure?",
+      "Shopify Plus powers several automotive brands' global merchandise operations with significantly lower TCO",
+      "Our API-first architecture allows seamless integration with Tesla's existing tech stack while providing enterprise-grade commerce capabilities"
+    ],
+    "opportunity_signals": [
+      {
+        "signal": "Global merchandise expansion",
+        "source": "recent_activities",
+        "urgency": "high",
+        "action": "Present Shopify Plus global commerce capabilities"
+      },
+      {
+        "signal": "Direct sales channel expansion",
+        "source": "news_signals",
+        "urgency": "medium",
+        "action": "Schedule technical architecture review"
+      }
+    ],
+    "last_updated": "2025-07-25T02:19:43.530Z",
+    "data_quality": {
+      "completeness": 0.8,
+      "freshness": 0.9,
+      "reliability": 0.85,
+      "overall": 0.78
+    }
+  },
+  "metrics": {
+    "totalCost": 0.02,
+    "cacheHits": 0,
+    "cacheSavings": 0,
+    "llmCost": 0.02,
+    "datasetsCollected": 0,
+    "dataQuality": {
+      "completeness": 0.8,
+      "freshness": 0.9,
+      "reliability": 0.85,
+      "overall": 0.78
+    }
+  },
+  "generatedAt": "2025-07-25T02:19:43.847Z",
+  "requestId": "0ca2fb76-8b10-4234-bd6a-2aac3194932e",
+  "workflowMetadata": {
+    "type": "customer_intelligence",
+    "datasetsCollected": [],
+    "processedAt": "2025-07-25T02:19:43.847Z"
+  }
+} 

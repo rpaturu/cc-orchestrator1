@@ -1,330 +1,414 @@
-# Sales Intelligence Frontend - React Edition
+# Sales Intelligence Orchestrator (Backend API)
 
-A modern React-based frontend for the Sales Intelligence AI platform, providing an intuitive interface for sales professionals to access company insights, discovery data, and competitive intelligence.
+A serverless, AI-powered backend orchestrator built on AWS Lambda that provides comprehensive sales intelligence through advanced data aggregation, AI analysis, and real-time company insights. This backend powers the [cc-intelligence](../cc-intelligence) frontend application.
 
-## 🚀 Recent Updates (v2.1.0)
+## 🚀 M4 Release Features
 
-- **Enhanced Discovery UI**: Fixed key contacts and tech stack rendering with proper object structure display
-- **Improved Intelligence Cards**: Better visualization of company data, contacts, and technology information
-- **Enhanced Authentication**: Robust user authentication with AWS Cognito integration
-- **Profile Management**: Complete user profile system with preferences and settings
-- **Responsive Design**: Modern, mobile-friendly interface using Tailwind CSS
-- **Real-time Data**: Live integration with backend API for fresh company intelligence
+### Enhanced Backend Architecture
+- **🔧 Improved Company Lookup**: Enhanced caching and response formatting
+- **⚡ Serverless Optimization**: Optimized Lambda functions for better performance
+- **🏢 Multi-Consumer Support**: Advanced data processing for multiple frontend clients
+- **🤖 AI Analysis Engine**: Enhanced LLM integration with context-aware responses
+- **📊 Real-time Processing**: Asynchronous workflow support with polling mechanisms
+- **🔄 Cache Management**: Intelligent TTL-based caching with freshness indicators
 
-## 🎯 Features
-
-### Core Intelligence Features
-- **Company Discovery**: Comprehensive company insights with key contacts and tech stack
-- **Analysis Dashboard**: Deep AI-powered analysis with pain points and opportunities
-- **Overview Reports**: Quick company summaries with financial and operational data
-- **Real-time Updates**: Live status updates for processing requests
-
-### UI/UX Features
-- **Modern Interface**: Clean, professional design with shadcn/ui components
-- **Dark/Light Mode**: Theme switching for user preference
-- **Responsive Layout**: Works seamlessly on desktop, tablet, and mobile
-- **Real-time Status**: Live request status tracking with progress indicators
-- **Smart Navigation**: Intuitive routing and breadcrumb navigation
-
-### User Management
-- **AWS Cognito Auth**: Secure authentication with sign-up, sign-in, and password reset
-- **Profile System**: User preferences, company information, and settings
-- **Protected Routes**: Secure access to intelligence features
-- **Session Management**: Persistent login with automatic token refresh
+### API Improvements
+- **📈 Company Intelligence API**: Comprehensive company data aggregation
+- **🔍 Enhanced Search**: Improved company lookup with fuzzy matching
+- **⚙️ Async Processing**: Long-running analysis with status tracking
+- **📱 CORS Support**: Enhanced frontend integration with proper headers
+- **🛡️ Security**: API key validation and request sanitization
 
 ## 🏗️ Architecture
 
+### Serverless Infrastructure
+```
+AWS Lambda Functions:
+├── CompanyLookupLambda          # Company search and discovery
+├── VendorContextLambda          # Comprehensive company intelligence
+├── AsyncAnalysisLambda          # Long-running AI analysis
+├── StatusCheckLambda            # Request status tracking
+└── HealthCheckLambda            # System health monitoring
+
+AWS Services:
+├── API Gateway                  # RESTful API endpoints
+├── DynamoDB                     # Data persistence and caching
+├── S3                          # Document and file storage
+├── CloudWatch                   # Logging and monitoring
+├── Secrets Manager             # API keys and configuration
+└── EventBridge                 # Event-driven workflows
+```
+
+### Core Components
 ```
 src/
-├── components/           # Reusable UI components
-│   ├── chat/            # Intelligence display components
-│   │   ├── IntelligenceCard.tsx
-│   │   ├── MessageBubble.tsx
-│   │   └── SourceCredibility.tsx
-│   ├── ui/              # shadcn/ui components
-│   │   ├── button.tsx
-│   │   ├── card.tsx
-│   │   ├── input.tsx
-│   │   └── ...
-│   ├── Layout.tsx       # Main layout wrapper
-│   ├── Navbar.tsx       # Navigation component
-│   └── ProtectedRoute.tsx
-├── contexts/            # React contexts
-│   ├── AuthContext.tsx  # Authentication state
-│   ├── ProfileContext.tsx
-│   └── ProfileContextTypes.ts
-├── hooks/               # Custom React hooks
-│   ├── useAuth.ts
-│   ├── useProfile.ts
-│   └── use-toast.ts
-├── lib/                 # Utility libraries
-│   ├── api.ts          # API client
-│   ├── config.ts       # App configuration
-│   └── utils.ts        # Helper functions
-├── pages/               # Main application pages
-│   ├── EnhancedIntelligenceExperience.tsx
-│   ├── LoginPage.tsx
-│   ├── SignUpPage.tsx
-│   ├── ConfirmSignUpPage.tsx
-│   └── ProfilePage.tsx
-├── types/               # TypeScript definitions
-│   └── api.ts
-└── App.tsx             # Main application component
+├── services/
+│   ├── handlers/lambda/         # Lambda function handlers
+│   │   ├── CompanyLookupLambda.ts
+│   │   ├── VendorContextLambda.ts
+│   │   ├── AsyncAnalysisLambda.ts
+│   │   └── StatusCheckLambda.ts
+│   ├── analysis/               # AI analysis engines
+│   │   ├── AIAnalyzer.ts
+│   │   ├── IntentAnalyzer.ts
+│   │   └── SourceAnalyzer.ts
+│   ├── content/                # Data fetching services
+│   │   ├── ContentFetcher.ts
+│   │   └── ContentFilter.ts
+│   ├── enrichment/             # Data enrichment engines
+│   │   ├── engines/
+│   │   ├── processors/
+│   │   └── sources/
+│   └── core/
+│       ├── CacheService.ts     # Redis/DynamoDB caching
+│       └── Logger.ts           # Structured logging
+├── stacks/                     # CDK infrastructure
+│   ├── constructs/
+│   │   ├── api/               # API Gateway constructs
+│   │   ├── compute/           # Lambda constructs
+│   │   ├── data/              # Database constructs
+│   │   └── storage/           # S3 constructs
+│   └── SalesIntelligenceStack.ts
+└── types/                      # TypeScript definitions
+    ├── api-types.ts
+    ├── cache-types.ts
+    └── dataset-requirements.ts
 ```
 
-## 📦 Installation
+## 📡 API Endpoints
 
-1. **Clone and install dependencies:**
-```bash
-npm install
-```
-
-2. **Set up environment variables:**
-```bash
-# Create .env file with:
-VITE_API_URL=https://your-api-gateway-url.com/prod
-VITE_AWS_REGION=us-west-2
-VITE_AWS_USER_POOL_ID=your_user_pool_id
-VITE_AWS_USER_POOL_WEB_CLIENT_ID=your_client_id
-```
-
-3. **Start development server:**
-```bash
-npm run dev
-```
-
-4. **Build for production:**
-```bash
-npm run build
-```
-
-## 🎨 UI Components
-
-### Intelligence Cards
-Enhanced display components for company data:
-
+### Company Intelligence
 ```typescript
-// IntelligenceCard with proper object rendering
-<IntelligenceCard
-  title="Key Contacts"
-  data={contacts}
-  renderItem={(contact) => (
-    <div className="space-y-1">
-      <div className="font-medium">{contact.name}</div>
-      <div className="text-sm text-muted-foreground">{contact.title}</div>
-      <div className="text-xs">{contact.approachStrategy}</div>
-    </div>
-  )}
-/>
+// GET /company/{domain}/lookup
+// Search and discover companies
+GET /company/okta.com/lookup
+Response: {
+  companies: CompanySearchResult[],
+  cached: boolean,
+  requestId: string
+}
+
+// POST /company/{domain}/vendor-context  
+// Comprehensive company intelligence
+POST /company/okta.com/vendor-context
+Body: { userRole: "account-executive" }
+Response: {
+  companyIntelligence: {
+    companyName: string,
+    industry: string,
+    products: string[],
+    targetMarkets: string[],
+    competitors: string[],
+    valuePropositions: string[],
+    // ... extensive company data
+  },
+  metadata: {
+    requestId: string,
+    fromCache: boolean,
+    processingTimeMs: number
+  }
+}
 ```
 
-### Tech Stack Display
-Color-coded technology stack visualization:
-
+### Analysis & Discovery
 ```typescript
-// Tech stack with category-based styling
-{techStack.current?.map((tech, index) => (
-  <span key={index} className="px-2 py-1 bg-green-100 text-green-800 rounded">
-    {tech}
-  </span>
-))}
+// POST /analysis/async
+// Long-running AI analysis
+POST /analysis/async
+Body: {
+  domain: "example.com",
+  context: "discovery",
+  searchResults: SearchResult[]
+}
+Response: {
+  statusEndpoint: string,
+  workflow: string,
+  requestId: string
+}
+
+// GET /analysis/status/{requestId}
+// Check analysis status
+GET /analysis/status/abc-123-def
+Response: {
+  status: "processing" | "completed" | "failed",
+  progress: number,
+  data?: AnalysisResult,
+  estimatedCompletion?: string
+}
 ```
 
-### Discovery Interface
-Comprehensive discovery insights with proper data structure handling:
-- Key contacts with names, titles, and approach strategies
-- Technology stack with current, planned, and vendor categories
-- Company overview with financial and operational metrics
-- Sources with credibility scoring and citations
+### System Health
+```typescript
+// GET /health
+// System health check
+GET /health
+Response: {
+  status: "healthy",
+  timestamp: string,
+  services: {
+    database: "operational",
+    cache: "operational", 
+    ai: "operational"
+  }
+}
+```
 
 ## 🔧 Configuration
 
 ### Environment Variables
 ```bash
+# AWS Configuration
+AWS_REGION=us-west-2
+AWS_ACCOUNT_ID=123456789012
+
 # API Configuration
-VITE_API_URL=https://api.salesintelligence.com/prod
-VITE_API_KEY=your_api_key  # Optional if using Cognito
+API_STAGE=prod
+CORS_ORIGIN=https://your-frontend-domain.com
+API_KEY_REQUIRED=true
 
-# AWS Cognito Configuration
-VITE_AWS_REGION=us-west-2
-VITE_AWS_USER_POOL_ID=us-west-2_xxxxxxxxx
-VITE_AWS_USER_POOL_WEB_CLIENT_ID=xxxxxxxxxxxxxxxxxxxxxxxxxx
+# Database Configuration
+DYNAMODB_TABLE_NAME=sales-intelligence-cache
+CACHE_TTL_HOURS=24
 
-# Optional Features
-VITE_ENABLE_ANALYTICS=true
-VITE_DEBUG_MODE=false
+# AI Services
+OPENAI_API_KEY=sk-...
+ANTHROPIC_API_KEY=...
+BEDROCK_REGION=us-west-2
+
+# External APIs
+SERPAPI_KEY=...
+BRIGHT_DATA_TOKEN=...
+SNOV_API_KEY=...
 ```
 
-### API Integration
-The frontend integrates with the backend API using:
+### Infrastructure Deployment
+```bash
+# Install dependencies
+npm install
 
+# Deploy infrastructure
+npx cdk deploy SalesIntelligenceStack
+
+# Deploy with specific stage
+npx cdk deploy --context stage=prod
+
+# Update Lambda functions only
+npx cdk deploy --hotswap
+```
+
+## 🤖 AI Analysis Engine
+
+### Multi-Model Architecture
 ```typescript
-// Enhanced API client with authentication
-const apiClient = {
-  getCompanyOverview: (domain: string) => 
-    api.get(`/company/${domain}/overview`),
-  
-  getDiscoveryInsights: (domain: string) => 
-    api.get(`/company/${domain}/discovery`),
+// Enhanced AI analysis with multiple providers
+class AIAnalyzer {
+  async analyzeCompany(data: CompanyData, context: AnalysisContext) {
+    const engines = [
+      new OpenAIEngine(),
+      new AnthropicEngine(), 
+      new BedrockEngine()
+    ];
     
-  getAnalysis: (domain: string, searchResults: any[]) =>
-    api.post(`/company/${domain}/analysis`, { searchResults }),
-    
-  checkRequestStatus: (requestId: string) =>
-    api.get(`/requests/${requestId}`)
-};
-```
-
-## 🎯 Key Features
-
-### Enhanced Discovery Experience
-- **Visual Company Cards**: Rich display of company information
-- **Interactive Tech Stack**: Clickable technology categories with descriptions
-- **Contact Intelligence**: Detailed contact profiles with approach strategies
-- **Real-time Processing**: Live status updates during analysis generation
-
-### Improved Data Rendering
-- **Object Structure Support**: Proper rendering of complex data objects
-- **Citation Integration**: Source links and credibility indicators
-- **Error Handling**: Graceful fallbacks for missing or invalid data
-- **Loading States**: Skeleton loaders and progress indicators
-
-### User Experience
-- **Intuitive Navigation**: Clean routing between discovery, analysis, and overview
-- **Responsive Design**: Optimized for all device sizes
-- **Accessibility**: WCAG compliant with keyboard navigation
-- **Performance**: Optimized bundle size and lazy loading
-
-## 🧪 Testing
-
-```bash
-# Run component tests
-npm run test
-
-# Run E2E tests
-npm run test:e2e
-
-# Run accessibility tests
-npm run test:a11y
-
-# Visual regression tests
-npm run test:visual
-```
-
-## 🚀 Deployment
-
-### Netlify (Recommended)
-```bash
-# Build command
-npm run build
-
-# Publish directory
-dist
-
-# Environment variables (set in Netlify dashboard)
-VITE_API_URL=https://your-production-api.com/prod
-VITE_AWS_REGION=us-west-2
-VITE_AWS_USER_POOL_ID=your_prod_pool_id
-VITE_AWS_USER_POOL_WEB_CLIENT_ID=your_prod_client_id
-```
-
-### AWS S3 + CloudFront
-```bash
-# Build for production
-npm run build
-
-# Deploy to S3
-aws s3 sync dist/ s3://your-bucket-name --delete
-
-# Invalidate CloudFront cache
-aws cloudfront create-invalidation --distribution-id YOUR_DISTRIBUTION_ID --paths "/*"
-```
-
-### Docker
-```dockerfile
-FROM node:18-alpine as builder
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci
-COPY . .
-RUN npm run build
-
-FROM nginx:alpine
-COPY --from=builder /app/dist /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/nginx.conf
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
-```
-
-## 🎨 Styling & Theming
-
-### Tailwind CSS Configuration
-```javascript
-// tailwind.config.js
-module.exports = {
-  content: ["./src/**/*.{js,ts,jsx,tsx}"],
-  theme: {
-    extend: {
-      colors: {
-        primary: {
-          50: '#eff6ff',
-          500: '#3b82f6',
-          900: '#1e3a8a',
-        }
-      }
-    }
-  },
-  plugins: [require("@tailwindcss/typography")]
+    return await this.orchestrateAnalysis(engines, data, context);
+  }
 }
 ```
 
-### Component Library
-Built with shadcn/ui for consistent, accessible components:
-- Button, Card, Input, Select components
-- Dark/light mode support
-- Consistent spacing and typography
-- Professional color palette
+### Context-Aware Processing
+- **Role-Based Analysis**: Tailored insights for AE, SE, BDR, CSM roles
+- **Intent Detection**: Automatic context classification (discovery, competitive, renewal)
+- **Source Credibility**: AI-powered source reliability scoring
+- **Real-time Updates**: Incremental analysis with live data streams
 
-## 📱 Mobile Support
+## 📊 Data Processing Pipeline
 
-The application is fully responsive with:
-- Touch-friendly interface elements
-- Optimized layouts for mobile screens
-- Swipe gestures for navigation
-- Mobile-specific loading states
+### Multi-Stage Enrichment
+```
+1. Company Discovery
+   ├── Domain validation
+   ├── Company search
+   └── Basic info retrieval
 
-## 🔐 Security Features
+2. Data Aggregation  
+   ├── Web scraping
+   ├── API integrations
+   ├── Public data sources
+   └── Social media signals
 
-- **Secure Authentication**: AWS Cognito integration with MFA support
-- **Protected Routes**: Authentication required for intelligence features
-- **HTTPS Only**: Enforced secure connections
-- **XSS Protection**: Sanitized data rendering
-- **CSRF Protection**: Request validation and tokens
+3. AI Analysis
+   ├── Content processing
+   ├── Entity extraction
+   ├── Sentiment analysis
+   └── Insight generation
 
-## 🚀 Performance
+4. Response Formation
+   ├── Data structuring
+   ├── Cache optimization
+   └── API response
+```
 
-- **Code Splitting**: Lazy-loaded components and routes
-- **Bundle Optimization**: Tree shaking and minification
-- **Caching Strategy**: Intelligent API response caching
-- **Image Optimization**: WebP format with fallbacks
-- **CDN Integration**: Static asset optimization
+### Caching Strategy
+- **Multi-Level Caching**: DynamoDB + Redis for optimal performance
+- **TTL Management**: Intelligent cache expiration based on data type
+- **Cache Invalidation**: Event-driven cache updates
+- **Freshness Indicators**: Real-time data age tracking
 
-## 📈 Analytics & Monitoring
+## 🔒 Security & Compliance
 
-- **User Analytics**: Page views, user flows, and engagement metrics
-- **Error Tracking**: Real-time error monitoring and reporting
-- **Performance Monitoring**: Core Web Vitals and load times
-- **API Monitoring**: Request success rates and response times
+### API Security
+- **Authentication**: API key-based access control
+- **Authorization**: Role-based permissions
+- **Rate Limiting**: Request throttling per client
+- **Input Validation**: Comprehensive request sanitization
+- **CORS**: Configurable cross-origin policies
 
-## 🤝 Contributing
+### Data Protection
+- **Encryption**: At-rest and in-transit encryption
+- **Data Retention**: Configurable TTL policies
+- **Privacy**: PII detection and anonymization
+- **Compliance**: GDPR and CCPA ready
 
-1. Fork the repository
-2. Create feature branch (`git checkout -b feature/amazing-feature`)
-3. Follow the component structure and naming conventions
-4. Add tests for new components
-5. Update documentation
-6. Submit pull request
+## 🚀 Performance Optimization
 
-## 📝 License
+### Serverless Benefits
+- **Auto-scaling**: Automatic capacity management
+- **Cold Start Optimization**: Provisioned concurrency for critical functions
+- **Cost Efficiency**: Pay-per-request pricing model
+- **Global Distribution**: Multi-region deployment support
+
+### Monitoring & Observability
+```typescript
+// Enhanced logging and metrics
+class Logger {
+  logApiRequest(endpoint: string, duration: number, status: number) {
+    CloudWatch.putMetric({
+      MetricName: 'ApiLatency',
+      Value: duration,
+      Dimensions: [
+        { Name: 'Endpoint', Value: endpoint },
+        { Name: 'Status', Value: status.toString() }
+      ]
+    });
+  }
+}
+```
+
+## 🧪 Testing
+
+### Test Coverage
+```bash
+# Unit tests
+npm test
+
+# Integration tests  
+npm run test:integration
+
+# Load testing
+npm run test:load
+
+# API contract tests
+npm run test:contract
+```
+
+### Test Environment
+```bash
+# Deploy test stack
+npx cdk deploy TestStack --context stage=test
+
+# Run full test suite
+npm run test:full
+
+# Performance benchmarks
+npm run benchmark
+```
+
+## 📈 Metrics & Analytics
+
+### Key Performance Indicators
+- **Response Time**: P95 < 2s for company lookup
+- **Throughput**: 1000+ requests/minute capacity
+- **Accuracy**: 95%+ data quality score
+- **Availability**: 99.9% uptime SLA
+- **Cache Hit Rate**: 80%+ for frequent queries
+
+### Business Metrics
+- **API Usage**: Request patterns and growth
+- **Feature Adoption**: Endpoint utilization
+- **Data Quality**: Source reliability tracking
+- **User Satisfaction**: Response accuracy scores
+
+## 🔄 Release History
+
+### M4 (Current)
+- ✅ Enhanced company lookup with improved caching
+- ✅ Optimized Lambda performance and cost
+- ✅ Advanced AI analysis with multi-model support
+- ✅ Real-time processing with async workflows
+- ✅ Improved CORS and frontend integration
+
+### M3.1
+- ✅ Async analysis processing
+- ✅ Enhanced error handling
+- ✅ Performance optimizations
+
+### M3
+- ✅ Multi-consumer architecture
+- ✅ Advanced caching strategies
+- ✅ AI analysis improvements
+
+### M2
+- ✅ Core API endpoints
+- ✅ Basic company intelligence
+- ✅ DynamoDB integration
+
+### M1-backend
+- ✅ Initial serverless architecture
+- ✅ Basic Lambda functions
+- ✅ API Gateway setup
+
+## 🛠️ Development
+
+### Local Development
+```bash
+# Install dependencies
+npm install
+
+# Start local development
+npm run dev
+
+# Deploy to dev environment
+npm run deploy:dev
+
+# Run tests
+npm test
+```
+
+### Contributing Guidelines
+1. **Feature Branches**: Use descriptive branch names
+2. **Code Standards**: Follow TypeScript best practices  
+3. **Testing**: Maintain 90%+ test coverage
+4. **Documentation**: Update API docs for changes
+5. **Performance**: Consider cold start impact
+
+## 📞 Support
+
+### Troubleshooting
+- **Lambda Timeouts**: Check CloudWatch logs for performance bottlenecks
+- **Cache Issues**: Verify DynamoDB TTL configurations
+- **API Errors**: Review API Gateway logs and error responses
+- **AI Analysis**: Monitor token usage and model availability
+
+### Resources
+- [AWS Lambda Best Practices](https://docs.aws.amazon.com/lambda/latest/dg/best-practices.html)
+- [CDK Documentation](https://docs.aws.amazon.com/cdk/)
+- [API Documentation](./docs/api-reference.md)
+
+## 📄 License
 
 MIT License - see LICENSE file for details.
+
+## 🔗 Related Projects
+
+- [cc-intelligence](../cc-intelligence): React frontend application
+- [Infrastructure Documentation](./docs/infrastructure.md): Detailed AWS setup guide
+- [API Reference](./docs/api-reference.md): Complete endpoint documentation

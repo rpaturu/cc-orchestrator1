@@ -115,14 +115,35 @@ export const profileHandler = async (
       hasResult: !!result
     });
 
-    return {
-      statusCode: 200,
-      headers: corsHeaders,
-      body: JSON.stringify({
+    // Format response based on operation type
+    let responseData;
+    if (event.httpMethod === 'GET') {
+      // GET returns profile wrapped in profile property
+      responseData = {
+        profile: result,
+        requestId: context.awsRequestId,
+        timestamp: new Date().toISOString()
+      };
+    } else if (event.httpMethod === 'PUT') {
+      // PUT returns saved profile wrapped in profile property
+      responseData = {
+        profile: result,
+        requestId: context.awsRequestId,
+        timestamp: new Date().toISOString()
+      };
+    } else if (event.httpMethod === 'DELETE') {
+      // DELETE returns message directly
+      responseData = {
         ...result,
         requestId: context.awsRequestId,
         timestamp: new Date().toISOString()
-      }),
+      };
+    }
+
+    return {
+      statusCode: 200,
+      headers: corsHeaders,
+      body: JSON.stringify(responseData),
     };
 
   } catch (error) {
