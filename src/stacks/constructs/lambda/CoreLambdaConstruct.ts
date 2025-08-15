@@ -10,6 +10,7 @@ export interface CoreLambdaProps {
   cacheTable: dynamodb.Table;
   requestsTable: dynamodb.Table;
   profilesTable: dynamodb.Table;
+  researchHistoryTable: dynamodb.Table;
   apiKeysSecret: secretsmanager.Secret;
   allowedOriginsString: string;
   nodeEnv: string;
@@ -41,6 +42,10 @@ export interface CoreLambdaFunctions {
   processOverviewFunction: NodejsFunction;
   processDiscoveryFunction: NodejsFunction;
   processAnalysisFunction: NodejsFunction;
+  
+  // Research Functions
+  researchStreamingFunction: NodejsFunction;
+  researchHistoryFunction: NodejsFunction;
 }
 
 export class CoreLambdaConstruct extends Construct {
@@ -56,6 +61,7 @@ export class CoreLambdaConstruct extends Construct {
       CACHE_TABLE_NAME: props.cacheTable.tableName,
       REQUESTS_TABLE_NAME: props.requestsTable.tableName,
       PROFILES_TABLE_NAME: props.profilesTable.tableName,
+      RESEARCH_HISTORY_TABLE_NAME: props.researchHistoryTable.tableName,
       API_KEYS_SECRET_NAME: props.apiKeysSecret.secretName,
       BEDROCK_MODEL: scope.node.tryGetContext('bedrockModel')!,
       BEDROCK_MAX_TOKENS: scope.node.tryGetContext('bedrockMaxTokens')!,
@@ -63,6 +69,9 @@ export class CoreLambdaConstruct extends Construct {
       GOOGLE_SEARCH_API_KEY: scope.node.tryGetContext('googleSearchApiKey') || '',
       GOOGLE_SEARCH_ENGINE_ID: scope.node.tryGetContext('googleSearchEngineId') || '',
       SERPAPI_API_KEY: scope.node.tryGetContext('serpApiKey') || '',
+      SNOV_API_KEY: scope.node.tryGetContext('snovApiKey') || '',
+      SNOV_API_SECRET: scope.node.tryGetContext('snovApiSecret') || '',
+      BRIGHTDATA_API_KEY: scope.node.tryGetContext('brightDataApiKey') || '',
       LOG_LEVEL: scope.node.tryGetContext('logLevel') || 'INFO',
       ALLOWED_ORIGINS: props.allowedOriginsString,
       NODE_ENV: props.nodeEnv
@@ -272,5 +281,32 @@ export class CoreLambdaConstruct extends Construct {
       environment: commonEnvironment,
       bundling: bundlingConfig,
     });
+
+    // Research Streaming Function
+    this.functions.researchStreamingFunction = new NodejsFunction(this, 'ResearchStreamingFunction', {
+      functionName: 'sales-intelligence-research-streaming',
+      runtime: lambda.Runtime.NODEJS_20_X,
+      entry: path.join(__dirname, '../../../services/handlers/lambda/ResearchStreamingLambda.ts'),
+      handler: 'researchStreamingHandler',
+      timeout: cdk.Duration.seconds(30),
+      memorySize: 512,
+      environment: commonEnvironment,
+      bundling: bundlingConfig,
+    });
+
+    // Research History Function
+    this.functions.researchHistoryFunction = new NodejsFunction(this, 'ResearchHistoryFunction', {
+      functionName: 'sales-intelligence-research-history',
+      runtime: lambda.Runtime.NODEJS_20_X,
+      entry: path.join(__dirname, '../../../services/handlers/lambda/ResearchHistoryLambda.ts'),
+      handler: 'researchHistoryHandler',
+      timeout: cdk.Duration.seconds(30),
+      memorySize: 512,
+      environment: commonEnvironment,
+      bundling: bundlingConfig,
+    });
+
+    // Grant DynamoDB permissions to research streaming function
+    props.cacheTable.grantReadWriteData(this.functions.researchStreamingFunction);
   }
 } 

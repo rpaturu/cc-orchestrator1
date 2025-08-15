@@ -2,6 +2,7 @@ import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
+import { Duration } from 'aws-cdk-lib';
 
 export interface ApiGatewayProps {
   allowedOrigins: string[];
@@ -20,6 +21,8 @@ export interface ApiGatewayProps {
     profileFunction: NodejsFunction;
     getAsyncRequestFunction: NodejsFunction;
     getWorkflowStatusFunction: NodejsFunction;
+    researchStreamingFunction: NodejsFunction;
+    researchHistoryFunction: NodejsFunction;
   };
   // Will add other function groups as we create more constructs
 }
@@ -38,7 +41,9 @@ export class ApiGatewayConstruct extends Construct {
       defaultCorsPreflightOptions: {
         allowOrigins: props.allowedOrigins,
         allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-        allowHeaders: ['Content-Type', 'Authorization', 'X-API-Key'],
+        allowHeaders: ['Content-Type', 'Authorization', 'X-API-Key', 'x-user-id'],
+        allowCredentials: true,
+        maxAge: Duration.seconds(86400), // 24 hours
       },
     });
 
@@ -169,6 +174,53 @@ export class ApiGatewayConstruct extends Construct {
     userProfileResource.addMethod('GET', profileIntegration, { apiKeyRequired: true });
     userProfileResource.addMethod('PUT', profileIntegration, { apiKeyRequired: true });
     userProfileResource.addMethod('DELETE', profileIntegration, { apiKeyRequired: true });
+
+    // Research Streaming endpoints
+    const researchResource = apiResource.addResource('research');
+    const researchStreamingIntegration = new apigateway.LambdaIntegration(props.coreFunctions.researchStreamingFunction);
+    
+    // POST /api/research/stream - Initiate research session
+    const researchStreamResource = researchResource.addResource('stream');
+    researchStreamResource.addMethod('POST', researchStreamingIntegration, {
+      apiKeyRequired: true,
+    });
+    
+    // Research Streaming Events, Status, and Results endpoints
+    const researchStreamIdResource = researchStreamResource.addResource('{researchSessionId}');
+    
+    // GET /api/research/stream/{researchSessionId}/events - SSE streaming
+    researchStreamIdResource.addResource('events').addMethod('GET', researchStreamingIntegration, {
+      apiKeyRequired: true,
+    });
+    
+    // GET /api/research/stream/{researchSessionId}/status - Get research status
+    researchStreamIdResource.addResource('status').addMethod('GET', researchStreamingIntegration, {
+      apiKeyRequired: true,
+    });
+    
+    // GET /api/research/stream/{researchSessionId}/result - Get research results
+    researchStreamIdResource.addResource('result').addMethod('GET', researchStreamingIntegration, {
+      apiKeyRequired: true,
+    });
+
+    // Research History endpoints (company-based structure)
+    const researchHistoryResource = apiResource.addResource('research-history');
+    const researchHistoryUsersResource = researchHistoryResource.addResource('users');
+    const researchHistoryUserResource = researchHistoryUsersResource.addResource('{userId}');
+    const researchHistoryCompaniesResource = researchHistoryUserResource.addResource('companies');
+    const researchHistoryCompanyResource = researchHistoryCompaniesResource.addResource('{companyName}');
+    
+    // Add GDPR right to erasure endpoint
+    const researchHistoryAllDataResource = researchHistoryUserResource.addResource('all-data');
+
+    // Research History Lambda integrations
+    researchHistoryCompaniesResource.addMethod('GET', new apigateway.LambdaIntegration(props.coreFunctions.researchHistoryFunction));
+    researchHistoryCompanyResource.addMethod('GET', new apigateway.LambdaIntegration(props.coreFunctions.researchHistoryFunction));
+    researchHistoryCompanyResource.addMethod('PUT', new apigateway.LambdaIntegration(props.coreFunctions.researchHistoryFunction));
+    researchHistoryCompanyResource.addMethod('DELETE', new apigateway.LambdaIntegration(props.coreFunctions.researchHistoryFunction));
+    
+    // GDPR right to erasure endpoint
+    researchHistoryAllDataResource.addMethod('DELETE', new apigateway.LambdaIntegration(props.coreFunctions.researchHistoryFunction));
 
     // Create API key for external access
     this.apiKey = this.api.addApiKey('SalesIntelligenceApiKey', {
