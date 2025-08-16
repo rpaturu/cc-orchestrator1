@@ -1,14 +1,17 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
 import { ResearchHistoryService } from '../../ResearchHistoryService';
+import { withSession, SessionAwareLambdaEvent } from '../../../middleware/SessionMiddleware';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'Content-Type,X-API-Key',
+  'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Session-ID',
   'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
+  'Access-Control-Allow-Credentials': 'true',
 };
 
-export const researchHistoryHandler = async (
-  event: APIGatewayProxyEvent,
+// Internal handler that can work with session-aware events
+const internalResearchHistoryHandler = async (
+  event: SessionAwareLambdaEvent,
   context: Context
 ): Promise<APIGatewayProxyResult> => {
   // Handle CORS preflight requests
@@ -20,18 +23,14 @@ export const researchHistoryHandler = async (
     };
   }
 
-  // Extract user ID from path parameters (like profile API)
-  const userId = event.pathParameters?.userId;
-  if (!userId) {
-    return {
-      statusCode: 400,
-      headers: corsHeaders,
-      body: JSON.stringify({
-        error: 'userId is required in path',
-        requestId: context.awsRequestId,
-      }),
-    };
-  }
+  // Get userId from session context (required)
+  const userId = event.userContext.userId;
+  
+  console.log('Research history request:', {
+    sessionId: event.sessionId,
+    userId,
+    email: event.userContext.email
+  });
 
   // Extract company name from path parameters (if present)
   const companyName = event.pathParameters?.companyName;
@@ -43,7 +42,7 @@ export const researchHistoryHandler = async (
   switch (event.httpMethod) {
     case 'GET':
       if (event.pathParameters?.companyName) {
-        // GET /research-history/users/{userId}/companies/{companyName}
+        // GET /research-history/companies/{companyName}
         const companyName = decodeURIComponent(event.pathParameters.companyName);
         const research = await researchHistoryService.getCompanyResearch(userId, companyName);
         
@@ -61,7 +60,7 @@ export const researchHistoryHandler = async (
           body: JSON.stringify({ research })
         };
       } else {
-        // GET /research-history/users/{userId}/companies
+        // GET /research-history/companies
         const result = await researchHistoryService.getUserCompanies(userId);
         return {
           statusCode: 200,
@@ -72,7 +71,7 @@ export const researchHistoryHandler = async (
       
     case 'PUT':
       if (event.pathParameters?.companyName) {
-        // PUT /research-history/users/{userId}/companies/{companyName}
+        // PUT /research-history/companies/{companyName}
         const companyName = decodeURIComponent(event.pathParameters.companyName);
         const data = JSON.parse(event.body || '{}');
         const research = await researchHistoryService.saveCompanyResearch(userId, companyName, data);
@@ -90,7 +89,7 @@ export const researchHistoryHandler = async (
       
     case 'DELETE':
       if (event.path.endsWith('/all-data')) {
-        // DELETE /research-history/users/{userId}/all-data (GDPR Right to Erasure)
+        // DELETE /research-history/all-data (GDPR Right to Erasure)
         const result = await researchHistoryService.deleteAllUserData(userId);
         
         return {
@@ -99,7 +98,7 @@ export const researchHistoryHandler = async (
           body: JSON.stringify(result)
         };
       } else if (event.pathParameters?.companyName) {
-        // DELETE /research-history/users/{userId}/companies/{companyName}
+        // DELETE /research-history/companies/{companyName}
         const companyName = decodeURIComponent(event.pathParameters.companyName);
         const result = await researchHistoryService.deleteCompanyResearch(userId, companyName);
         
@@ -122,3 +121,8 @@ export const researchHistoryHandler = async (
     }),
   };
 };
+
+// Export session-only handler (clean implementation)
+export const researchHistoryHandler = withSession(
+  internalResearchHistoryHandler
+);

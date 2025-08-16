@@ -23,6 +23,7 @@ export interface ApiGatewayProps {
     getWorkflowStatusFunction: NodejsFunction;
     researchStreamingFunction: NodejsFunction;
     researchHistoryFunction: NodejsFunction;
+    sessionFunction: NodejsFunction;
   };
   // Will add other function groups as we create more constructs
 }
@@ -41,7 +42,7 @@ export class ApiGatewayConstruct extends Construct {
       defaultCorsPreflightOptions: {
         allowOrigins: props.allowedOrigins,
         allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-        allowHeaders: ['Content-Type', 'Authorization', 'X-API-Key', 'x-user-id'],
+        allowHeaders: ['Content-Type', 'Authorization', 'X-API-Key', 'x-user-id', 'X-Session-ID'],
         allowCredentials: true,
         maxAge: Duration.seconds(86400), // 24 hours
       },
@@ -175,6 +176,18 @@ export class ApiGatewayConstruct extends Construct {
     userProfileResource.addMethod('PUT', profileIntegration, { apiKeyRequired: true });
     userProfileResource.addMethod('DELETE', profileIntegration, { apiKeyRequired: true });
 
+    // Session Management endpoints
+    const sessionIntegration = new apigateway.LambdaIntegration(props.coreFunctions.sessionFunction);
+    const sessionResource = this.api.root.addResource('session');
+    
+    // POST /session - Create new session
+    sessionResource.addMethod('POST', sessionIntegration, { apiKeyRequired: true });
+    
+    // DELETE /session/{sessionId} - Destroy session  
+    const sessionIdResource = sessionResource.addResource('{sessionId}');
+    sessionIdResource.addMethod('DELETE', sessionIntegration, { apiKeyRequired: true });
+    sessionIdResource.addMethod('GET', sessionIntegration, { apiKeyRequired: true }); // Optional: Get session info
+
     // Research Streaming endpoints
     const researchResource = apiResource.addResource('research');
     const researchStreamingIntegration = new apigateway.LambdaIntegration(props.coreFunctions.researchStreamingFunction);
@@ -203,24 +216,32 @@ export class ApiGatewayConstruct extends Construct {
       apiKeyRequired: true,
     });
 
-    // Research History endpoints (company-based structure)
+    // Research History endpoints (session-based structure)
     const researchHistoryResource = apiResource.addResource('research-history');
-    const researchHistoryUsersResource = researchHistoryResource.addResource('users');
-    const researchHistoryUserResource = researchHistoryUsersResource.addResource('{userId}');
-    const researchHistoryCompaniesResource = researchHistoryUserResource.addResource('companies');
+    const researchHistoryCompaniesResource = researchHistoryResource.addResource('companies');
     const researchHistoryCompanyResource = researchHistoryCompaniesResource.addResource('{companyName}');
     
     // Add GDPR right to erasure endpoint
-    const researchHistoryAllDataResource = researchHistoryUserResource.addResource('all-data');
+    const researchHistoryAllDataResource = researchHistoryResource.addResource('all-data');
 
-    // Research History Lambda integrations
-    researchHistoryCompaniesResource.addMethod('GET', new apigateway.LambdaIntegration(props.coreFunctions.researchHistoryFunction));
-    researchHistoryCompanyResource.addMethod('GET', new apigateway.LambdaIntegration(props.coreFunctions.researchHistoryFunction));
-    researchHistoryCompanyResource.addMethod('PUT', new apigateway.LambdaIntegration(props.coreFunctions.researchHistoryFunction));
-    researchHistoryCompanyResource.addMethod('DELETE', new apigateway.LambdaIntegration(props.coreFunctions.researchHistoryFunction));
+    // Research History Lambda integrations (CORS handled automatically)
+    researchHistoryCompaniesResource.addMethod('GET', new apigateway.LambdaIntegration(props.coreFunctions.researchHistoryFunction), {
+      apiKeyRequired: true,
+    });
+    researchHistoryCompanyResource.addMethod('GET', new apigateway.LambdaIntegration(props.coreFunctions.researchHistoryFunction), {
+      apiKeyRequired: true,
+    });
+    researchHistoryCompanyResource.addMethod('PUT', new apigateway.LambdaIntegration(props.coreFunctions.researchHistoryFunction), {
+      apiKeyRequired: true,
+    });
+    researchHistoryCompanyResource.addMethod('DELETE', new apigateway.LambdaIntegration(props.coreFunctions.researchHistoryFunction), {
+      apiKeyRequired: true,
+    });
     
     // GDPR right to erasure endpoint
-    researchHistoryAllDataResource.addMethod('DELETE', new apigateway.LambdaIntegration(props.coreFunctions.researchHistoryFunction));
+    researchHistoryAllDataResource.addMethod('DELETE', new apigateway.LambdaIntegration(props.coreFunctions.researchHistoryFunction), {
+      apiKeyRequired: true,
+    });
 
     // Create API key for external access
     this.apiKey = this.api.addApiKey('SalesIntelligenceApiKey', {

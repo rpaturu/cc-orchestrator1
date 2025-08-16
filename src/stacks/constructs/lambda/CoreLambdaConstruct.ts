@@ -46,6 +46,9 @@ export interface CoreLambdaFunctions {
   // Research Functions
   researchStreamingFunction: NodejsFunction;
   researchHistoryFunction: NodejsFunction;
+  
+  // Session Management
+  sessionFunction: NodejsFunction;
 }
 
 export class CoreLambdaConstruct extends Construct {
@@ -302,6 +305,18 @@ export class CoreLambdaConstruct extends Construct {
       handler: 'researchHistoryHandler',
       timeout: cdk.Duration.seconds(30),
       memorySize: 512,
+      environment: commonEnvironment,
+      bundling: bundlingConfig,
+    });
+
+    // Session Management Function
+    this.functions.sessionFunction = new NodejsFunction(this, 'SessionFunction', {
+      functionName: 'sales-intelligence-session',
+      runtime: lambda.Runtime.NODEJS_20_X,
+      entry: path.join(__dirname, '../../../services/handlers/lambda/SessionLambda.ts'),
+      handler: 'sessionHandler',
+      timeout: cdk.Duration.seconds(30),
+      memorySize: 256, // Lightweight session management
       environment: commonEnvironment,
       bundling: bundlingConfig,
     });

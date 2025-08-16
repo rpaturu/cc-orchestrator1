@@ -259,5 +259,9 @@ export class SalesIntelligenceStack extends cdk.Stack {
     
     // Grant DynamoDB permissions to research history function
     infrastructure.researchHistoryTable.grantReadWriteData(coreLambda.functions.researchHistoryFunction);
+    
+    // Grant session functions access to profiles table (for session storage)
+    infrastructure.profilesTable.grantReadWriteData(coreLambda.functions.sessionFunction);
+    infrastructure.profilesTable.grantReadData(coreLambda.functions.researchHistoryFunction);
   }
 } 
